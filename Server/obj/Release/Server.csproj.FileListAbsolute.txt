@@ -1,0 +1,10 @@
+D:\git\CanvasTogether\CanvasTogether\bin\Release\CanvasTogether.exe.config
+D:\git\CanvasTogether\CanvasTogether\bin\Release\CanvasTogether.exe
+D:\git\CanvasTogether\CanvasTogether\bin\Release\CanvasTogether.pdb
+D:\git\CanvasTogether\CanvasTogether\obj\Release\CanvasTogether.ConnectModal.resources
+D:\git\CanvasTogether\CanvasTogether\obj\Release\CanvasTogether.ServerForm.resources
+D:\git\CanvasTogether\CanvasTogether\obj\Release\CanvasTogether.Properties.Resources.resources
+D:\git\CanvasTogether\CanvasTogether\obj\Release\Server.csproj.GenerateResource.cache
+D:\git\CanvasTogether\CanvasTogether\obj\Release\Server.csproj.CoreCompileInputs.cache
+D:\git\CanvasTogether\CanvasTogether\obj\Release\CanvasTogether.exe
+D:\git\CanvasTogether\CanvasTogether\obj\Release\CanvasTogether.pdb

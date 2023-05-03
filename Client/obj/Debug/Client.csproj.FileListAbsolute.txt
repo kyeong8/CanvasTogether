@@ -1,0 +1,10 @@
+D:\git\CanvasTogether\Client\bin\Debug\Client.exe.config
+D:\git\CanvasTogether\Client\bin\Debug\Client.exe
+D:\git\CanvasTogether\Client\bin\Debug\Client.pdb
+D:\git\CanvasTogether\Client\obj\Debug\CanvasTogether.ConnectModal.resources
+D:\git\CanvasTogether\Client\obj\Debug\CanvasTogether.ClientForm.resources
+D:\git\CanvasTogether\Client\obj\Debug\Client.Properties.Resources.resources
+D:\git\CanvasTogether\Client\obj\Debug\Client.csproj.GenerateResource.cache
+D:\git\CanvasTogether\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
+D:\git\CanvasTogether\Client\obj\Debug\Client.exe
+D:\git\CanvasTogether\Client\obj\Debug\Client.pdb

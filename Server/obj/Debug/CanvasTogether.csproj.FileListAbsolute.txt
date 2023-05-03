@@ -1,0 +1,23 @@
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\bin\Debug\CanvasTogether.exe.config
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\bin\Debug\CanvasTogether.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\bin\Debug\CanvasTogether.pdb
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.csproj.AssemblyReference.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.csproj.SuggestedBindingRedirects.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.Form1.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.Form2.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.Properties.Resources.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.csproj.GenerateResource.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.csproj.CoreCompileInputs.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.pdb
+D:\git\CanvasTogether\CanvasTogether\bin\Debug\CanvasTogether.exe.config
+D:\git\CanvasTogether\CanvasTogether\bin\Debug\CanvasTogether.exe
+D:\git\CanvasTogether\CanvasTogether\bin\Debug\CanvasTogether.pdb
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.csproj.AssemblyReference.cache
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.Form1.resources
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.Form2.resources
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.Properties.Resources.resources
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.csproj.GenerateResource.cache
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.csproj.CoreCompileInputs.cache
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.exe
+D:\git\CanvasTogether\CanvasTogether\obj\Debug\CanvasTogether.pdb
