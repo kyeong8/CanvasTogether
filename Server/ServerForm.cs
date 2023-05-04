@@ -26,9 +26,17 @@ namespace CanvasTogether
         //public List<ServerThread> serverThreads = new List<ServerThread>();
         public ServerThread[] serverThreads = new ServerThread[10];
 
+        int pages = 1;
+
         public ServerForm()
         {
             InitializeComponent();
+
+            lblCurrentPage.Text = 1.ToString();
+            //panel2.BackColor = Color.MintCream;
+            //panel3.BackColor = Color.Red;
+            panel2.Visible = false;
+            panel3.Visible = false;
 
             ConnectModal connectModal = new ConnectModal();
             connectModal.ShowDialog();
@@ -120,6 +128,132 @@ namespace CanvasTogether
             }
 
             this.Close();
+        }
+
+        private void createPageBtn_Click(object sender, EventArgs e)
+        {
+            if (pages >= 3)
+            {
+                MessageBox.Show("최대 3개의 페이지를 만들 수 있습니다.");
+                return;
+            }
+            if (pages == 1)
+            {
+                panel2.Visible = true;
+                panel2.BackColor = Color.MintCream;
+                lblCurrentPage.Text = 2.ToString();
+                pages++;
+            }
+            else if (pages == 2)
+            {
+                panel3.Visible = true;
+                panel3.BackColor = Color.Red;
+                lblCurrentPage.Text = 3.ToString();
+                pages++;
+            }
+        }
+
+        private void prevPageBtn_Click(object sender, EventArgs e)
+        {
+            int curPage = int.Parse(lblCurrentPage.Text);
+            if (pages == 1)
+            {
+                return;
+            }
+            else if (pages == 2)
+            {
+                if (curPage == 1)
+                {
+                    panel2.Visible = true;
+                    lblCurrentPage.Text = 2.ToString();
+                }
+                else if (curPage == 2)
+                {
+                    panel2.Visible = false;
+                    lblCurrentPage.Text = 1.ToString();
+                }
+            }
+            else if (pages == 3)
+            {
+                if (curPage == 1)
+                {
+                    panel2.Visible = true;
+                    panel3.Visible = true;
+                    lblCurrentPage.Text = 3.ToString();
+                }
+                else if (curPage == 2)
+                {
+                    panel2.Visible = false;
+                    lblCurrentPage.Text = 1.ToString();
+                }
+                else if (curPage == 3)
+                {
+                    panel3.Visible = false;
+                    lblCurrentPage.Text = 2.ToString();
+                }
+            }
+        }
+
+        private void nextPageBtn_Click(object sender, EventArgs e)
+        {
+            int curPage = int.Parse(lblCurrentPage.Text);
+            if (pages == 1)
+            {
+                return;
+            }
+            else if (pages == 2)
+            {
+                if (curPage == 1)
+                {
+                    panel2.Visible = true;
+                    lblCurrentPage.Text = 2.ToString();
+                }
+                else if (curPage == 2)
+                {
+                    panel2.Visible = false;
+                    lblCurrentPage.Text = 1.ToString();
+                }
+            }
+            else if (pages == 3)
+            {
+                if (curPage == 1)
+                {
+                    panel2.Visible = true;
+                    lblCurrentPage.Text = 2.ToString();
+                }
+                else if (curPage == 2)
+                {
+                    panel3.Visible = true;
+                    lblCurrentPage.Text = 3.ToString();
+                }
+                else if (curPage == 3)
+                {
+                    panel3.Visible = false;
+                    panel2.Visible = false;
+                    lblCurrentPage.Text = 1.ToString();
+                }
+            }
+        }
+
+        private void delPageBtn_Click(object sender, EventArgs e)
+        {
+            if (pages == 1)
+            {
+                MessageBox.Show("페이지를 삭제할 수 없습니다.");
+                return;
+            }
+            else if (pages == 2)
+            {
+                pages--;
+                panel2.Visible = false;
+                lblCurrentPage.Text = 1.ToString();
+            }
+            else if (pages == 3)
+            {
+                pages--;
+                panel3.Visible = false;
+                lblCurrentPage.Text=2.ToString();
+            }
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)

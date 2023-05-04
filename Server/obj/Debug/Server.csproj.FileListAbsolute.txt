@@ -9,3 +9,15 @@ D:\git\CanvasTogether\CanvasTogether\bin\Debug\Server.pdb
 D:\git\CanvasTogether\CanvasTogether\obj\Debug\Server.Properties.Resources.resources
 D:\git\CanvasTogether\CanvasTogether\obj\Debug\Server.exe
 D:\git\CanvasTogether\CanvasTogether\obj\Debug\Server.pdb
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.exe.config
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.pdb
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.SuggestedBindingRedirects.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\CanvasTogether.ConnectModal.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\CanvasTogether.ServerForm.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.Properties.Resources.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.GenerateResource.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.pdb
