@@ -9,6 +9,7 @@ D:\git\CanvasTogether\CanvasTogether\bin\Debug\Server.pdb
 D:\git\CanvasTogether\CanvasTogether\obj\Debug\Server.Properties.Resources.resources
 D:\git\CanvasTogether\CanvasTogether\obj\Debug\Server.exe
 D:\git\CanvasTogether\CanvasTogether\obj\Debug\Server.pdb
+<<<<<<< HEAD
 C:\Users\Minsu\Desktop\프로그래밍\C#\CanvasTogether\Server\bin\Debug\Server.exe.config
 C:\Users\Minsu\Desktop\프로그래밍\C#\CanvasTogether\Server\bin\Debug\Server.exe
 C:\Users\Minsu\Desktop\프로그래밍\C#\CanvasTogether\Server\bin\Debug\Server.pdb
@@ -41,3 +42,17 @@ C:\Users\Minsu\Desktop\프로그래밍\C#\CanvasTogether\Server\bin\Debug\Entity
 C:\Users\Minsu\Desktop\프로그래밍\C#\CanvasTogether\Server\bin\Debug\System.Data.SQLite.xml
 C:\Users\Minsu\Desktop\프로그래밍\C#\CanvasTogether\Server\obj\Debug\Server.Login.resources
 C:\Users\Minsu\Desktop\프로그래밍\C#\CanvasTogether\Server\obj\Debug\Server.SignUp.resources
+=======
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.exe.config
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.pdb
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.SuggestedBindingRedirects.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\CanvasTogether.ConnectModal.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\CanvasTogether.ServerForm.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.Properties.Resources.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.GenerateResource.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.pdb
+>>>>>>> 87f289bb33e8ba487806ab176506a56911710e64
