@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
+using System.Data.SQLite;
 
 namespace CanvasTogether
 {
