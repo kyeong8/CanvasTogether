@@ -27,6 +27,8 @@ namespace CanvasTogether
 
         int pages = 1;
 
+        private PictureBox movingPictureBox;
+
         public ClientForm()
         {
             InitializeComponent();
@@ -216,15 +218,40 @@ namespace CanvasTogether
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     PictureBox p = new PictureBox();
-                    panel1.Controls.Add(p);
+                    
                     p.SizeMode = PictureBoxSizeMode.StretchImage;
                     p.Image = Image.FromFile(dialog.FileName);
                     p.Left = 100;
                     p.Top = 100;
                     p.Width = p.Image.Width;
                     p.Height = p.Image.Height;
+
+                    panel1.Controls.Add(p);
+                    p.MouseDown += p_MouseDown;
+                    p.MouseMove += p_MouseMove;
+                    p.MouseUp += p_MouseUp;
                 }
             }
+        }
+        private void p_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                movingPictureBox = (PictureBox)sender;
+            }
+        }
+        private void p_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && movingPictureBox != null)
+            {
+                movingPictureBox.Left = e.X + movingPictureBox.Left - movingPictureBox.Width / 2;
+                movingPictureBox.Top = e.Y + movingPictureBox.Top - movingPictureBox.Height / 2;
+            }
+        }
+
+        private void p_MouseUp(object sender, MouseEventArgs e)
+        {
+            movingPictureBox = null; // PictureBox 객체 초기화
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
