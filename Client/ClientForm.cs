@@ -196,6 +196,36 @@ namespace CanvasTogether
                 lblCurrentPage.Text = 2.ToString();
             }
         }
+        
+        private void toolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        {
+            if (e.Button == imageButton)
+            {
+                this.imageButton.Pushed = true;
+                this.penButton.Pushed = false;
+                this.eraserButton.Pushed = false;
+                this.lineButton.Pushed = false;
+                this.rectButton.Pushed = false;
+                this.circleButton.Pushed = false;
+                this.fillButton.Pushed = false;
+                this.textButton.Pushed = false;
+
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Filter = "Image Files (*.bmp;*.jpg;*.jpeg;*.png)|*.BMP;*.JPG;*.JPEG,*.PNG";
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    PictureBox p = new PictureBox();
+                    panel1.Controls.Add(p);
+                    p.SizeMode = PictureBoxSizeMode.StretchImage;
+                    p.Image = Image.FromFile(dialog.FileName);
+                    p.Left = 100;
+                    p.Top = 100;
+                    p.Width = p.Image.Width;
+                    p.Height = p.Image.Height;
+                }
+            }
+        }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
         {

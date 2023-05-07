@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerForm));
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -36,7 +35,7 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.txtInput = new System.Windows.Forms.TextBox();
             this.txtChat = new System.Windows.Forms.TextBox();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.imageList1 = new System.Windows.Forms.ImageList();
             this.toolBarPanel = new System.Windows.Forms.Panel();
             this.toolBar1 = new System.Windows.Forms.ToolBar();
             this.penButton = new System.Windows.Forms.ToolBarButton();
@@ -64,27 +63,26 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(777, 330);
+            this.label1.Location = new System.Drawing.Point(680, 264);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(122, 15);
+            this.label1.Size = new System.Drawing.Size(97, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "오른쪽 채팅 영역";
-            //
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(729, 359);
+            this.label3.Location = new System.Drawing.Point(638, 287);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(225, 15);
+            this.label3.Size = new System.Drawing.Size(177, 12);
             this.label3.TabIndex = 2;
             this.label3.Text = "사이즈는 300, 600으로 해주세요";
             // 
             // btnDisconnect
             // 
-            this.btnDisconnect.Location = new System.Drawing.Point(467, 658);
-            this.btnDisconnect.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnDisconnect.Location = new System.Drawing.Point(417, 485);
             this.btnDisconnect.Name = "btnDisconnect";
-            this.btnDisconnect.Size = new System.Drawing.Size(86, 29);
+            this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
             this.btnDisconnect.TabIndex = 4;
             this.btnDisconnect.Text = "연결 종료";
             this.btnDisconnect.UseVisualStyleBackColor = true;
@@ -92,10 +90,9 @@
             // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(919, 602);
-            this.btnSend.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnSend.Location = new System.Drawing.Point(804, 482);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(78, 32);
+            this.btnSend.Size = new System.Drawing.Size(68, 26);
             this.btnSend.TabIndex = 10;
             this.btnSend.Text = "보내기";
             this.btnSend.UseVisualStyleBackColor = true;
@@ -103,22 +100,20 @@
             // 
             // txtInput
             // 
-            this.txtInput.Location = new System.Drawing.Point(654, 602);
-            this.txtInput.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtInput.Location = new System.Drawing.Point(572, 482);
             this.txtInput.Multiline = true;
             this.txtInput.Name = "txtInput";
-            this.txtInput.Size = new System.Drawing.Size(258, 32);
+            this.txtInput.Size = new System.Drawing.Size(226, 26);
             this.txtInput.TabIndex = 9;
             this.txtInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtInput_KeyDown);
             // 
             // txtChat
             // 
-            this.txtChat.Location = new System.Drawing.Point(654, 15);
-            this.txtChat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtChat.Location = new System.Drawing.Point(572, 12);
             this.txtChat.Multiline = true;
             this.txtChat.Name = "txtChat";
             this.txtChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtChat.Size = new System.Drawing.Size(342, 562);
+            this.txtChat.Size = new System.Drawing.Size(300, 450);
             this.txtChat.TabIndex = 8;
             // 
             // imageList1
@@ -138,9 +133,10 @@
             // 
             this.toolBarPanel.BackColor = System.Drawing.SystemColors.Window;
             this.toolBarPanel.Controls.Add(this.toolBar1);
-            this.toolBarPanel.Location = new System.Drawing.Point(12, 12);
+            this.toolBarPanel.Location = new System.Drawing.Point(10, 10);
+            this.toolBarPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.toolBarPanel.Name = "toolBarPanel";
-            this.toolBarPanel.Size = new System.Drawing.Size(550, 34);
+            this.toolBarPanel.Size = new System.Drawing.Size(481, 27);
             this.toolBarPanel.TabIndex = 11;
             // 
             // toolBar1
@@ -159,10 +155,12 @@
             this.toolBar1.DropDownArrows = true;
             this.toolBar1.ImageList = this.imageList1;
             this.toolBar1.Location = new System.Drawing.Point(0, 0);
+            this.toolBar1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.toolBar1.Name = "toolBar1";
             this.toolBar1.ShowToolTips = true;
-            this.toolBar1.Size = new System.Drawing.Size(550, 35);
+            this.toolBar1.Size = new System.Drawing.Size(481, 28);
             this.toolBar1.TabIndex = 0;
+            this.toolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
             // 
             // penButton
             // 
@@ -207,7 +205,7 @@
             // lblPage
             // 
             this.lblPage.AutoSize = true;
-            this.lblPage.Location = new System.Drawing.Point(228, 482);
+            this.lblPage.Location = new System.Drawing.Point(200, 386);
             this.lblPage.Name = "lblPage";
             this.lblPage.Size = new System.Drawing.Size(49, 12);
             this.lblPage.TabIndex = 13;
@@ -215,9 +213,10 @@
             // 
             // prevPageBtn
             // 
-            this.prevPageBtn.Location = new System.Drawing.Point(12, 472);
+            this.prevPageBtn.Location = new System.Drawing.Point(10, 378);
+            this.prevPageBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.prevPageBtn.Name = "prevPageBtn";
-            this.prevPageBtn.Size = new System.Drawing.Size(52, 38);
+            this.prevPageBtn.Size = new System.Drawing.Size(46, 30);
             this.prevPageBtn.TabIndex = 14;
             this.prevPageBtn.Text = "<<";
             this.prevPageBtn.UseVisualStyleBackColor = true;
@@ -225,9 +224,10 @@
             // 
             // nextPageBtn
             // 
-            this.nextPageBtn.Location = new System.Drawing.Point(510, 472);
+            this.nextPageBtn.Location = new System.Drawing.Point(446, 378);
+            this.nextPageBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nextPageBtn.Name = "nextPageBtn";
-            this.nextPageBtn.Size = new System.Drawing.Size(52, 38);
+            this.nextPageBtn.Size = new System.Drawing.Size(46, 30);
             this.nextPageBtn.TabIndex = 15;
             this.nextPageBtn.Text = ">>";
             this.nextPageBtn.UseVisualStyleBackColor = true;
@@ -235,9 +235,10 @@
             // 
             // createPageBtn
             // 
-            this.createPageBtn.Location = new System.Drawing.Point(189, 513);
+            this.createPageBtn.Location = new System.Drawing.Point(165, 410);
+            this.createPageBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createPageBtn.Name = "createPageBtn";
-            this.createPageBtn.Size = new System.Drawing.Size(88, 23);
+            this.createPageBtn.Size = new System.Drawing.Size(77, 28);
             this.createPageBtn.TabIndex = 16;
             this.createPageBtn.Text = "페이지 생성";
             this.createPageBtn.UseVisualStyleBackColor = true;
@@ -245,9 +246,10 @@
             // 
             // delPageBtn
             // 
-            this.delPageBtn.Location = new System.Drawing.Point(283, 513);
+            this.delPageBtn.Location = new System.Drawing.Point(248, 410);
+            this.delPageBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.delPageBtn.Name = "delPageBtn";
-            this.delPageBtn.Size = new System.Drawing.Size(88, 23);
+            this.delPageBtn.Size = new System.Drawing.Size(77, 28);
             this.delPageBtn.TabIndex = 17;
             this.delPageBtn.Text = "페이지 삭제";
             this.delPageBtn.UseVisualStyleBackColor = true;
@@ -258,9 +260,10 @@
             this.panel1.BackColor = System.Drawing.SystemColors.Window;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.panel2);
-            this.panel1.Location = new System.Drawing.Point(12, 53);
+            this.panel1.Location = new System.Drawing.Point(10, 42);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(550, 409);
+            this.panel1.Size = new System.Drawing.Size(482, 328);
             this.panel1.TabIndex = 18;
             // 
             // panel2
@@ -269,8 +272,9 @@
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Location = new System.Drawing.Point(-1, -1);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(550, 409);
+            this.panel2.Size = new System.Drawing.Size(482, 328);
             this.panel2.TabIndex = 19;
             // 
             // panel3
@@ -278,24 +282,24 @@
             this.panel3.BackColor = System.Drawing.SystemColors.Window;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Location = new System.Drawing.Point(-1, -1);
+            this.panel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(550, 409);
+            this.panel3.Size = new System.Drawing.Size(482, 328);
             this.panel3.TabIndex = 19;
             // 
             // lblCurrentPage
             // 
             this.lblCurrentPage.AutoSize = true;
-            this.lblCurrentPage.Location = new System.Drawing.Point(283, 482);
+            this.lblCurrentPage.Location = new System.Drawing.Point(248, 386);
             this.lblCurrentPage.Name = "lblCurrentPage";
             this.lblCurrentPage.Size = new System.Drawing.Size(0, 12);
             this.lblCurrentPage.TabIndex = 19;
             // 
             // ServerForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1010, 701);
-            this.ClientSize = new System.Drawing.Size(884, 561);
+            this.ClientSize = new System.Drawing.Size(885, 519);
             this.Controls.Add(this.lblCurrentPage);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.delPageBtn);
@@ -310,7 +314,6 @@
             this.Controls.Add(this.btnDisconnect);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "ServerForm";
             this.Text = "CanvasTogether";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ServerForm_FormClosing);
