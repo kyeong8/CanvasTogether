@@ -13,11 +13,13 @@ using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
 using System.Data.SQLite;
+using Server;
 
 namespace CanvasTogether
 {
     public partial class ServerForm : Form
     {
+        // Variables Declaration =============================
         public static string ip, port, name, exitFlag;
         public Thread m_thServer = null;
 
@@ -28,12 +30,68 @@ namespace CanvasTogether
         public ServerThread[] serverThreads = new ServerThread[10];
 
         int pages = 1;
+        int curMode;
 
         private PictureBox movingPictureBox;
+
+        // Shapes variables
+        private bool freePen;
+        private bool line;
+        private bool rect;
+        private bool circle;
+        private Point start; // 도형의 시작점
+        private Point finish; // 도형의 끝점
+        private Pen pen; // 펜
+        private int nfreepen; // 저장된 자유펜 개수
+        private int nline; // 저장된 선 개수
+        private int nrect; // 저장된 사각형 개수
+        private int ncircle; // 저장된 원 개수
+        private int i;
+        private int thick; // 선 두께
+        private MyFreePen[] myfreepens;
+        private MyLines[] mylines;
+        private MyRect[] myrect;
+        private MyCircle[] mycircle;
+
+        private void SetupShapeVar()
+        {
+            i = 0;
+            thick = 1;
+            freePen = false;
+            line = false;
+            rect = false;
+            circle = false;
+            start = new Point(0, 0);
+            finish = new Point(0, 0);
+            pen = new Pen(Color.Black);
+            myfreepens = new MyFreePen[1000];
+            mylines = new MyLines[100];
+            myrect = new MyRect[100];
+            mycircle = new MyCircle[100];
+            nfreepen = 0;
+            nline = 0;
+            nrect = 0;
+            ncircle = 0;
+
+            SetupMine();
+        }
+
+        private void SetupMine()
+        {
+            for (int i = 0; i < 1000; i++)
+                myfreepens[i] = new MyFreePen();
+            for (int i = 0; i < 100; i++)
+                mylines[i] = new MyLines();
+            for (int i = 0; i < 100; i++)
+                myrect[i] = new MyRect();
+            for (int i = 0; i < 100; i++)
+                mycircle[i] = new MyCircle();
+        }
 
         public ServerForm()
         {
             InitializeComponent();
+            SetupShapeVar();
 
             lblCurrentPage.Text = 1.ToString();
             //panel2.BackColor = Color.MintCream;
@@ -261,6 +319,54 @@ namespace CanvasTogether
 
         private void toolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
         {
+            if (e.Button == penButton)
+            {
+                freePen = true;
+                line = false;
+                rect = false;
+                circle = false;
+
+                this.penButton.Pushed = true;
+                this.lineButton.Pushed = false;
+                this.rectButton.Pushed = false;
+                this.circleButton.Pushed = false;
+            }
+            if(e.Button == lineButton)
+            {
+                freePen = false;
+                line = true;
+                rect = false;
+                circle = false;
+
+                this.penButton.Pushed = false;
+                this.lineButton.Pushed = true;
+                this.rectButton.Pushed = false;
+                this.circleButton.Pushed = false;
+            }
+            if (e.Button == rectButton)
+            {
+                freePen = false;
+                line = false;
+                rect = true;
+                circle = false;
+
+                this.penButton.Pushed = false;
+                this.lineButton.Pushed = false;
+                this.rectButton.Pushed = true;
+                this.circleButton.Pushed = false;
+            }
+            if(e.Button == circleButton)
+            {
+                freePen = false;
+                line = false;
+                rect = false;
+                circle = true;
+
+                this.penButton.Pushed = false;
+                this.lineButton.Pushed = false;
+                this.rectButton.Pushed = false;
+                this.circleButton.Pushed = true;
+            }
             if (e.Button == imageButton)
             {
                 this.imageButton.Pushed = true;
@@ -312,6 +418,85 @@ namespace CanvasTogether
         private void p_MouseUp(object sender, MouseEventArgs e)
         {
             movingPictureBox = null; // PictureBox 객체 초기화
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            start.X = e.X;
+            start.Y = e.Y;
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (start.X == 0 && start.Y == 0)
+                return;
+
+            finish.X = e.X;
+            finish.Y = e.Y;
+
+            if (freePen == true)
+            {
+                Point curPoint = panel1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                myfreepens[nfreepen].setRectF(curPoint, thick);
+                nfreepen++;
+            }
+            if (line == true)
+            {
+                mylines[nline].setPoint(start, finish, thick);
+            }
+            if (rect == true)
+            {
+                myrect[nrect].setRect(start, finish, thick);
+            }
+            if (circle == true)
+            {
+                mycircle[ncircle].setRectC(start, finish, thick);
+            }
+            panel1.Invalidate(true);
+            panel1.Update();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            for(i=0; i<nfreepen; i++)
+            {
+                pen.Width = myfreepens[i].getThick();
+                e.Graphics.DrawEllipse(pen, myfreepens[i].getRectF());
+            }
+
+            for (i = 0; i <= nline; i++) 
+            {
+                pen.Width = mylines[i].getThick();
+                e.Graphics.DrawLine(pen, mylines[i].getPoint1(), mylines[i].getPoint2());
+            }
+
+            for (i = 0; i <= nrect; i++)
+            {
+                pen.Width = myrect[i].getThick();
+                e.Graphics.DrawRectangle(pen, myrect[i].getRect());
+            }
+
+            for (i = 0; i <= ncircle; i++)
+            {
+                pen.Width = mycircle[i].getThick();
+                e.Graphics.DrawEllipse(pen, mycircle[i].getRectC());
+            }
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (line == true)
+                nline++;
+            if (rect == true)
+                nrect++;
+            if (circle == true)
+                ncircle++;
+
+            start.X = 0;
+            start.Y = 0;
+            finish.X = 0;
+            finish.Y = 0;
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)

@@ -12,11 +12,22 @@ using System.Net.Sockets;
 using System.Net;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections;
+using System.Drawing.Drawing2D;
 
 namespace CanvasTogether
 {
     public partial class ClientForm : Form
     {
+        enum CANVAS_MODE
+        {
+            PENMODE = 0, // 펜 모드
+            SHAPEMODE = 1, // 선, 사각형, 원 모드
+            PAINTMODE = 2, // 채우기 모드
+            ERASERMODE = 3, // 지우개 모드
+            TEXTMODE = 4, // 텍스트 모드
+        }
+
         NetworkStream m_Stream;
         TcpClient m_Client;
         StreamReader m_Read;
@@ -26,6 +37,7 @@ namespace CanvasTogether
         public static string ip, port, name, exitFlag;
 
         int pages = 1;
+        int curMode;
 
         private PictureBox movingPictureBox;
 
@@ -198,6 +210,20 @@ namespace CanvasTogether
                 lblCurrentPage.Text = 2.ToString();
             }
         }
+
+        //private void SetCanvasMode(int mode)
+        //{
+        //    switch (mode)
+        //    {
+        //        case (int)CANVAS_MODE.PENMODE:
+        //            curMode = (int)CANVAS_MODE.PENMODE;
+        //            this.Cursor=
+        //            break;
+
+        //    }
+        //}
+
+        // private Cursor LoadCursor()
         
         private void toolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
         {

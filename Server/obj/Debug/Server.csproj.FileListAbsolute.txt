@@ -30,3 +30,67 @@ C:\Users\hlee\Source\Repos\CanvasTogether\Server\obj\Debug\Server.csproj.CoreCom
 C:\Users\hlee\Source\Repos\CanvasTogether\Server\obj\Debug\Server.csproj.CopyComplete
 C:\Users\hlee\Source\Repos\CanvasTogether\Server\obj\Debug\Server.exe
 C:\Users\hlee\Source\Repos\CanvasTogether\Server\obj\Debug\Server.pdb
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.exe.config
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\Server.pdb
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\EntityFramework.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\SQLitePCLRaw.core.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Buffers.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Data.SQLite.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Memory.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\EntityFramework.xml
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Buffers.xml
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Data.SQLite.xml
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Memory.xml
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.SuggestedBindingRedirects.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\CanvasTogether.ConnectModal.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.Login.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\CanvasTogether.ServerForm.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.Properties.Resources.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.SignUp.resources
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.GenerateResource.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.csproj.CopyComplete
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.exe
+C:\Users\chysi\OneDrive\OneDrive - 광운대학교\2023-1\응용소프트웨어실습\팀프로젝트\CanvasTogether\Server\obj\Debug\Server.pdb
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\Server.exe.config
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\Server.exe
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\Server.pdb
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\EntityFramework.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\EntityFramework.SqlServer.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\SQLitePCLRaw.core.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Buffers.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Data.SQLite.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Data.SQLite.EF6.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Data.SQLite.Linq.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Memory.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Numerics.Vectors.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\EntityFramework.xml
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\EntityFramework.SqlServer.xml
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Buffers.xml
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Data.SQLite.xml
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Memory.xml
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Numerics.Vectors.xml
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.csproj.SuggestedBindingRedirects.cache
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\CanvasTogether.ConnectModal.resources
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.Login.resources
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\CanvasTogether.ServerForm.resources
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.Properties.Resources.resources
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.SignUp.resources
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.csproj.GenerateResource.cache
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.csproj.CopyComplete
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.exe
+D:\박철민\개발\Project\응소실\CanvasTogether\Server\obj\Debug\Server.pdb
