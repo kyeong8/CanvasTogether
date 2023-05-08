@@ -12,11 +12,22 @@ using System.Net.Sockets;
 using System.Net;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections;
+using System.Drawing.Drawing2D;
 
 namespace CanvasTogether
 {
     public partial class ClientForm : Form
     {
+        enum CANVAS_MODE
+        {
+            PENMODE = 0, // 펜 모드
+            SHAPEMODE = 1, // 선, 사각형, 원 모드
+            PAINTMODE = 2, // 채우기 모드
+            ERASERMODE = 3, // 지우개 모드
+            TEXTMODE = 4, // 텍스트 모드
+        }
+
         NetworkStream m_Stream;
         TcpClient m_Client;
         StreamReader m_Read;
@@ -32,6 +43,9 @@ namespace CanvasTogether
         public static List<string> roomNames = new List<string>();
 
         int pages = 1;
+        int curMode;
+
+        private PictureBox movingPictureBox;
 
         public ClientForm()
         {
@@ -229,6 +243,75 @@ namespace CanvasTogether
                 panel3.Visible = false;
                 lblCurrentPage.Text = 2.ToString();
             }
+        }
+
+        //private void SetCanvasMode(int mode)
+        //{
+        //    switch (mode)
+        //    {
+        //        case (int)CANVAS_MODE.PENMODE:
+        //            curMode = (int)CANVAS_MODE.PENMODE;
+        //            this.Cursor=
+        //            break;
+
+        //    }
+        //}
+
+        // private Cursor LoadCursor()
+        
+        private void toolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        {
+            if (e.Button == imageButton)
+            {
+                this.imageButton.Pushed = true;
+                this.penButton.Pushed = false;
+                this.eraserButton.Pushed = false;
+                this.lineButton.Pushed = false;
+                this.rectButton.Pushed = false;
+                this.circleButton.Pushed = false;
+                this.fillButton.Pushed = false;
+                this.textButton.Pushed = false;
+
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Filter = "Image Files (*.bmp;*.jpg;*.jpeg;*.png)|*.BMP;*.JPG;*.JPEG,*.PNG";
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    PictureBox p = new PictureBox();
+                    
+                    p.SizeMode = PictureBoxSizeMode.StretchImage;
+                    p.Image = Image.FromFile(dialog.FileName);
+                    p.Left = 100;
+                    p.Top = 100;
+                    p.Width = p.Image.Width;
+                    p.Height = p.Image.Height;
+
+                    panel1.Controls.Add(p);
+                    p.MouseDown += p_MouseDown;
+                    p.MouseMove += p_MouseMove;
+                    p.MouseUp += p_MouseUp;
+                }
+            }
+        }
+        private void p_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                movingPictureBox = (PictureBox)sender;
+            }
+        }
+        private void p_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && movingPictureBox != null)
+            {
+                movingPictureBox.Left = e.X + movingPictureBox.Left - movingPictureBox.Width / 2;
+                movingPictureBox.Top = e.Y + movingPictureBox.Top - movingPictureBox.Height / 2;
+            }
+        }
+
+        private void p_MouseUp(object sender, MouseEventArgs e)
+        {
+            movingPictureBox = null; // PictureBox 객체 초기화
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
