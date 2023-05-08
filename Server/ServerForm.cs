@@ -12,13 +12,11 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
-using System.Data.SQLite;
 
 namespace CanvasTogether
 {
     public partial class ServerForm : Form
     {
-        public static string ip, port, name, exitFlag;
         public Thread m_thServer = null;
 
         TcpListener m_listener;
@@ -26,26 +24,20 @@ namespace CanvasTogether
         int index = 0;
         //public List<ServerThread> serverThreads = new List<ServerThread>();
         public ServerThread[] serverThreads = new ServerThread[10];
-
-        int pages = 1;
+        public List<List<string>> UserState = new List<List<string>>();
+        public List<string> Users = new List<string>();
+        public int UserCount = 0;
+        public List<string> roomNames = new List<string>();
 
         public ServerForm()
         {
             InitializeComponent();
 
-            lblCurrentPage.Text = 1.ToString();
-            //panel2.BackColor = Color.MintCream;
-            //panel3.BackColor = Color.Red;
-            panel2.Visible = false;
-            panel3.Visible = false;
-
-            ConnectModal connectModal = new ConnectModal();
-            connectModal.ShowDialog();
-
-            if (exitFlag == "Exit") this.Close();
-
             for (int i = 0; i < 10; i++)
                 serverThreads[i] = new ServerThread(this);
+
+            for (int i = 0; i < 4; i++)
+                UserState.Add(new List<string>());
 
             this.m_thServer = new Thread(new ThreadStart(ServerStart));
             this.m_thServer.Start();
@@ -89,13 +81,37 @@ namespace CanvasTogether
             }));
         }
 
-        public void Receive_Message(string message)
+        public void Receive_Message(string message, string roomNumber)
         {
-            printChat(message);
+            printChat("[" + roomNumber + "번방]" + message);
+            for (int i = 0; i < 10; i++)
+            {
+                if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
+                    serverThreads[i].SendMessage(message);
+            }
+        }
+
+        public void Receive_Update(int ret)
+        {
+            printChat("[접속인원 재갱신]");
             for (int i = 0; i < 10; i++)
             {
                 if (serverThreads[i].m_bConnect)
-                    serverThreads[i].SendMessage(message);
+                {
+                    serverThreads[i].SendUpdate(ret);
+                }
+            }
+        }
+
+        public void Receive_RoomUpdate()
+        {
+            printChat("[활성화 된 방 재갱신]");
+            for (int i = 0; i < 10; i++)
+            {
+                if (serverThreads[i].m_bConnect)
+                {
+                    serverThreads[i].SendRoomUpdate(roomNames);
+                }
             }
         }
 
@@ -131,173 +147,6 @@ namespace CanvasTogether
             this.Close();
         }
 
-        private void createPageBtn_Click(object sender, EventArgs e)
-        {
-            if (pages >= 3)
-            {
-                MessageBox.Show("최대 3개의 페이지를 만들 수 있습니다.");
-                return;
-            }
-            if (pages == 1)
-            {
-                panel2.Visible = true;
-                panel2.BackColor = Color.MintCream;
-                lblCurrentPage.Text = 2.ToString();
-                pages++;
-            }
-            else if (pages == 2)
-            {
-                panel3.Visible = true;
-                panel3.BackColor = Color.Red;
-                lblCurrentPage.Text = 3.ToString();
-                pages++;
-            }
-        }
-
-        private void prevPageBtn_Click(object sender, EventArgs e)
-        {
-            int curPage = int.Parse(lblCurrentPage.Text);
-            if (pages == 1)
-            {
-                return;
-            }
-            else if (pages == 2)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-            }
-            else if (pages == 3)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    panel3.Visible = true;
-                    lblCurrentPage.Text = 3.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-                else if (curPage == 3)
-                {
-                    panel3.Visible = false;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-            }
-        }
-
-        private void nextPageBtn_Click(object sender, EventArgs e)
-        {
-            int curPage = int.Parse(lblCurrentPage.Text);
-            if (pages == 1)
-            {
-                return;
-            }
-            else if (pages == 2)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-            }
-            else if (pages == 3)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel3.Visible = true;
-                    lblCurrentPage.Text = 3.ToString();
-                }
-                else if (curPage == 3)
-                {
-                    panel3.Visible = false;
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-            }
-        }
-
-        private void delPageBtn_Click(object sender, EventArgs e)
-        {
-            if (pages == 1)
-            {
-                MessageBox.Show("페이지를 삭제할 수 없습니다.");
-                return;
-            }
-            else if (pages == 2)
-            {
-                pages--;
-                panel2.Visible = false;
-                lblCurrentPage.Text = 1.ToString();
-            }
-            else if (pages == 3)
-            {
-                pages--;
-                panel3.Visible = false;
-                lblCurrentPage.Text=2.ToString();
-            }
-        }
-
-        private void txtInput_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode != Keys.Enter)
-                return;
-            for (int i = 0; i < 10; i++)
-            {
-                if (serverThreads[i].m_bConnect)
-                {
-                    serverThreads[i].m_Write.WriteLine("Message");
-                    serverThreads[i].m_Write.WriteLine(name + " : " + txtInput.Text);
-                    serverThreads[i].m_Write.Flush();
-                }
-            }
-            printChat(name + " : " + txtInput.Text);
-
-            txtInput.Clear();
-
-        }
-
-        private void btnDisconnect_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (serverThreads[i].m_bConnect)
-                {
-                    serverThreads[i].m_Write.WriteLine("Message");
-                    serverThreads[i].m_Write.WriteLine(name + " : " + txtInput.Text);
-                    serverThreads[i].m_Write.Flush();
-                }
-            }
-            printChat(name + " : " + txtInput.Text);
-
-            txtInput.Clear();
-        }
-
     }
 
     public class ServerThread
@@ -308,7 +157,12 @@ namespace CanvasTogether
         public bool m_bConnect = false;
         private ServerForm serverForm;
         public Thread m_thReader = null;
-        private string connectedClient;
+        private string connectedClient = null;
+        private string generatedRoom = null;
+        private string enteredUser = null;
+        public string roomNumber = null;
+        private string roomName = null;
+
 
         public ServerThread(ServerForm serverForm)
         {
@@ -324,11 +178,41 @@ namespace CanvasTogether
                 if (Request.Equals("New Client"))
                 {
                     connectedClient = m_Read.ReadLine();
-                    serverForm.printChat(connectedClient + "이(가) 입장했습니다.");
+                    serverForm.UserCount += 1;
+                    serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
+
+                    int ret = serverForm.UserCount;
+                    serverForm.Receive_Update(ret);
+                    serverForm.Receive_RoomUpdate();
                 }
                 else if (Request.Equals("Message"))
                 {
-                    serverForm.Receive_Message(m_Read.ReadLine());
+                    serverForm.Receive_Message(m_Read.ReadLine(), roomNumber);
+                }
+                else if (Request.Equals("Generate"))
+                {
+                    generatedRoom = m_Read.ReadLine();
+                    serverForm.printChat(generatedRoom + "이(가) 생성되었습니다.");
+                }
+                else if (Request.Equals("Enter"))
+                {
+                    serverForm.UserCount += 100;
+                    enteredUser = m_Read.ReadLine();
+                    roomNumber = m_Read.ReadLine();
+                    serverForm.UserState[Convert.ToInt32(roomNumber)].Add(enteredUser);
+                    serverForm.Receive_Message(enteredUser + "이(가) " + roomNumber + "번 방에 입장하였습니다.", roomNumber);
+                    serverForm.Receive_Update(serverForm.UserCount);
+                }
+                else if (Request.Equals("Update"))
+                {
+                    int ret = serverForm.UserCount;
+                    SendUpdate(ret);
+                }
+                else if (Request.Equals("Room"))
+                {
+                    roomName = m_Read.ReadLine();
+                    serverForm.roomNames.Add(roomName);
+                    serverForm.Receive_RoomUpdate();
                 }
                 else if (Request.Equals("Disconnect"))
                 {
@@ -344,6 +228,25 @@ namespace CanvasTogether
         {
             m_Write.WriteLine("Message");
             m_Write.WriteLine(message);
+            m_Write.Flush();
+        }
+
+        public void SendUpdate(int message)
+        {
+            m_Write.WriteLine("Update");
+            m_Write.WriteLine((message / 100).ToString());
+            m_Write.WriteLine((message % 100).ToString());
+            //serverForm.printChat("현재 접속인원 : " + message.ToString());
+            m_Write.Flush();
+        }
+
+        public void SendRoomUpdate(List<string> names)
+        {
+            m_Write.WriteLine("Room");
+            m_Write.WriteLine(names.Count.ToString());
+            foreach (string name in names)
+                m_Write.WriteLine(name);
+            //serverForm.printChat("현재 활성화 된 방 : " + message.ToString());
             m_Write.Flush();
         }
     }

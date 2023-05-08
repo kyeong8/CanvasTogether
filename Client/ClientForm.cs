@@ -23,7 +23,13 @@ namespace CanvasTogether
         StreamWriter m_Write;
         private Thread m_thReader;
         bool m_bConnect;
-        public static string ip, port, name, exitFlag;
+        public static string name;
+        public static string totalCount = "0";
+        public static string roomCount = "0";
+        public static bool exitFlag = true;
+        public static int enterRoomNumber = 0;
+        public Lobby lobby = null;
+        public static List<string> roomNames = new List<string>();
 
         int pages = 1;
 
@@ -37,10 +43,38 @@ namespace CanvasTogether
             panel2.Visible = false;
             panel3.Visible = false;
 
-            ConnectModal connectModal = new ConnectModal();
-            connectModal.ShowDialog();
-            if (exitFlag == "Exit") this.Close();
+            Login login = new Login();
+            login.ShowDialog();
+
+            if (exitFlag)
+            {
+                this.Close();
+                return;
+            }
+
             Connect();
+
+            if (!m_bConnect)
+            {
+                MessageBox.Show("서버가 구동되고 있지 않습니다.");
+                this.Close();
+                return;
+            }
+            
+            exitFlag = true;
+
+            lobby = new Lobby();
+            lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestRoomUpdate);
+            lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
+            lobby.ShowDialog();
+
+            //requestUpdate();
+
+            if (exitFlag)
+            {
+                this.Close();
+                return;
+            }
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
@@ -231,6 +265,27 @@ namespace CanvasTogether
             m_thReader.Start();
         }
 
+        public void requestUpdate()
+        {
+            m_Write.WriteLine("Update");
+            m_Write.Flush();
+        }
+
+        public void requestEnterUpdate(int num)
+        {
+            m_Write.WriteLine("Enter");
+            m_Write.WriteLine(name);
+            m_Write.WriteLine(num.ToString());
+            m_Write.Flush();
+        }
+
+        public void requestRoomUpdate(string text)
+        {
+            m_Write.WriteLine("Room");
+            m_Write.WriteLine(text);
+            m_Write.Flush();
+        }
+
         private void Receive()
         {
             m_Write.WriteLine("New Client");
@@ -251,6 +306,46 @@ namespace CanvasTogether
                     {
                         txtChat.AppendText(message + "\r\n");
                     }));
+                }
+                else if (receive.Equals("Update"))
+                {
+                    if (lobby.IsDisposed)
+                        continue;
+                    string message = m_Read.ReadLine();
+                    roomCount = message;
+                    message = m_Read.ReadLine();
+                    totalCount = message;
+                    //MessageBox.Show("call by update");
+
+                    lobby.uiUpdate();
+                }
+                else if (receive.Equals("Room"))
+                {
+                    if (lobby.IsDisposed)
+                        continue;
+
+                    roomNames = new List<string>();
+                    string count = m_Read.ReadLine();
+
+                    for (int i = 0; i < Convert.ToInt32(count); i++)
+                    {
+                        string message = m_Read.ReadLine();
+                        roomNames.Add(message);
+                    }
+
+                    lobby.uiUpdate();
+                }
+                else if (receive.Equals("Enter"))
+                {
+                    if (lobby.IsDisposed)
+                        continue;
+
+                    string message = m_Read.ReadLine();
+                    roomCount = message;
+                    message = m_Read.ReadLine();
+                    totalCount = message;
+
+                    lobby.uiUpdate();
                 }
             }
         }

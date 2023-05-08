@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Server
+namespace CanvasTogether
 {
     public partial class Login : Form
     {
@@ -27,6 +27,7 @@ namespace Server
             string route = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
             string stm = $"select * from member where id = \'" + ID_txtbox.Text.Trim() + "\'";
             int LoginStatus = 0;
+            string nickname = "";
 
             try
             {
@@ -38,17 +39,19 @@ namespace Server
                 SQLiteDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (ID_txtbox.Text.Trim() == (string)reader["id"] && PW_txtbox.Text.Trim() == (string)reader["pw"])
+                    if (ID_txtbox.Text.Trim() == (string)reader["id"] && SHA256HASH(PW_txtbox.Text.Trim()) == (string)reader["pw"])
+                    {
                         LoginStatus = 1;
+                        nickname = (string)reader["id"];
+                    }
                 }
                 conn.Close();
 
                 if (LoginStatus == 1)
                 {
                     MessageBox.Show("로그인 완료");
-
-                    ClientForm clientForm = new ClientForm();
-                    clientForm.ShowDialog();
+                    ClientForm.exitFlag = false;
+                    ClientForm.name = nickname;
                     this.Close();
                 }
                 else
@@ -67,6 +70,17 @@ namespace Server
             signUp.ShowDialog();
         }
 
-        
+        public static string SHA256HASH(string data)
+        {
+            System.Security.Cryptography.SHA256 sha = new System.Security.Cryptography.SHA256Managed();
+            byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(data));
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (byte b in hash)
+            {
+                stringBuilder.AppendFormat("{0:x2}", b);
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 }

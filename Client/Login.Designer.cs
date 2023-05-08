@@ -1,4 +1,4 @@
-﻿namespace Server
+﻿namespace CanvasTogether
 {
     partial class Login
     {
@@ -39,26 +39,27 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(33, 45);
+            this.label1.Location = new System.Drawing.Point(29, 36);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 15);
+            this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "아이디";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(33, 92);
+            this.label2.Location = new System.Drawing.Point(29, 74);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 15);
+            this.label2.Size = new System.Drawing.Size(53, 12);
             this.label2.TabIndex = 1;
             this.label2.Text = "비밀번호";
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(55, 155);
+            this.btnLogin.Location = new System.Drawing.Point(48, 124);
+            this.btnLogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(82, 33);
+            this.btnLogin.Size = new System.Drawing.Size(72, 26);
             this.btnLogin.TabIndex = 2;
             this.btnLogin.Text = "로그인";
             this.btnLogin.UseVisualStyleBackColor = true;
@@ -66,9 +67,10 @@
             // 
             // btnSignUP
             // 
-            this.btnSignUP.Location = new System.Drawing.Point(193, 155);
+            this.btnSignUP.Location = new System.Drawing.Point(169, 124);
+            this.btnSignUP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSignUP.Name = "btnSignUP";
-            this.btnSignUP.Size = new System.Drawing.Size(82, 33);
+            this.btnSignUP.Size = new System.Drawing.Size(72, 26);
             this.btnSignUP.TabIndex = 3;
             this.btnSignUP.Text = "회원가입";
             this.btnSignUP.UseVisualStyleBackColor = true;
@@ -76,29 +78,33 @@
             // 
             // ID_txtbox
             // 
-            this.ID_txtbox.Location = new System.Drawing.Point(128, 42);
+            this.ID_txtbox.Location = new System.Drawing.Point(112, 34);
+            this.ID_txtbox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ID_txtbox.Name = "ID_txtbox";
-            this.ID_txtbox.Size = new System.Drawing.Size(181, 25);
+            this.ID_txtbox.Size = new System.Drawing.Size(159, 21);
             this.ID_txtbox.TabIndex = 4;
             // 
             // PW_txtbox
             // 
-            this.PW_txtbox.Location = new System.Drawing.Point(128, 92);
+            this.PW_txtbox.Location = new System.Drawing.Point(112, 74);
+            this.PW_txtbox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PW_txtbox.Name = "PW_txtbox";
-            this.PW_txtbox.Size = new System.Drawing.Size(181, 25);
+            this.PW_txtbox.PasswordChar = '*';
+            this.PW_txtbox.Size = new System.Drawing.Size(159, 21);
             this.PW_txtbox.TabIndex = 5;
             // 
             // Login
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 202);
+            this.ClientSize = new System.Drawing.Size(299, 162);
             this.Controls.Add(this.PW_txtbox);
             this.Controls.Add(this.ID_txtbox);
             this.Controls.Add(this.btnSignUP);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Login";
             this.Text = "CanvasTogether";
             this.ResumeLayout(false);

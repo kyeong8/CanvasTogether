@@ -1,4 +1,4 @@
-﻿namespace Server
+﻿namespace CanvasTogether
 {
     partial class SignUp
     {

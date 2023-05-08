@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClientForm));
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.txtChat = new System.Windows.Forms.TextBox();
             this.txtInput = new System.Windows.Forms.TextBox();
@@ -61,24 +59,6 @@
             this.toolBarPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(680, 264);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(97, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "오른쪽 채팅 영역";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(638, 287);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(177, 12);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "사이즈는 300, 600으로 해주세요";
-            // 
             // btnDisconnect
             // 
             this.btnDisconnect.Location = new System.Drawing.Point(409, 526);
@@ -91,7 +71,7 @@
             // 
             // txtChat
             // 
-            this.txtChat.Location = new System.Drawing.Point(572, 12);
+            this.txtChat.Location = new System.Drawing.Point(568, 12);
             this.txtChat.Multiline = true;
             this.txtChat.Name = "txtChat";
             this.txtChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -291,6 +271,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 561);
+            this.Controls.Add(this.txtChat);
             this.Controls.Add(this.lblCurrentPage);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.delPageBtn);
@@ -301,10 +282,7 @@
             this.Controls.Add(this.toolBarPanel);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtInput);
-            this.Controls.Add(this.txtChat);
             this.Controls.Add(this.btnDisconnect);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
             this.Name = "ClientForm";
             this.Text = "CanvasTogether";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClientForm_FormClosing);
@@ -317,9 +295,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnDisconnect;
         private System.Windows.Forms.TextBox txtChat;
         private System.Windows.Forms.TextBox txtInput;
