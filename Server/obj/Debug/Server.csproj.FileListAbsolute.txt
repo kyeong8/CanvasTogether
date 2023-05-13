@@ -1,9 +1,0 @@
-D:\git\CanvasTogether\Server\bin\Debug\Server.exe.config
-D:\git\CanvasTogether\Server\bin\Debug\Server.exe
-D:\git\CanvasTogether\Server\bin\Debug\Server.pdb
-D:\git\CanvasTogether\Server\obj\Debug\CanvasTogether.ServerForm.resources
-D:\git\CanvasTogether\Server\obj\Debug\Server.Properties.Resources.resources
-D:\git\CanvasTogether\Server\obj\Debug\Server.csproj.GenerateResource.cache
-D:\git\CanvasTogether\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
-D:\git\CanvasTogether\Server\obj\Debug\Server.exe
-D:\git\CanvasTogether\Server\obj\Debug\Server.pdb
