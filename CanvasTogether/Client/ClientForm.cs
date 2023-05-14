@@ -39,8 +39,9 @@ namespace CanvasTogether
         public static string roomCount = "0";
         public static bool exitFlag = true;
         public static int enterRoomNumber = 0;
-        public Lobby lobby = null;
+        public Lobby lobby = new Lobby();
         public static List<string> roomNames = new List<string>();
+        public static bool closeFlag = false;
 
         int pages = 1;
         int curMode;
@@ -79,12 +80,12 @@ namespace CanvasTogether
 
             exitFlag = true;
 
-            lobby = new Lobby();
+            // lobby = new Lobby();
             lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestRoomUpdate);
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
             lobby.ShowDialog();
 
-            //requestUpdate();
+            requestUpdate();
 
             if (exitFlag)
             {
@@ -403,11 +404,11 @@ namespace CanvasTogether
             m_thReader.Start();
         }
 
-        //public void requestUpdate()
-        //{
-        //    m_Write.WriteLine("Update");
-        //    m_Write.Flush();
-        //}
+        public void requestUpdate()
+        {
+            m_Write.WriteLine("Update");
+            m_Write.Flush();
+        }
 
         public void requestEnterUpdate(bool flag)
         {
@@ -450,43 +451,55 @@ namespace CanvasTogether
                 }
                 else if (receive.Equals("Update"))
                 {
-                    if (lobby.IsDisposed)
-                        continue;
-                    string message = m_Read.ReadLine();
-                    roomCount = message;
-                    message = m_Read.ReadLine();
-                    totalCount = message;
-                    //MessageBox.Show("call by update");
+                    //if (lobby.IsDisposed)
+                    //    continue;
+                    
+                    if (!closeFlag)
+                    {
+                        string message = m_Read.ReadLine();
+                        roomCount = message;
+                        message = m_Read.ReadLine();
+                        totalCount = message;
+                        //MessageBox.Show("call by update");
 
-                    lobby.uiUpdate();
+                        lobby.uiUpdate();
+                    }
+                    
                 }
                 else if (receive.Equals("Room"))
                 {
-                    if (lobby.IsDisposed)
-                        continue;
-
-                    roomNames = new List<string>();
-                    string count = m_Read.ReadLine();
-
-                    for (int i = 0; i < Convert.ToInt32(count); i++)
+                    //if (lobby.IsDisposed)
+                    //    continue;
+                    
+                    if (!closeFlag)
                     {
-                        string message = m_Read.ReadLine();
-                        roomNames.Add(message);
-                    }
+                        roomNames = new List<string>();
+                        string count = m_Read.ReadLine();
 
-                    lobby.uiUpdate();
+                        for (int i = 0; i < Convert.ToInt32(count); i++)
+                        {
+                            string message = m_Read.ReadLine();
+                            roomNames.Add(message);
+                        }
+
+                        lobby.uiUpdate();
+                    }
+                    
                 }
                 else if (receive.Equals("Enter"))
                 {
-                    if (lobby.IsDisposed)
-                        continue;
+                    //if (lobby.IsDisposed)
+                    //    continue;
 
-                    string message = m_Read.ReadLine();
-                    roomCount = message;
-                    message = m_Read.ReadLine();
-                    totalCount = message;
+                    if(!closeFlag)
+                    {
+                        string message = m_Read.ReadLine();
+                        roomCount = message;
+                        message = m_Read.ReadLine();
+                        totalCount = message;
 
-                    lobby.uiUpdate();
+                        lobby.uiUpdate();
+                    }
                 }
             }
         }

@@ -54,7 +54,17 @@ namespace CanvasTogether
                 {
                     this.lblConnect.Text = lobbyCount + "로비 / " + connectCount + "접속";
                 }
-
+                if (this.lblWelcome.InvokeRequired)
+                {
+                    this.Invoke(new fnSetTextBoxCallback(SetWelcomeInput), new object[]
+                    {
+                    ClientForm.name + "님 환영합니다."
+                    });
+                }
+                else
+                {
+                    this.lblWelcome.Text = ClientForm.name + "님 환영합니다.";
+                }
 
                 for (int i = 1; i <= ClientForm.roomNames.Count; i++)
                 {
@@ -86,6 +96,11 @@ namespace CanvasTogether
         private void SetTextboxInput(string contents)
         {
             this.lblConnect.Text = contents;
+        }
+
+        private void SetWelcomeInput(string contents)
+        {
+            this.lblWelcome.Text = contents;
         }
 
         private void SetButtonState(Button btn, int index)
@@ -140,6 +155,11 @@ namespace CanvasTogether
         {
             Dispose();
             this.form2SendUpdate(flag);
+        }
+
+        private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ClientForm.closeFlag = true;
         }
     }
 }
