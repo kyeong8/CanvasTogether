@@ -464,7 +464,6 @@ namespace CanvasTogether
 
                         lobby.uiUpdate();
                     }
-                    
                 }
                 else if (receive.Equals("Room"))
                 {
@@ -483,8 +482,7 @@ namespace CanvasTogether
                         }
 
                         lobby.uiUpdate();
-                    }
-                    
+                    }  
                 }
                 else if (receive.Equals("Enter"))
                 {
