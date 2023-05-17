@@ -450,7 +450,7 @@ namespace CanvasTogether
 
         public void requestRoomUpdate(string text)
         {
-            m_Write.WriteLine("Room");
+            m_Write.WriteLine("Generate");
             m_Write.WriteLine(text);
             m_Write.Flush();
         }
