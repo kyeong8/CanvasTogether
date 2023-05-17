@@ -511,21 +511,6 @@ namespace CanvasTogether
                         lobby.uiUpdate();
                     }  
                 }
-                else if (receive.Equals("Enter"))
-                {
-                    //if (lobby.IsDisposed)
-                    //    continue;
-
-                    if(!closeFlag)
-                    {
-                        string message = m_Read.ReadLine();
-                        roomCount = message;
-                        message = m_Read.ReadLine();
-                        totalCount = message;
-
-                        lobby.uiUpdate();
-                    }
-                }
             }
         }
 
