@@ -381,6 +381,7 @@
             this.btn_image.Name = "btn_image";
             this.btn_image.Size = new System.Drawing.Size(34, 40);
             this.btn_image.Text = "toolStripButton2";
+            this.btn_image.Click += new System.EventHandler(this.btn_image_Click);
             // 
             // toolStripSeparator1
             // 
@@ -396,6 +397,7 @@
             this.color1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color1.Name = "color1";
             this.color1.Size = new System.Drawing.Size(28, 28);
+            this.color1.Click += new System.EventHandler(this.Btn_SelectColor_Click);
             // 
             // color2
             // 
@@ -407,6 +409,7 @@
             this.color2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color2.Name = "color2";
             this.color2.Size = new System.Drawing.Size(28, 28);
+            this.color2.Click += new System.EventHandler(this.Btn_SelectColor_Click);
             // 
             // color3
             // 
@@ -417,6 +420,7 @@
             this.color3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color3.Name = "color3";
             this.color3.Size = new System.Drawing.Size(28, 28);
+            this.color3.Click += new System.EventHandler(this.Btn_SelectColor_Click);
             // 
             // ClientForm
             // 

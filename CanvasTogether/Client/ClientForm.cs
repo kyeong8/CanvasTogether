@@ -501,5 +501,54 @@ namespace CanvasTogether
                 }
             }
         }
+
+        private void btn_image_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Image Files (*.bmp;*.jpg;*.jpeg;*.png)|*.BMP;*.JPG;*.JPEG,*.PNG";
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                PictureBox p = new PictureBox();
+
+                p.SizeMode = PictureBoxSizeMode.StretchImage;
+                p.Image = Image.FromFile(dialog.FileName);
+                p.Left = 100;
+                p.Top = 100;
+                p.Width = p.Image.Width;
+                p.Height = p.Image.Height;
+
+                if (int.Parse(lblCurrentPage.Text) == 1)
+                {
+                    panel1.Controls.Add(p);
+                }
+                else if (int.Parse(lblCurrentPage.Text) == 2)
+                {
+                    panel2.Controls.Add(p);
+                }
+                else if (int.Parse(lblCurrentPage.Text) == 3)
+                {
+                    panel3.Controls.Add(p);
+                }
+
+                p.MouseDown += p_MouseDown;
+                p.MouseMove += p_MouseMove;
+                p.MouseUp += p_MouseUp;
+            }
+        }
+        private void Btn_SelectColor_Click(object sender, EventArgs e)
+        {
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (sender == color1)
+                    color1.BackColor = colorDialog1.Color;
+                else if (sender == color2)
+                    color2.BackColor = colorDialog1.Color;
+                else if (sender == color3)
+                    color3.BackColor = colorDialog1.Color;
+            }
+        }
+
+        
     }
 }
