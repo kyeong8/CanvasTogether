@@ -48,17 +48,79 @@ namespace CanvasTogether
         int _polygon = 1;
         int _thick = 1;
 
+        // ==========================================
+
+        private bool freePen;
+        private bool line;
+        private bool rect;
+        private bool circle;
+        private Point start; // 도형의 시작점
+        private Point finish; // 도형의 끝점
+        private int nfreepen; // 저장된 자유펜 개수
+        private int nline; // 저장된 선 개수
+        private int nrect; // 저장된 사각형 개수
+        private int ncircle; // 저장된 원 개수
+        private int i;
+        private int thick; // 선 두께
+        private MyFreePen[] myfreepens;
+        private MyLines[] mylines;
+        private MyRect[] myrect;
+        private MyCircle[] mycircle;
+        private List<Shape> shapes = new List<Shape>();
+        Pen pen; // 펜
+        SolidBrush brush;
+        Shape shape;
+
+        private void SetupShapeVar()
+        {
+            i = 0;
+            thick = 1;
+            freePen = false;
+            line = false;
+            rect = false;
+            circle = false;
+            start = new Point(0, 0);
+            finish = new Point(0, 0);
+            pen = new Pen(Color.Black);
+            brush = new SolidBrush(Color.Black);
+            myfreepens = new MyFreePen[1000];
+            mylines = new MyLines[100];
+            myrect = new MyRect[100];
+            mycircle = new MyCircle[100];
+            nfreepen = 0;
+            nline = 0;
+            nrect = 0;
+            ncircle = 0;
+
+            SetupMine();
+        }
+
+        private void SetupMine()
+        {
+            for (int i = 0; i < 1000; i++)
+                myfreepens[i] = new MyFreePen();
+            for (int i = 0; i < 100; i++)
+                mylines[i] = new MyLines();
+            for (int i = 0; i < 100; i++)
+                myrect[i] = new MyRect();
+            for (int i = 0; i < 100; i++)
+                mycircle[i] = new MyCircle();
+        }
+
+        // ==========================================
+
         private PictureBox movingPictureBox;
 
         public ClientForm()
         {
             InitializeComponent();
+            SetupShapeVar();
 
             lblCurrentPage.Text = 1.ToString();
             //panel2.BackColor = Color.MintCream;
             //panel3.BackColor = Color.Red;
-            panel2.Visible = false;
-            panel3.Visible = false;
+            //panel2.Visible = false;
+            //panel3.Visible = false;
 
             Login login = new Login();
             login.ShowDialog();
@@ -94,180 +156,180 @@ namespace CanvasTogether
                 this.ClientForm_FormClosing(sender, e);
             }
         }
-
-        private void ddbtn_polygon_Click(object sender, EventArgs e)
+        
+        private void Btn_shape_Click(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (sender.Equals(item_line))
+            if (e.ClickedItem == item_line)
             {
-                ddbtn_polygon.Image = item_line.Image;
-                _polygon = 0;   //Line
+                btn_shape.Image = item_line.Image;
+                _polygon = 0; // line
             }
-            else if (sender.Equals(item_rect))
+            else if(e.ClickedItem == item_rect)
             {
-                ddbtn_polygon.Image = item_rect.Image;
-                _polygon = 1;   //Rectangle
+                btn_shape.Image = item_rect.Image;
+                _polygon = 1; // rect
             }
-            else if (sender.Equals(item_circle))
+            else if (e.ClickedItem == item_circle)
             {
-                ddbtn_polygon.Image = item_circle.Image;
-                _polygon = 2;   //Circle
+                btn_shape.Image = item_circle.Image;
+                _polygon = 2; // circle
             }
         }
 
-        private void ddbtn_thick_Click(object sender, EventArgs e)
+        private void Btn_thick_Click(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (sender.Equals(item_Thick1))
+            if (e.ClickedItem == item_Thick1)
             {
-                ddbtn_polygon.Image = item_Thick1.Image;
-                _thick = 0;   //Thick1
+                btn_thick.Image = item_Thick1.Image;
+                _thick = 1;
             }
-            else if (sender.Equals(item_Thick2))
+            else if (e.ClickedItem == item_Thick2)
             {
-                ddbtn_polygon.Image = item_Thick2.Image;
-                _thick = 1;   //Thick2
+                btn_thick.Image = item_Thick2.Image;
+                _thick = 2;
             }
-            else if (sender.Equals(item_Thick3))
+            else if( e.ClickedItem == item_Thick3)
             {
-                ddbtn_polygon.Image = item_Thick3.Image;
-                _thick = 2;   //Thick3
+                btn_thick.Image = item_Thick3.Image;
+                _thick = 3;
             }
-            else if (sender.Equals(item_Thick4))
+            else if (e.ClickedItem == item_Thick4)
             {
-                ddbtn_polygon.Image = item_Thick4.Image;
-                _thick = 3;   //Thick4
+                btn_thick.Image = item_Thick4.Image;
+                _thick = 4;
             }
-            else if (sender.Equals(item_Thick5))
+            else if (e.ClickedItem == item_Thick5)
             {
-                ddbtn_polygon.Image = item_Thick5.Image;
-                _thick = 4;   //Thick5
+                btn_thick.Image = item_Thick5.Image;
+                _thick = 5;
             }
         }
 
-        private void createPageBtn_Click(object sender, EventArgs e)
-        {
-            if (pages >= 3)
-            {
-                MessageBox.Show("최대 3개의 페이지를 만들 수 있습니다.");
-                return;
-            }
-            if (pages == 1)
-            {
-                panel2.Visible = true;
-                panel2.BackColor = Color.MintCream;
-                lblCurrentPage.Text = 2.ToString();
-                pages++;
-            }
-            else if (pages == 2)
-            {
-                panel3.Visible = true;
-                panel3.BackColor = Color.Red;
-                lblCurrentPage.Text = 3.ToString();
-                pages++;
-            }
-        }
+        //private void createPageBtn_Click(object sender, EventArgs e)
+        //{
+        //    if (pages >= 3)
+        //    {
+        //        MessageBox.Show("최대 3개의 페이지를 만들 수 있습니다.");
+        //        return;
+        //    }
+        //    if (pages == 1)
+        //    {
+        //        panel2.Visible = true;
+        //        panel2.BackColor = Color.MintCream;
+        //        lblCurrentPage.Text = 2.ToString();
+        //        pages++;
+        //    }
+        //    else if (pages == 2)
+        //    {
+        //        panel3.Visible = true;
+        //        panel3.BackColor = Color.Red;
+        //        lblCurrentPage.Text = 3.ToString();
+        //        pages++;
+        //    }
+        //}
 
-        private void prevPageBtn_Click(object sender, EventArgs e)
-        {
-            int curPage = int.Parse(lblCurrentPage.Text);
-            if (pages == 1)
-            {
-                return;
-            }
-            else if (pages == 2)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-            }
-            else if (pages == 3)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    panel3.Visible = true;
-                    lblCurrentPage.Text = 3.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-                else if (curPage == 3)
-                {
-                    panel3.Visible = false;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-            }
-        }
+        //private void prevPageBtn_Click(object sender, EventArgs e)
+        //{
+        //    int curPage = int.Parse(lblCurrentPage.Text);
+        //    if (pages == 1)
+        //    {
+        //        return;
+        //    }
+        //    else if (pages == 2)
+        //    {
+        //        if (curPage == 1)
+        //        {
+        //            panel2.Visible = true;
+        //            lblCurrentPage.Text = 2.ToString();
+        //        }
+        //        else if (curPage == 2)
+        //        {
+        //            panel2.Visible = false;
+        //            lblCurrentPage.Text = 1.ToString();
+        //        }
+        //    }
+        //    else if (pages == 3)
+        //    {
+        //        if (curPage == 1)
+        //        {
+        //            panel2.Visible = true;
+        //            panel3.Visible = true;
+        //            lblCurrentPage.Text = 3.ToString();
+        //        }
+        //        else if (curPage == 2)
+        //        {
+        //            panel2.Visible = false;
+        //            lblCurrentPage.Text = 1.ToString();
+        //        }
+        //        else if (curPage == 3)
+        //        {
+        //            panel3.Visible = false;
+        //            lblCurrentPage.Text = 2.ToString();
+        //        }
+        //    }
+        //}
 
-        private void nextPageBtn_Click(object sender, EventArgs e)
-        {
-            int curPage = int.Parse(lblCurrentPage.Text);
-            if (pages == 1)
-            {
-                return;
-            }
-            else if (pages == 2)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-            }
-            else if (pages == 3)
-            {
-                if (curPage == 1)
-                {
-                    panel2.Visible = true;
-                    lblCurrentPage.Text = 2.ToString();
-                }
-                else if (curPage == 2)
-                {
-                    panel3.Visible = true;
-                    lblCurrentPage.Text = 3.ToString();
-                }
-                else if (curPage == 3)
-                {
-                    panel3.Visible = false;
-                    panel2.Visible = false;
-                    lblCurrentPage.Text = 1.ToString();
-                }
-            }
-        }
+        //private void nextPageBtn_Click(object sender, EventArgs e)
+        //{
+        //    int curPage = int.Parse(lblCurrentPage.Text);
+        //    if (pages == 1)
+        //    {
+        //        return;
+        //    }
+        //    else if (pages == 2)
+        //    {
+        //        if (curPage == 1)
+        //        {
+        //            panel2.Visible = true;
+        //            lblCurrentPage.Text = 2.ToString();
+        //        }
+        //        else if (curPage == 2)
+        //        {
+        //            panel2.Visible = false;
+        //            lblCurrentPage.Text = 1.ToString();
+        //        }
+        //    }
+        //    else if (pages == 3)
+        //    {
+        //        if (curPage == 1)
+        //        {
+        //            panel2.Visible = true;
+        //            lblCurrentPage.Text = 2.ToString();
+        //        }
+        //        else if (curPage == 2)
+        //        {
+        //            panel3.Visible = true;
+        //            lblCurrentPage.Text = 3.ToString();
+        //        }
+        //        else if (curPage == 3)
+        //        {
+        //            panel3.Visible = false;
+        //            panel2.Visible = false;
+        //            lblCurrentPage.Text = 1.ToString();
+        //        }
+        //    }
+        //}
 
-        private void delPageBtn_Click(object sender, EventArgs e)
-        {
-            if (pages == 1)
-            {
-                MessageBox.Show("페이지를 삭제할 수 없습니다.");
-                return;
-            }
-            else if (pages == 2)
-            {
-                pages--;
-                panel2.Visible = false;
-                lblCurrentPage.Text = 1.ToString();
-            }
-            else if (pages == 3)
-            {
-                pages--;
-                panel3.Visible = false;
-                lblCurrentPage.Text = 2.ToString();
-            }
-        }
+        //private void delPageBtn_Click(object sender, EventArgs e)
+        //{
+        //    if (pages == 1)
+        //    {
+        //        MessageBox.Show("페이지를 삭제할 수 없습니다.");
+        //        return;
+        //    }
+        //    else if (pages == 2)
+        //    {
+        //        pages--;
+        //        panel2.Visible = false;
+        //        lblCurrentPage.Text = 1.ToString();
+        //    }
+        //    else if (pages == 3)
+        //    {
+        //        pages--;
+        //        panel3.Visible = false;
+        //        lblCurrentPage.Text = 2.ToString();
+        //    }
+        //}
 
         //private void SetCanvasMode(int mode)
         //{
@@ -500,6 +562,185 @@ namespace CanvasTogether
                     }
                 }
             }
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if(e.ClickedItem == btn_pen)
+            {
+                //curMode = (int)CANVAS_MODE.PENMODE;
+                freePen = true;
+                line = false;
+                rect = false;
+                circle = false;
+
+                this.btn_pen.BackColor = Color.Orange;
+                this.btn_eraser.BackColor = Color.White;
+                this.btn_shape.BackColor = Color.White;
+                this.btn_text.BackColor = Color.White;
+            }
+            if(e.ClickedItem == btn_eraser)
+            {
+                curMode = (int)CANVAS_MODE.ERASERMODE;
+
+                this.btn_eraser.BackColor = Color.Orange;
+                this.btn_pen.BackColor = Color.White;
+                this.btn_shape.BackColor = Color.White;
+                this.btn_text.BackColor = Color.White;
+            }
+            if(e.ClickedItem == btn_shape)
+            {
+                freePen = false;
+                //if (_polygon == 0)
+                //{
+                //    freePen = false;
+                //    line = true;
+                //    rect = false;
+                //    circle = false;
+                //}
+                //else if(_polygon == 1)
+                //{
+                //    freePen = false;
+                //    line = false;
+                //    rect = true;
+                //    circle = false;
+                //}
+                //else if (_polygon == 2)
+                //{
+                //    freePen = false;
+                //    line = false;
+                //    rect = false;
+                //    circle = true;
+                //}
+                this.btn_pen.BackColor = Color.White;
+                this.btn_eraser.BackColor = Color.White;
+                this.btn_shape.BackColor = Color.Orange;
+                this.btn_text.BackColor = Color.White;
+            }
+            if(e.ClickedItem == btn_text)
+            {
+                curMode = (int)CANVAS_MODE.TEXTMODE;
+
+                this.btn_eraser.BackColor = Color.White;
+                this.btn_pen.BackColor = Color.White;
+                this.btn_shape.BackColor = Color.White;
+                this.btn_text.BackColor = Color.Orange;
+            }
+        }
+
+        private void UpdatePolygon()
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            for (i = 0; i < nfreepen; i++)
+            {
+                pen.Width = myfreepens[i].getThick();
+                e.Graphics.DrawEllipse(pen, myfreepens[i].getRectF());
+            }
+
+            for (i = 0; i <= nline; i++)
+            {
+                pen.Width = mylines[i].getThick();
+                e.Graphics.DrawLine(pen, mylines[i].getPoint1(), mylines[i].getPoint2());
+            }
+
+            for (i = 0; i <= nrect; i++)
+            {
+                pen.Width = myrect[i].getThick();
+                e.Graphics.DrawRectangle(pen, myrect[i].getRect());
+            }
+
+            for (i = 0; i <= ncircle; i++)
+            {
+                pen.Width = mycircle[i].getThick();
+                e.Graphics.DrawEllipse(pen, mycircle[i].getRectC());
+            }
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            // 임시방편
+            if (!freePen)
+            {
+                if (btn_shape.Image == item_line.Image)
+                {
+                    _polygon = 0;
+                    freePen = false;
+                    line = true;
+                    rect = false;
+                    circle = false;
+                }
+                else if (btn_shape.Image == item_rect.Image)
+                {
+                    _polygon = 1;
+                    freePen = false;
+                    line = false;
+                    rect = true;
+                    circle = false;
+                }
+                else if (btn_shape.Image == item_circle.Image)
+                {
+                    _polygon = 2;
+                    freePen = false;
+                    line = false;
+                    rect = false;
+                    circle = true;
+                }
+            }
+
+            start.X = e.X;
+            start.Y = e.Y;
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (start.X == 0 && start.Y == 0)
+                return;
+
+            finish.X = e.X;
+            finish.Y = e.Y;
+
+            if (freePen == true)
+            {
+                Point curPoint = panel1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                myfreepens[nfreepen].setRectF(curPoint, pen, brush, _thick);
+                nfreepen++;
+            }
+            if (line == true)
+            {
+                mylines[nline].setPoint(start, finish, pen, _thick);
+            }
+            if (rect == true)
+            {
+                myrect[nrect].setRect(start, finish, pen, _thick);
+            }
+            if (circle == true)
+            {
+                mycircle[ncircle].setRectC(start, finish, pen, _thick);
+            }
+            panel1.Invalidate(true);
+            panel1.Update();
+        }
+
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (freePen == true)
+                nfreepen++;
+            if (line == true)
+                nline++;
+            if (rect == true)
+                nrect++;
+            if (circle == true)
+                ncircle++;
+
+            start.X = 0;
+            start.Y = 0;
+            finish.X = 0;
+            finish.Y = 0;
         }
     }
 }
