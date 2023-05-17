@@ -345,41 +345,6 @@ namespace CanvasTogether
 
         // private Cursor LoadCursor()
 
-        //private void toolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
-        //{
-        //    if (e.Button == imageButton)
-        //    {
-        //        this.imageButton.Pushed = true;
-        //        this.penButton.Pushed = false;
-        //        this.eraserButton.Pushed = false;
-        //        this.lineButton.Pushed = false;
-        //        this.rectButton.Pushed = false;
-        //        this.circleButton.Pushed = false;
-        //        this.fillButton.Pushed = false;
-        //        this.textButton.Pushed = false;
-
-        //        OpenFileDialog dialog = new OpenFileDialog();
-        //        dialog.Filter = "Image Files (*.bmp;*.jpg;*.jpeg;*.png)|*.BMP;*.JPG;*.JPEG,*.PNG";
-        //        dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        //        if (dialog.ShowDialog() == DialogResult.OK)
-        //        {
-        //            PictureBox p = new PictureBox();
-
-        //            p.SizeMode = PictureBoxSizeMode.StretchImage;
-        //            p.Image = Image.FromFile(dialog.FileName);
-        //            p.Left = 100;
-        //            p.Top = 100;
-        //            p.Width = p.Image.Width;
-        //            p.Height = p.Image.Height;
-
-        //            panel1.Controls.Add(p);
-        //            p.MouseDown += p_MouseDown;
-        //            p.MouseMove += p_MouseMove;
-        //            p.MouseUp += p_MouseUp;
-        //        }
-        //    }
-        //}
-
         private void p_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -765,11 +730,11 @@ namespace CanvasTogether
                 }
                 else if (int.Parse(lblCurrentPage.Text) == 2)
                 {
-                    panel2.Controls.Add(p);
+                    //panel2.Controls.Add(p);
                 }
                 else if (int.Parse(lblCurrentPage.Text) == 3)
                 {
-                    panel3.Controls.Add(p);
+                    //panel3.Controls.Add(p);
                 }
 
                 p.MouseDown += p_MouseDown;
