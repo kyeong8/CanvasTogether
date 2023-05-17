@@ -33,11 +33,11 @@ namespace CanvasTogether
         {
             InitializeComponent();
 
-            for (int i = 0; i < 10; i++)
-                serverThreads[i] = new ServerThread(this);
-
             for (int i = 0; i < 4; i++)
                 UserState.Add(new List<string>());
+
+            for (int i = 0; i < 10; i++)
+                serverThreads[i] = new ServerThread(this);
 
             this.m_thServer = new Thread(new ThreadStart(ServerStart));
             this.m_thServer.Start();
@@ -158,7 +158,6 @@ namespace CanvasTogether
         private ServerForm serverForm;
         public Thread m_thReader = null;
         private string connectedClient = null;
-        private string generatedRoom = null;
         private string enteredUser = null;
         public string roomNumber = null;
         private string roomName = null;
@@ -192,8 +191,10 @@ namespace CanvasTogether
                 }
                 else if (Request.Equals("Generate"))
                 {
-                    generatedRoom = m_Read.ReadLine();
-                    serverForm.printChat(generatedRoom + "이(가) 생성되었습니다.");
+                    roomName = m_Read.ReadLine();
+                    serverForm.roomNames.Add(roomName);
+                    serverForm.ResponseRoomUpdate();
+                    serverForm.printChat(roomName + "이(가) 생성되었습니다.");
                 }
                 else if (Request.Equals("Enter"))
                 {
@@ -208,12 +209,6 @@ namespace CanvasTogether
                 {
                     int ret = serverForm.UserCount;
                     SendUpdate(ret);
-                }
-                else if (Request.Equals("Room"))
-                {
-                    roomName = m_Read.ReadLine();
-                    serverForm.roomNames.Add(roomName);
-                    serverForm.ResponseRoomUpdate();
                 }
                 else if (Request.Equals("Disconnect"))
                 {
