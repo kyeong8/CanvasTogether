@@ -28,6 +28,8 @@ namespace CanvasTogether
         public List<string> Users = new List<string>();
         public int UserCount = 0;
         public List<string> roomNames = new List<string>();
+        public List<string> Id = new List<string>();
+        public List<string> Pw = new List<string>();
 
         public ServerForm()
         {
@@ -45,6 +47,7 @@ namespace CanvasTogether
 
         public void ServerStart()
         {
+          
             m_listener = new TcpListener(IPAddress.Any, 7777);
             m_listener.Start();
 

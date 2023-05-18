@@ -14,6 +14,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using System.Drawing.Drawing2D;
+using System.Data.Entity.Migrations.Builders;
 
 namespace CanvasTogether
 {
@@ -34,6 +35,7 @@ namespace CanvasTogether
         StreamWriter m_Write;
         private Thread m_thReader;
         bool m_bConnect;
+        public static string id, pw; //클라에 아이디 비번 저장
         public static string name;
         public static string totalCount = "0";
         public static string roomCount = "0";
@@ -52,6 +54,7 @@ namespace CanvasTogether
 
         public ClientForm()
         {
+           
             InitializeComponent();
 
             lblCurrentPage.Text = 1.ToString();
