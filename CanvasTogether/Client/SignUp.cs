@@ -24,7 +24,7 @@ namespace CanvasTogether
         private void btnSignUP_Click(object sender, EventArgs e)
         {
             string route = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
-            string stm = $"select *, count(*) as ct from member where id = \'" + ID_txtbox.Text.Trim() + "\'";
+            string stm = $"select *, count(*) as ct from member where id = \'" + ID_txtbox.Text.Trim() + "\'or name = \'" + Name_txtbox.Text.Trim() + "\'";
             int dupCheck = 0;
             try
             {
@@ -38,13 +38,14 @@ namespace CanvasTogether
                 {
                     if (reader["ct"].ToString() != "0")
                     {
-                        MessageBox.Show("동일한 아이디가 존재합니다.");
+                        MessageBox.Show("동일한 아이디 또는 닉네임이 존재합니다.");
                     }
                     else
                     {
                         dupCheck = 1;
                     }
                 }
+                reader.Close();
                 conn.Close();
 
                 if (dupCheck == 1)
