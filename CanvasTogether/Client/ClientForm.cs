@@ -170,7 +170,7 @@ namespace CanvasTogether
                 this.ClientForm_FormClosing(sender, e);
             }
         }
-        
+
         private void Btn_shape_Click(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem == item_line)
@@ -762,6 +762,7 @@ namespace CanvasTogether
             {
                 case 1: // 선
                     m_Write.WriteLine("Line");
+                    
                     m_Write.WriteLine(myLine.getPoint1().X);
                     m_Write.WriteLine(myLine.getPoint1().Y);
                     m_Write.WriteLine(myLine.getPoint2().X);
@@ -894,9 +895,9 @@ namespace CanvasTogether
     {
         public DoubleBufferPanel()
         {
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                ControlStyles.UserPaint |
+                ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
         }
     }

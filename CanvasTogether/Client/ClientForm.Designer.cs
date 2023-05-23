@@ -37,7 +37,7 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.txtInput = new System.Windows.Forms.TextBox();
             this.lblCurrentPage = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1 = new DoubleBufferPanel();
             this.delPageBtn = new System.Windows.Forms.Button();
             this.createPageBtn = new System.Windows.Forms.Button();
             this.nextPageBtn = new System.Windows.Forms.Button();
