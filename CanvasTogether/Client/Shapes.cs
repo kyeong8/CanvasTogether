@@ -32,10 +32,10 @@ namespace CanvasTogether
         }
 
         // Member functions declaration
-        public void setRectF(Point curPoint, Pen pen, SolidBrush brush, int thick)
+        public void setRectF(Point start, Pen pen, SolidBrush brush, int thick)
         {
-            rectF.X = curPoint.X;
-            rectF.Y = curPoint.Y;
+            rectF.X = start.X;
+            rectF.Y = start.Y;
             rectF.Width = thick;
             rectF.Height = thick;
 

@@ -29,9 +29,19 @@ namespace CanvasTogether
         public int UserCount = 0;
         public List<string> roomNames = new List<string>();
 
+        /* Page members */
+        int pages = 1;
+
         public ServerForm()
         {
             InitializeComponent();
+            lblCurrentPage.Text = 1.ToString();
+            panel2.BackColor = Color.Red;
+            panel3.BackColor = Color.Green;
+            panel4.BackColor = Color.Blue;
+            panel2.Visible = false;
+            panel3.Visible = false;
+            panel4.Visible = false;
 
             for (int i = 0; i < 4; i++)
                 UserState.Add(new List<string>());
@@ -147,6 +157,61 @@ namespace CanvasTogether
             this.Close();
         }
 
+        private void prevPageBtn_Click(object sender, EventArgs e)
+        {
+            int curPage = int.Parse(lblCurrentPage.Text);
+            if (curPage == 1)
+            {
+                panel2.Visible = true;
+                panel3.Visible = true;
+                panel4.Visible = true;
+                lblCurrentPage.Text = 4.ToString();
+            }
+            else if (curPage == 2)
+            {
+                panel2.Visible = false;
+                lblCurrentPage.Text = 1.ToString();
+            }
+            else if (curPage == 3)
+            {
+                panel3.Visible = false;
+                panel2.Visible = true;
+                lblCurrentPage.Text = 2.ToString();
+            }
+            else if (curPage == 4) 
+            {
+                panel4.Visible = false;
+                panel3.Visible = true;
+                lblCurrentPage.Text = 3.ToString();
+            }
+        }
+
+        private void nextPageBtn_Click(object sender, EventArgs e)
+        {
+            int curPage = int.Parse(lblCurrentPage.Text);
+            if (curPage == 1)
+            {
+                panel2.Visible = true;
+                lblCurrentPage.Text = 2.ToString();
+            }
+            else if (curPage == 2)
+            {
+                panel3.Visible = true;
+                lblCurrentPage.Text = 3.ToString();
+            }
+            else if (curPage == 3)
+            {
+                panel4.Visible = true;
+                lblCurrentPage.Text = 4.ToString();
+            }
+            else if (curPage == 4)
+            {
+                panel4.Visible = false;
+                panel3.Visible = false;
+                panel2.Visible = false;
+                lblCurrentPage.Text = 1.ToString();
+            }
+        }
     }
 
     public class ServerThread
