@@ -84,6 +84,7 @@ namespace CanvasTogether
         Bitmap bitmap;
         private List<Shape> shapes = new List<Shape>();
 
+
         private void SetupShapeVar()
         {
             i = 0;
@@ -883,6 +884,7 @@ namespace CanvasTogether
 
         }
 
+
         private void ClientForm_Load(object sender, EventArgs e)
         {
             myFreePen = new MyFreePen();
@@ -910,7 +912,6 @@ namespace CanvasTogether
         {
             curMode = (int)CANVAS_MODE.RECTMODE;
         }
-
 
         private void item_circle_Click(object sender, EventArgs e)
         {

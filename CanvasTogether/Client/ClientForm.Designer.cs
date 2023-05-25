@@ -65,7 +65,6 @@
             this.color1 = new System.Windows.Forms.ToolStripButton();
             this.color2 = new System.Windows.Forms.ToolStripButton();
             this.color3 = new System.Windows.Forms.ToolStripButton();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -219,7 +218,7 @@
             this.color1,
             this.color2,
             this.color3});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 1);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(562, 37);
             this.toolStrip1.TabIndex = 41;
@@ -234,7 +233,6 @@
             this.btn_undo.Name = "btn_undo";
             this.btn_undo.Size = new System.Drawing.Size(34, 34);
             this.btn_undo.Text = "toolStripButton1";
-            this.btn_undo.ToolTipText = "ㅤ";
             // 
             // btn_redo
             // 
@@ -244,7 +242,6 @@
             this.btn_redo.Name = "btn_redo";
             this.btn_redo.Size = new System.Drawing.Size(34, 34);
             this.btn_redo.Text = "toolStripButton2";
-            this.btn_redo.ToolTipText = "ㅤ";
             // 
             // btn_pen
             // 
@@ -254,7 +251,6 @@
             this.btn_pen.Name = "btn_pen";
             this.btn_pen.Size = new System.Drawing.Size(34, 34);
             this.btn_pen.Text = "toolStripButton1";
-            this.btn_pen.ToolTipText = "자유펜 그리기";
             // 
             // btn_eraser
             // 
@@ -264,7 +260,6 @@
             this.btn_eraser.Name = "btn_eraser";
             this.btn_eraser.Size = new System.Drawing.Size(34, 34);
             this.btn_eraser.Text = "toolStripButton1";
-            this.btn_eraser.ToolTipText = "지우개";
             // 
             // btn_shape
             // 
@@ -277,7 +272,6 @@
             this.btn_shape.Name = "btn_shape";
             this.btn_shape.Size = new System.Drawing.Size(43, 34);
             this.btn_shape.Text = "toolStripDropDownButton1";
-            this.btn_shape.ToolTipText = "도형 선택";
             this.btn_shape.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Btn_shape_Click);
             // 
             // item_line
@@ -317,7 +311,6 @@
             this.btn_thick.Name = "btn_thick";
             this.btn_thick.Size = new System.Drawing.Size(43, 34);
             this.btn_thick.Text = "toolStripDropDownButton2";
-            this.btn_thick.ToolTipText = "굵기 선택";
             this.btn_thick.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Btn_thick_Click);
             // 
             // item_Thick1
@@ -363,7 +356,6 @@
             this.btn_text.Name = "btn_text";
             this.btn_text.Size = new System.Drawing.Size(34, 34);
             this.btn_text.Text = "toolStripButton1";
-            this.btn_text.ToolTipText = "텍스트 추가";
             // 
             // btn_image
             // 
@@ -373,7 +365,6 @@
             this.btn_image.Name = "btn_image";
             this.btn_image.Size = new System.Drawing.Size(34, 34);
             this.btn_image.Text = "toolStripButton2";
-            this.btn_image.ToolTipText = "이미지 추가";
             this.btn_image.Click += new System.EventHandler(this.btn_image_Click);
             // 
             // toolStripSeparator1
@@ -390,7 +381,6 @@
             this.color1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color1.Name = "color1";
             this.color1.Size = new System.Drawing.Size(28, 28);
-            this.color1.ToolTipText = "좌 클릭 시 색상 적용, 우클릭 시 팔레트 선택";
             this.color1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // color2
@@ -403,7 +393,6 @@
             this.color2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color2.Name = "color2";
             this.color2.Size = new System.Drawing.Size(28, 28);
-            this.color2.ToolTipText = "좌 클릭 시 색상 적용, 우클릭 시 팔레트 선택";
             this.color2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // color3
@@ -415,7 +404,6 @@
             this.color3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color3.Name = "color3";
             this.color3.Size = new System.Drawing.Size(28, 28);
-            this.color3.ToolTipText = "좌 클릭 시 색상 적용, 우클릭 시 팔레트 선택";
             this.color3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // ClientForm
@@ -486,7 +474,6 @@
         private System.Windows.Forms.ToolStripButton color2;
         private System.Windows.Forms.ToolStripButton color3;
         private DoubleBufferPanel panel1;
-        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
