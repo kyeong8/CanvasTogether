@@ -37,7 +37,7 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.txtInput = new System.Windows.Forms.TextBox();
             this.lblCurrentPage = new System.Windows.Forms.Label();
-            this.panel1 = new DoubleBufferPanel();
+            this.panel1 = new CanvasTogether.DoubleBufferPanel();
             this.delPageBtn = new System.Windows.Forms.Button();
             this.createPageBtn = new System.Windows.Forms.Button();
             this.nextPageBtn = new System.Windows.Forms.Button();
@@ -220,7 +220,7 @@
             this.color3});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(562, 43);
+            this.toolStrip1.Size = new System.Drawing.Size(562, 37);
             this.toolStrip1.TabIndex = 41;
             this.toolStrip1.Text = "toolStrip1";
             this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
@@ -231,7 +231,7 @@
             this.btn_undo.Image = ((System.Drawing.Image)(resources.GetObject("btn_undo.Image")));
             this.btn_undo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_undo.Name = "btn_undo";
-            this.btn_undo.Size = new System.Drawing.Size(34, 40);
+            this.btn_undo.Size = new System.Drawing.Size(34, 34);
             this.btn_undo.Text = "toolStripButton1";
             // 
             // btn_redo
@@ -240,7 +240,7 @@
             this.btn_redo.Image = ((System.Drawing.Image)(resources.GetObject("btn_redo.Image")));
             this.btn_redo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_redo.Name = "btn_redo";
-            this.btn_redo.Size = new System.Drawing.Size(34, 40);
+            this.btn_redo.Size = new System.Drawing.Size(34, 34);
             this.btn_redo.Text = "toolStripButton2";
             // 
             // btn_pen
@@ -249,7 +249,7 @@
             this.btn_pen.Image = ((System.Drawing.Image)(resources.GetObject("btn_pen.Image")));
             this.btn_pen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_pen.Name = "btn_pen";
-            this.btn_pen.Size = new System.Drawing.Size(34, 40);
+            this.btn_pen.Size = new System.Drawing.Size(34, 34);
             this.btn_pen.Text = "toolStripButton1";
             // 
             // btn_eraser
@@ -258,7 +258,7 @@
             this.btn_eraser.Image = ((System.Drawing.Image)(resources.GetObject("btn_eraser.Image")));
             this.btn_eraser.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_eraser.Name = "btn_eraser";
-            this.btn_eraser.Size = new System.Drawing.Size(34, 40);
+            this.btn_eraser.Size = new System.Drawing.Size(34, 34);
             this.btn_eraser.Text = "toolStripButton1";
             // 
             // btn_shape
@@ -270,7 +270,7 @@
             this.item_circle});
             this.btn_shape.Image = ((System.Drawing.Image)(resources.GetObject("btn_shape.Image")));
             this.btn_shape.Name = "btn_shape";
-            this.btn_shape.Size = new System.Drawing.Size(43, 40);
+            this.btn_shape.Size = new System.Drawing.Size(43, 34);
             this.btn_shape.Text = "toolStripDropDownButton1";
             this.btn_shape.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Btn_shape_Click);
             // 
@@ -309,7 +309,7 @@
             this.item_Thick5});
             this.btn_thick.Image = ((System.Drawing.Image)(resources.GetObject("btn_thick.Image")));
             this.btn_thick.Name = "btn_thick";
-            this.btn_thick.Size = new System.Drawing.Size(43, 40);
+            this.btn_thick.Size = new System.Drawing.Size(43, 34);
             this.btn_thick.Text = "toolStripDropDownButton2";
             this.btn_thick.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Btn_thick_Click);
             // 
@@ -354,7 +354,7 @@
             this.btn_text.Image = ((System.Drawing.Image)(resources.GetObject("btn_text.Image")));
             this.btn_text.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_text.Name = "btn_text";
-            this.btn_text.Size = new System.Drawing.Size(34, 40);
+            this.btn_text.Size = new System.Drawing.Size(34, 34);
             this.btn_text.Text = "toolStripButton1";
             // 
             // btn_image
@@ -363,48 +363,48 @@
             this.btn_image.Image = ((System.Drawing.Image)(resources.GetObject("btn_image.Image")));
             this.btn_image.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_image.Name = "btn_image";
-            this.btn_image.Size = new System.Drawing.Size(34, 40);
+            this.btn_image.Size = new System.Drawing.Size(34, 34);
             this.btn_image.Text = "toolStripButton2";
             this.btn_image.Click += new System.EventHandler(this.btn_image_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 43);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 37);
             // 
             // color1
             // 
             this.color1.AutoSize = false;
-            this.color1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.color1.BackColor = System.Drawing.Color.Black;
             this.color1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.color1.Image = ((System.Drawing.Image)(resources.GetObject("color1.Image")));
             this.color1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color1.Name = "color1";
             this.color1.Size = new System.Drawing.Size(28, 28);
-            this.color1.Click += new System.EventHandler(this.Btn_SelectColor_Click);
+            this.color1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // color2
             // 
             this.color2.AutoSize = false;
-            this.color2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.color2.BackColor = System.Drawing.Color.DodgerBlue;
             this.color2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.color2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.color2.Image = ((System.Drawing.Image)(resources.GetObject("color2.Image")));
             this.color2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color2.Name = "color2";
             this.color2.Size = new System.Drawing.Size(28, 28);
-            this.color2.Click += new System.EventHandler(this.Btn_SelectColor_Click);
+            this.color2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // color3
             // 
             this.color3.AutoSize = false;
-            this.color3.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.color3.BackColor = System.Drawing.Color.OrangeRed;
             this.color3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.color3.Image = ((System.Drawing.Image)(resources.GetObject("color3.Image")));
             this.color3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color3.Name = "color3";
             this.color3.Size = new System.Drawing.Size(28, 28);
-            this.color3.Click += new System.EventHandler(this.Btn_SelectColor_Click);
+            this.color3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // ClientForm
             // 
@@ -446,7 +446,6 @@
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox txtInput;
         private System.Windows.Forms.Label lblCurrentPage;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button delPageBtn;
         private System.Windows.Forms.Button createPageBtn;
         private System.Windows.Forms.Button nextPageBtn;
@@ -474,6 +473,7 @@
         private System.Windows.Forms.ToolStripButton color1;
         private System.Windows.Forms.ToolStripButton color2;
         private System.Windows.Forms.ToolStripButton color3;
+        private DoubleBufferPanel panel1;
     }
 }
 

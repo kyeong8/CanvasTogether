@@ -53,6 +53,8 @@ namespace CanvasTogether
         int _polygon = 1;
         int _thick = 1;
 
+        Color currentColor = Color.Black;   //현재 적용된 컬러(1/2/3)
+
         // ==========================================
 
         private bool freePen;
@@ -93,8 +95,8 @@ namespace CanvasTogether
             circle = false;
             start = new Point(0, 0);
             finish = new Point(0, 0);
-            pen = new Pen(Color.Black);
-            brush = new SolidBrush(Color.Black);
+            pen = new Pen(currentColor);
+            brush = new SolidBrush(currentColor);
             //myfreepens = new MyFreePen[1000];
             //mylines = new MyLines[100];
             //myrect = new MyRect[100];
@@ -217,7 +219,7 @@ namespace CanvasTogether
                 btn_thick.Image = item_Thick5.Image;
                 _thick = 5;
             }
-            pen = new Pen(Color.Black, _thick);
+            pen = new Pen(currentColor, _thick);
         }
 
         //private void createPageBtn_Click(object sender, EventArgs e)
@@ -635,8 +637,8 @@ namespace CanvasTogether
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
-            pen = new Pen(Color.Black, _thick);
-            brush = new SolidBrush(Color.Black);
+            pen = new Pen(currentColor, _thick);
+            brush = new SolidBrush(currentColor);
             isHolding = true;
             switch (curMode)
             {
@@ -844,18 +846,44 @@ namespace CanvasTogether
                 p.MouseUp += p_MouseUp;
             }
         }
-        private void Btn_SelectColor_Click(object sender, EventArgs e)
+        private void Btn_SelectColor_Click(object sender, MouseEventArgs e)
         {
-            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            if (((MouseEventArgs)e).Button == MouseButtons.Left)
             {
+                MouseEventArgs mouseEvent = e as MouseEventArgs;
                 if (sender == color1)
-                    color1.BackColor = colorDialog1.Color;
+                    currentColor = color1.BackColor;
                 else if (sender == color2)
-                    color2.BackColor = colorDialog1.Color;
+                    currentColor = color2.BackColor;
                 else if (sender == color3)
-                    color3.BackColor = colorDialog1.Color;
+                    currentColor = color3.BackColor;
             }
+            else
+            {
+                if (colorDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    if (sender == color1)
+                    {
+                        color1.BackColor = colorDialog1.Color;
+                        currentColor = color1.BackColor;
+                    }
+                    else if (sender == color2)
+                    {
+                        color2.BackColor = colorDialog1.Color;
+                        currentColor = color2.BackColor;
+                    }
+                    else if (sender == color3)
+                    {
+                        color3.BackColor = colorDialog1.Color;
+                        currentColor = color3.BackColor;
+                    }
+
+                }
+            }
+            
+
         }
+
 
         private void ClientForm_Load(object sender, EventArgs e)
         {
