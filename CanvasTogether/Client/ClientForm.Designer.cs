@@ -233,6 +233,7 @@
             this.btn_undo.Name = "btn_undo";
             this.btn_undo.Size = new System.Drawing.Size(34, 34);
             this.btn_undo.Text = "toolStripButton1";
+            this.btn_undo.ToolTipText = "실행 취소";
             // 
             // btn_redo
             // 
@@ -242,6 +243,7 @@
             this.btn_redo.Name = "btn_redo";
             this.btn_redo.Size = new System.Drawing.Size(34, 34);
             this.btn_redo.Text = "toolStripButton2";
+            this.btn_redo.ToolTipText = "다시 실행";
             // 
             // btn_pen
             // 
@@ -251,6 +253,7 @@
             this.btn_pen.Name = "btn_pen";
             this.btn_pen.Size = new System.Drawing.Size(34, 34);
             this.btn_pen.Text = "toolStripButton1";
+            this.btn_pen.ToolTipText = "자유펜";
             // 
             // btn_eraser
             // 
@@ -260,6 +263,7 @@
             this.btn_eraser.Name = "btn_eraser";
             this.btn_eraser.Size = new System.Drawing.Size(34, 34);
             this.btn_eraser.Text = "toolStripButton1";
+            this.btn_eraser.ToolTipText = "지우개";
             // 
             // btn_shape
             // 
@@ -272,13 +276,14 @@
             this.btn_shape.Name = "btn_shape";
             this.btn_shape.Size = new System.Drawing.Size(43, 34);
             this.btn_shape.Text = "toolStripDropDownButton1";
+            this.btn_shape.ToolTipText = "도형 선택";
             this.btn_shape.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Btn_shape_Click);
             // 
             // item_line
             // 
             this.item_line.Image = global::CanvasTogether.Properties.Resources.line;
             this.item_line.Name = "item_line";
-            this.item_line.Size = new System.Drawing.Size(126, 22);
+            this.item_line.Size = new System.Drawing.Size(194, 36);
             this.item_line.Text = "Line";
             this.item_line.Click += new System.EventHandler(this.item_line_Click);
             // 
@@ -286,7 +291,7 @@
             // 
             this.item_rect.Image = global::CanvasTogether.Properties.Resources.rect;
             this.item_rect.Name = "item_rect";
-            this.item_rect.Size = new System.Drawing.Size(126, 22);
+            this.item_rect.Size = new System.Drawing.Size(194, 36);
             this.item_rect.Text = "Rectangle";
             this.item_rect.Click += new System.EventHandler(this.item_rect_Click);
             // 
@@ -294,7 +299,7 @@
             // 
             this.item_circle.Image = global::CanvasTogether.Properties.Resources.circle;
             this.item_circle.Name = "item_circle";
-            this.item_circle.Size = new System.Drawing.Size(126, 22);
+            this.item_circle.Size = new System.Drawing.Size(194, 36);
             this.item_circle.Text = "Circle";
             this.item_circle.Click += new System.EventHandler(this.item_circle_Click);
             // 
@@ -311,41 +316,42 @@
             this.btn_thick.Name = "btn_thick";
             this.btn_thick.Size = new System.Drawing.Size(43, 34);
             this.btn_thick.Text = "toolStripDropDownButton2";
+            this.btn_thick.ToolTipText = "굵기 선택";
             this.btn_thick.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Btn_thick_Click);
             // 
             // item_Thick1
             // 
             this.item_Thick1.Image = global::CanvasTogether.Properties.Resources.thick1;
             this.item_Thick1.Name = "item_Thick1";
-            this.item_Thick1.Size = new System.Drawing.Size(109, 22);
+            this.item_Thick1.Size = new System.Drawing.Size(194, 36);
             this.item_Thick1.Text = "Thick1";
             // 
             // item_Thick2
             // 
             this.item_Thick2.Image = global::CanvasTogether.Properties.Resources.thick2;
             this.item_Thick2.Name = "item_Thick2";
-            this.item_Thick2.Size = new System.Drawing.Size(109, 22);
+            this.item_Thick2.Size = new System.Drawing.Size(194, 36);
             this.item_Thick2.Text = "Thick2";
             // 
             // item_Thick3
             // 
             this.item_Thick3.Image = global::CanvasTogether.Properties.Resources.thick3;
             this.item_Thick3.Name = "item_Thick3";
-            this.item_Thick3.Size = new System.Drawing.Size(109, 22);
+            this.item_Thick3.Size = new System.Drawing.Size(194, 36);
             this.item_Thick3.Text = "Thick3";
             // 
             // item_Thick4
             // 
             this.item_Thick4.Image = global::CanvasTogether.Properties.Resources.thick4;
             this.item_Thick4.Name = "item_Thick4";
-            this.item_Thick4.Size = new System.Drawing.Size(109, 22);
+            this.item_Thick4.Size = new System.Drawing.Size(194, 36);
             this.item_Thick4.Text = "Thick4";
             // 
             // item_Thick5
             // 
             this.item_Thick5.Image = global::CanvasTogether.Properties.Resources.thick5;
             this.item_Thick5.Name = "item_Thick5";
-            this.item_Thick5.Size = new System.Drawing.Size(109, 22);
+            this.item_Thick5.Size = new System.Drawing.Size(194, 36);
             this.item_Thick5.Text = "Thick5";
             // 
             // btn_text
@@ -356,6 +362,7 @@
             this.btn_text.Name = "btn_text";
             this.btn_text.Size = new System.Drawing.Size(34, 34);
             this.btn_text.Text = "toolStripButton1";
+            this.btn_text.ToolTipText = "텍스트 추가";
             // 
             // btn_image
             // 
@@ -365,6 +372,7 @@
             this.btn_image.Name = "btn_image";
             this.btn_image.Size = new System.Drawing.Size(34, 34);
             this.btn_image.Text = "toolStripButton2";
+            this.btn_image.ToolTipText = "이미지 추가";
             this.btn_image.Click += new System.EventHandler(this.btn_image_Click);
             // 
             // toolStripSeparator1
@@ -381,6 +389,7 @@
             this.color1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color1.Name = "color1";
             this.color1.Size = new System.Drawing.Size(28, 28);
+            this.color1.ToolTipText = "좌클릭 시 색상 적용, 우클릭 시 색상 선택";
             this.color1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // color2
@@ -393,6 +402,7 @@
             this.color2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color2.Name = "color2";
             this.color2.Size = new System.Drawing.Size(28, 28);
+            this.color2.ToolTipText = "좌클릭 시 색상 적용, 우클릭 시 색상 선택";
             this.color2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // color3
@@ -404,6 +414,7 @@
             this.color3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.color3.Name = "color3";
             this.color3.Size = new System.Drawing.Size(28, 28);
+            this.color3.ToolTipText = "좌클릭 시 색상 적용, 우클릭 시 색상 선택";
             this.color3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
             // ClientForm
