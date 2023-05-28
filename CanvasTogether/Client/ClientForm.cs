@@ -15,6 +15,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using System.Drawing.Drawing2D;
 using System.Data.Entity.Migrations.Builders;
+using Shapes;
 
 namespace CanvasTogether
 {
@@ -57,18 +58,10 @@ namespace CanvasTogether
 
         // ==========================================
 
-        private bool freePen;
-        private bool line;
-        private bool rect;
-        private bool circle;
+
         private Point start; // 도형의 시작점
         private Point finish; // 도형의 끝점
-        private int nfreepen; // 저장된 자유펜 개수
-        private int nline; // 저장된 선 개수
-        private int nrect; // 저장된 사각형 개수
-        private int ncircle; // 저장된 원 개수
-        private int i;
-        private int thick; // 선 두께
+
         private MyFreePen[] myfreepens;
         private MyLines[] mylines;
         private MyRect[] myrect;
@@ -87,41 +80,11 @@ namespace CanvasTogether
 
         private void SetupShapeVar()
         {
-            i = 0;
-            thick = 1;
-            freePen = false;
-            line = false;
-            rect = false;
-            circle = false;
             start = new Point(0, 0);
             finish = new Point(0, 0);
             pen = new Pen(currentColor);
             brush = new SolidBrush(currentColor);
-            //myfreepens = new MyFreePen[1000];
-            //mylines = new MyLines[100];
-            //myrect = new MyRect[100];
-            //mycircle = new MyCircle[100];
-            //nfreepen = 0;
-            //nline = 0;
-            //nrect = 0;
-            //ncircle = 0;
-
-            //SetupMine();
         }
-
-        //private void SetupMine()
-        //{
-        //    for (int i = 0; i < 1000; i++)
-        //        myfreepens[i] = new MyFreePen();
-        //    for (int i = 0; i < 100; i++)
-        //        mylines[i] = new MyLines();
-        //    for (int i = 0; i < 100; i++)
-        //        myrect[i] = new MyRect();
-        //    for (int i = 0; i < 100; i++)
-        //        mycircle[i] = new MyCircle();
-        //}
-
-        // ==========================================
 
         private PictureBox movingPictureBox;
 
@@ -528,7 +491,46 @@ namespace CanvasTogether
                         lobby.uiUpdate();
                     }  
                 }
-                //Draw();
+                
+                else if (receive.Equals("Line"))
+                {
+                    int x1 = int.Parse(m_Read.ReadLine());
+                    int y1 = int.Parse(m_Read.ReadLine());
+                    int x2 = int.Parse(m_Read.ReadLine());
+                    int y2 = int.Parse(m_Read.ReadLine());
+                    int thick = int.Parse(m_Read.ReadLine());
+                    int Argb = int.Parse(m_Read.ReadLine());
+                    MyLines ml = new MyLines();
+                    ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
+                    shape = ml;
+                    shapes.Add(shape);
+                }
+                else if (receive.Equals("Rectangle"))
+                {
+                    int x1 = int.Parse(m_Read.ReadLine());
+                    int y1 = int.Parse(m_Read.ReadLine());
+                    int wid = int.Parse(m_Read.ReadLine());
+                    int hei = int.Parse(m_Read.ReadLine());
+                    int thick = int.Parse(m_Read.ReadLine());
+                    int Argb = int.Parse(m_Read.ReadLine());
+                    MyRect mr = new MyRect();
+                    mr.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
+                    shape = mr;
+                    shapes.Add(shape);
+                }
+                else if (receive.Equals("Circle"))
+                {
+                    int x1 = int.Parse(m_Read.ReadLine());
+                    int y1 = int.Parse(m_Read.ReadLine());
+                    int wid = int.Parse(m_Read.ReadLine());
+                    int hei = int.Parse(m_Read.ReadLine());
+                    int thick = int.Parse(m_Read.ReadLine());
+                    int Argb = int.Parse(m_Read.ReadLine());
+                    MyCircle mc = new MyCircle();
+                    mc.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
+                    shape = mc;
+                    shapes.Add(shape);
+                }
             }
         }
 
@@ -537,10 +539,6 @@ namespace CanvasTogether
             if(e.ClickedItem == btn_pen)
             {
                 curMode = (int)CANVAS_MODE.PENMODE;
-                //freePen = true;
-                //line = false;
-                //rect = false;
-                //circle = false;
 
                 this.btn_pen.BackColor = Color.Orange;
                 this.btn_eraser.BackColor = Color.White;
@@ -558,29 +556,8 @@ namespace CanvasTogether
             }
             if(e.ClickedItem == btn_shape)
             {
-                freePen = false;
                 curMode = (int)CANVAS_MODE.LINEMODE;
-                //if (_polygon == 0)
-                //{
-                //    freePen = false;
-                //    line = true;
-                //    rect = false;
-                //    circle = false;
-                //}
-                //else if(_polygon == 1)
-                //{
-                //    freePen = false;
-                //    line = false;
-                //    rect = true;
-                //    circle = false;
-                //}
-                //else if (_polygon == 2)
-                //{
-                //    freePen = false;
-                //    line = false;
-                //    rect = false;
-                //    circle = true;
-                //}
+
                 this.btn_pen.BackColor = Color.White;
                 this.btn_eraser.BackColor = Color.White;
                 this.btn_shape.BackColor = Color.Orange;
@@ -600,29 +577,6 @@ namespace CanvasTogether
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //for (i = 0; i < nfreepen; i++)
-            //{
-            //    pen.Width = myfreepens[i].getThick();
-            //    e.Graphics.DrawEllipse(pen, myfreepens[i].getRectF());
-            //}
-
-            //for (i = 0; i <= nline; i++)
-            //{
-            //    pen.Width = mylines[i].getThick();
-            //    e.Graphics.DrawLine(pen, mylines[i].getPoint1(), mylines[i].getPoint2());
-            //}
-
-            //for (i = 0; i <= nrect; i++)
-            //{
-            //    pen.Width = myrect[i].getThick();
-            //    e.Graphics.DrawRectangle(pen, myrect[i].getRect());
-            //}
-
-            //for (i = 0; i <= ncircle; i++)
-            //{
-            //    pen.Width = mycircle[i].getThick();
-            //    e.Graphics.DrawEllipse(pen, mycircle[i].getRectC());
-            //}
             try
             {
                 foreach (var sh in shapes)
@@ -658,41 +612,11 @@ namespace CanvasTogether
                     myCircle = new MyCircle();
                     shape = myCircle;
                     break;
+                case 5: // 지우개
+                    break;
             }
             start.X = e.X;
             start.Y = e.Y;
-
-            //// 임시방편
-            //if (!freePen)
-            //{
-            //    if (btn_shape.Image == item_line.Image)
-            //    {
-            //        _polygon = 0;
-            //        freePen = false;
-            //        line = true;
-            //        rect = false;
-            //        circle = false;
-            //    }
-            //    else if (btn_shape.Image == item_rect.Image)
-            //    {
-            //        _polygon = 1;
-            //        freePen = false;
-            //        line = false;
-            //        rect = true;
-            //        circle = false;
-            //    }
-            //    else if (btn_shape.Image == item_circle.Image)
-            //    {
-            //        _polygon = 2;
-            //        freePen = false;
-            //        line = false;
-            //        rect = false;
-            //        circle = true;
-            //    }
-            //}
-
-            //start.X = e.X;
-            //start.Y = e.Y;
         }
 
         private void panel1_MouseMove(object sender, MouseEventArgs e)
@@ -703,17 +627,24 @@ namespace CanvasTogether
             switch(curMode)
             {
                 case 0: // 펜
-                    m_Write.WriteLine("Freepen");
-                    m_Write.WriteLine(start.X);
-                    m_Write.WriteLine(start.Y);
-                    m_Write.WriteLine(pen.Width);
-                    m_Write.WriteLine(pen.Color.ToArgb());
-                    m_Write.Flush();
+                    
+                    //m_Write.WriteLine("Freepen");
+                    //m_Write.WriteLine(start.X);
+                    //m_Write.WriteLine(start.Y);
+                    //m_Write.WriteLine(pen.Width);
+                    //m_Write.WriteLine(pen.Color.ToArgb());
 
                     Point curPoint = panel1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
                     myFreePen.setRectF(curPoint, pen, brush, _thick);
+
+                    m_Write.WriteLine("Freepen");
+                    m_Write.WriteLine(curPoint.X);
+                    m_Write.WriteLine(curPoint.Y);
+                    m_Write.WriteLine(_thick);
+                    m_Write.WriteLine(myFreePen.GetPen().Color.ToArgb());
+                    m_Write.Flush();
                     shapes.Add(myFreePen);
-                    myFreePen = new MyFreePen();
+                    myFreePen = new MyFreePen(); // 다음 freepen을 담기 위해 생성
                     break;
                 case 1: // 직선
                     myLine.setPoint(start, finish, pen, _thick);
@@ -727,89 +658,71 @@ namespace CanvasTogether
             }
             panel1.Invalidate(true);
             panel1.Update();
-            //if (start.X == 0 && start.Y == 0)
-            //    return;
-
-            //finish.X = e.X;
-            //finish.Y = e.Y;
-
-            //if (freePen == true)
-            //{
-            //    Point curPoint = panel1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
-            //    myfreepens[nfreepen].setRectF(curPoint, pen, brush, _thick);
-            //    nfreepen++;
-            //}
-            //if (line == true)
-            //{
-            //    mylines[nline].setPoint(start, finish, pen, _thick);
-            //}
-            //if (rect == true)
-            //{
-            //    myrect[nrect].setRect(start, finish, pen, _thick);
-            //}
-            //if (circle == true)
-            //{
-            //    mycircle[ncircle].setRectC(start, finish, pen, _thick);
-            //}
-            //panel1.Invalidate(true);
-            //panel1.Update();
         }
 
         private void panel1_MouseUp(object sender, MouseEventArgs e)
         {
             isHolding = false;
             if (start.X.Equals(e.X) && start.Y.Equals(e.Y)) return; // 도형을 그리지 않은 경우
+            List<int> obj = new List<int>();
 
-            switch(curMode)
+            switch (curMode)
             {
-                case 1: // 선
+                case 1: // 선                    
+                    //obj.Add(myLine.getPoint1().X);
+                    //obj.Add(myLine.getPoint1().Y);
+                    //obj.Add(myLine.getPoint2().X);
+                    //obj.Add(myLine.getPoint2().Y);
+                    //obj.Add((int)myLine.GetPen().Width);
+                    //obj.Add(myLine.GetPen().Color.ToArgb());
                     m_Write.WriteLine("Line");
-                    
                     m_Write.WriteLine(myLine.getPoint1().X);
                     m_Write.WriteLine(myLine.getPoint1().Y);
                     m_Write.WriteLine(myLine.getPoint2().X);
                     m_Write.WriteLine(myLine.getPoint2().Y);
-                    m_Write.WriteLine(myLine.GetPen().Width);
+                    m_Write.WriteLine(_thick);
                     m_Write.WriteLine(myLine.GetPen().Color.ToArgb());
+                    //m_Write.WriteLine(obj);
                     m_Write.Flush();
                     shapes.Add(myLine);
                     break;
                 case 2: // 사각형
                     m_Write.WriteLine("Rectangle");
+                    //obj[0] = myRect.getRect().X;
+                    //obj[1] = myRect.getRect().Y;
+                    //obj[2] = myRect.getRect().Width;
+                    //obj[3] = myRect.getRect().Height;
+                    //obj[4] = (int)myLine.GetPen().Width;
+                    //obj[5] = myLine.GetPen().Color.ToArgb();
                     m_Write.WriteLine(myRect.getRect().X);
                     m_Write.WriteLine(myRect.getRect().Y);
                     m_Write.WriteLine(myRect.getRect().Width);
                     m_Write.WriteLine(myRect.getRect().Height);
-                    m_Write.WriteLine(myRect.GetPen().Width);
+                    m_Write.WriteLine(_thick);
                     m_Write.WriteLine(myRect.GetPen().Color.ToArgb());
+                    //m_Write.WriteLine(obj);
                     m_Write.Flush();
                     shapes.Add(myRect);
                     break;
                 case 3: // 원
                     m_Write.WriteLine("Circle");
+                    //obj[0] = myCircle.getRectC().X;
+                    //obj[1] = myCircle.getRectC().Y;
+                    //obj[2] = myCircle.getRectC().Width;
+                    //obj[3] = myCircle.getRectC().Height;
+                    //obj[4] = (int)myCircle.GetPen().Width;
+                    //obj[5] = myCircle.GetPen().Color.ToArgb();
                     m_Write.WriteLine(myCircle.getRectC().X);
                     m_Write.WriteLine(myCircle.getRectC().Y);
                     m_Write.WriteLine(myCircle.getRectC().Width);
                     m_Write.WriteLine(myCircle.getRectC().Height);
-                    m_Write.WriteLine(myCircle.GetPen().Width);
+                    m_Write.WriteLine(_thick);
                     m_Write.WriteLine(myCircle.GetPen().Color.ToArgb());
+                    //m_Write.WriteLine(obj);
                     m_Write.Flush();
                     shapes.Add(myCircle);
                     break;
             }
-            //if (freePen == true)
-            //    nfreepen++;
-            //if (line == true)
-            //    nline++;
-            //if (rect == true)
-            //    nrect++;
-            //if (circle == true)
-            //    ncircle++;
-
-            //start.X = 0;
-            //start.Y = 0;
-            //finish.X = 0;
-            //finish.Y = 0;
         }
 
         private void btn_image_Click(object sender, EventArgs e)
@@ -877,13 +790,9 @@ namespace CanvasTogether
                         color3.BackColor = colorDialog1.Color;
                         currentColor = color3.BackColor;
                     }
-
                 }
             }
-            
-
         }
-
 
         private void ClientForm_Load(object sender, EventArgs e)
         {

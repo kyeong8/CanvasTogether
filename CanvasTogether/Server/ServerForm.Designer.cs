@@ -33,10 +33,10 @@
             this.nextPageBtn = new System.Windows.Forms.Button();
             this.prevPageBtn = new System.Windows.Forms.Button();
             this.lblPage = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.panel1 = new CanvasTogether.DoubleBufferPanel();
+            this.panel2 = new CanvasTogether.DoubleBufferPanel();
+            this.panel3 = new CanvasTogether.DoubleBufferPanel();
+            this.panel4 = new CanvasTogether.DoubleBufferPanel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -98,6 +98,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(550, 414);
             this.panel1.TabIndex = 45;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // panel2
             // 

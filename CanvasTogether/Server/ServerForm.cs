@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
+using Shapes;
 
 namespace CanvasTogether
 {
@@ -28,6 +29,9 @@ namespace CanvasTogether
         public List<string> Users = new List<string>();
         public int UserCount = 0;
         public List<string> roomNames = new List<string>();
+
+        public List<List<Shape>> shapes = new List<List<Shape>>();
+        
         //public List<string> Id = new List<string>();
         //public List<string> Pw = new List<string>();
 
@@ -37,6 +41,11 @@ namespace CanvasTogether
         public ServerForm()
         {
             InitializeComponent();
+            // 패널 4개를 관리할 shapes 2차원 list 초기화
+            shapes.Add(new List<Shape>());
+            shapes.Add(new List<Shape>());
+            shapes.Add(new List<Shape>());
+            shapes.Add(new List<Shape>());
             lblCurrentPage.Text = 1.ToString();
             panel2.BackColor = Color.Red;
             panel3.BackColor = Color.Green;
@@ -53,6 +62,8 @@ namespace CanvasTogether
 
             this.m_thServer = new Thread(new ThreadStart(ServerStart));
             this.m_thServer.Start();
+
+
         }
 
         public void ServerStart()
@@ -215,6 +226,56 @@ namespace CanvasTogether
                 lblCurrentPage.Text = 1.ToString();
             }
         }
+
+        public void Draw()
+        {
+            this.Invoke(new Action(delegate ()
+            {
+                panel1.Invalidate(false);
+                panel1.Update();
+            }));
+        }
+
+        public void all_Send_Line(int x1, int y1, int x2, int y2, int thick, int Argb, string roomNumber)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
+                    serverThreads[i].Send_Line(x1, y1, x2, y2, thick, Argb);
+            }
+        }
+
+        public void all_Send_Rectangle(int x1, int y1, int x2, int y2, int thick, int Argb, string roomNumber)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
+                    serverThreads[i].Send_Rectangle(x1, y1, x2, y2, thick, Argb);
+            }
+        }
+
+        public void all_Send_Circle(int x1, int y1, int x2, int y2, int thick, int Argb, string roomNumber)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
+                    serverThreads[i].Send_Circle(x1, y1, x2, y2, thick, Argb);
+            }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            try
+            {
+                foreach (var item in shapes[0])
+                    item.DrawShape(e);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
     }
 
     public class ServerThread
@@ -312,6 +373,68 @@ namespace CanvasTogether
 
                     return;
                 }
+                else if(Request.Equals("Freepen"))
+                {
+                    int x = int.Parse(m_Read.ReadLine());
+                    int y = int.Parse(m_Read.ReadLine());
+                    int thick = int.Parse(m_Read.ReadLine());
+                    int Argb = int.Parse(m_Read.ReadLine());
+                    MyFreePen myFreePen = new MyFreePen();
+                    myFreePen.setRectF(new Point(x, y), new Pen(Color.FromArgb(Argb), thick), new SolidBrush(Color.FromArgb(Argb)), thick);
+                    Shape shape = myFreePen;
+                    serverForm.shapes[int.Parse(roomNumber)-1].Add(shape);
+                    serverForm.Draw();
+
+                    //serverForm.all_Send_Freepen(x, y, thick, Argb);
+                }
+                else if(Request.Equals("Line"))
+                {
+                    int x1 = int.Parse(m_Read.ReadLine());
+                    int y1 = int.Parse(m_Read.ReadLine());
+                    int x2 = int.Parse(m_Read.ReadLine());
+                    int y2 = int.Parse(m_Read.ReadLine());
+                    int thick = int.Parse(m_Read.ReadLine());
+                    int Argb = int.Parse(m_Read.ReadLine());
+                    MyLines myLine = new MyLines();
+                    myLine.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
+                    Shape shape = myLine;
+                    serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
+                    serverForm.Draw();
+
+                    serverForm.all_Send_Line(x1, y1, x2, y2, thick, Argb, roomNumber);
+                }
+                else if(Request.Equals("Rectangle"))
+                {
+                    int x1 = int.Parse(m_Read.ReadLine());
+                    int y1 = int.Parse(m_Read.ReadLine());
+                    int wid = int.Parse(m_Read.ReadLine());
+                    int hei = int.Parse(m_Read.ReadLine());
+                    int thick = int.Parse(m_Read.ReadLine());
+                    int Argb = int.Parse(m_Read.ReadLine());
+                    MyRect myRect = new MyRect();
+                    myRect.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
+                    Shape shape = myRect;
+                    serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
+                    serverForm.Draw();
+
+                    serverForm.all_Send_Rectangle(x1, y1, wid, hei, thick, Argb, roomNumber);
+                }
+                else if(Request.Equals("Circle"))
+                {
+                    int x1 = int.Parse(m_Read.ReadLine());
+                    int y1 = int.Parse(m_Read.ReadLine());
+                    int wid = int.Parse(m_Read.ReadLine());
+                    int hei = int.Parse(m_Read.ReadLine());
+                    int thick = int.Parse(m_Read.ReadLine());
+                    int Argb = int.Parse(m_Read.ReadLine());
+                    MyCircle myCircle = new MyCircle();
+                    myCircle.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
+                    Shape shape = myCircle;
+                    serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
+                    serverForm.Draw();
+
+                    serverForm.all_Send_Circle(x1, y1, wid, hei, thick, Argb, roomNumber);
+                }
             }
             serverForm.ServerThreadExit(this);
         }
@@ -341,6 +464,53 @@ namespace CanvasTogether
                 m_Write.WriteLine(name);
             //serverForm.printChat("현재 활성화 된 방 : " + message.ToString());
             m_Write.Flush();
+        }
+
+        public void Send_Line(int x1, int y1, int x2, int y2, int thick, int Argb)
+        {
+            m_Write.WriteLine("Line");
+            m_Write.WriteLine(x1);
+            m_Write.WriteLine(y1);
+            m_Write.WriteLine(x2);
+            m_Write.WriteLine(y2);
+            m_Write.WriteLine(thick);
+            m_Write.WriteLine(Argb);
+            m_Write.Flush();
+        }
+
+        public void Send_Circle(int x1, int y1, int wid, int hei, int thick, int Argb)
+        {
+            m_Write.WriteLine("Circle");
+            m_Write.WriteLine(x1);
+            m_Write.WriteLine(y1);
+            m_Write.WriteLine(wid);
+            m_Write.WriteLine(hei);
+            m_Write.WriteLine(thick);
+            m_Write.WriteLine(Argb);
+            m_Write.Flush();
+        }
+
+        public void Send_Rectangle(int x1, int y1, int wid, int hei, int thick, int Argb)
+        {
+            m_Write.WriteLine("Rectangle");
+            m_Write.WriteLine(x1);
+            m_Write.WriteLine(y1);
+            m_Write.WriteLine(wid);
+            m_Write.WriteLine(hei);
+            m_Write.WriteLine(thick);
+            m_Write.WriteLine(Argb);
+            m_Write.Flush();
+        }
+
+        public class DoubleBufferPanel : Panel
+        {
+            public DoubleBufferPanel()
+            {
+                this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                    ControlStyles.UserPaint |
+                    ControlStyles.AllPaintingInWmPaint, true);
+                this.UpdateStyles();
+            }
         }
     }
 }
