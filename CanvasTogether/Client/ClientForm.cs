@@ -62,7 +62,7 @@ namespace CanvasTogether
         private Point start; // 도형의 시작점
         private Point finish; // 도형의 끝점
 
-        private MyFreePen[] myfreepens;
+        //private MyFreePen[] myfreepens;
         private MyLines[] mylines;
         private MyRect[] myrect;
         private MyCircle[] mycircle;
@@ -70,7 +70,7 @@ namespace CanvasTogether
         SolidBrush brush = new SolidBrush(Color.Black);
         
         Shape shape;
-        MyFreePen myFreePen;
+        //MyFreePen myFreePen;
         MyLines myLine;
         MyCircle myCircle;
         MyRect myRect;
@@ -90,7 +90,6 @@ namespace CanvasTogether
 
         public ClientForm()
         {
-           
             InitializeComponent();
             SetupShapeVar();
             pen.SetLineCap(System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.DashCap.Round);
@@ -504,6 +503,7 @@ namespace CanvasTogether
                     ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     shape = ml;
                     shapes.Add(shape);
+                    Draw();
                 }
                 else if (receive.Equals("Rectangle"))
                 {
@@ -517,6 +517,7 @@ namespace CanvasTogether
                     mr.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     shape = mr;
                     shapes.Add(shape);
+                    Draw();
                 }
                 else if (receive.Equals("Circle"))
                 {
@@ -530,6 +531,7 @@ namespace CanvasTogether
                     mc.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     shape = mc;
                     shapes.Add(shape);
+                    Draw();
                 }
             }
         }
@@ -597,8 +599,8 @@ namespace CanvasTogether
             switch (curMode)
             {
                 case 0: // 펜
-                    myFreePen = new MyFreePen();
-                    shape = myFreePen;
+                    //myFreePen = new MyFreePen();
+                    //shape = myFreePen;
                     break;
                 case 1: // 선
                     myLine = new MyLines();
@@ -627,24 +629,35 @@ namespace CanvasTogether
             switch(curMode)
             {
                 case 0: // 펜
-                    
+
                     //m_Write.WriteLine("Freepen");
                     //m_Write.WriteLine(start.X);
                     //m_Write.WriteLine(start.Y);
                     //m_Write.WriteLine(pen.Width);
                     //m_Write.WriteLine(pen.Color.ToArgb());
 
-                    Point curPoint = panel1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
-                    myFreePen.setRectF(curPoint, pen, brush, _thick);
+                    //Point curPoint = panel1.PointToClient(new Point(Control.MousePosition.X, Control.MousePosition.Y));
+                    //myFreePen.setRectF(curPoint, pen, brush, _thick);
 
-                    m_Write.WriteLine("Freepen");
-                    m_Write.WriteLine(curPoint.X);
-                    m_Write.WriteLine(curPoint.Y);
-                    m_Write.WriteLine(_thick);
-                    m_Write.WriteLine(myFreePen.GetPen().Color.ToArgb());
+                    //m_Write.WriteLine("Freepen");
+                    //m_Write.WriteLine(curPoint.X);
+                    //m_Write.WriteLine(curPoint.Y);
+                    //m_Write.WriteLine(_thick);
+                    //m_Write.WriteLine(myFreePen.GetPen().Color.ToArgb());
+                    //m_Write.Flush();
+                    //shapes.Add(myFreePen);
+                    //myFreePen = new MyFreePen(); // 다음 freepen을 담기 위해 생성
+                    //break;
+                    m_Write.WriteLine("Line");
+                    m_Write.WriteLine(start.X);
+                    m_Write.WriteLine(start.Y);
+                    m_Write.WriteLine(finish.X);
+                    m_Write.WriteLine(finish.Y);
+                    m_Write.WriteLine(pen.Width);
+                    m_Write.WriteLine(pen.Color.ToArgb());
                     m_Write.Flush();
-                    shapes.Add(myFreePen);
-                    myFreePen = new MyFreePen(); // 다음 freepen을 담기 위해 생성
+
+                    start = finish;
                     break;
                 case 1: // 직선
                     myLine.setPoint(start, finish, pen, _thick);
@@ -684,7 +697,7 @@ namespace CanvasTogether
                     m_Write.WriteLine(myLine.GetPen().Color.ToArgb());
                     //m_Write.WriteLine(obj);
                     m_Write.Flush();
-                    shapes.Add(myLine);
+                    //shapes.Add(myLine);
                     break;
                 case 2: // 사각형
                     m_Write.WriteLine("Rectangle");
@@ -702,7 +715,7 @@ namespace CanvasTogether
                     m_Write.WriteLine(myRect.GetPen().Color.ToArgb());
                     //m_Write.WriteLine(obj);
                     m_Write.Flush();
-                    shapes.Add(myRect);
+                    //shapes.Add(myRect);
                     break;
                 case 3: // 원
                     m_Write.WriteLine("Circle");
@@ -720,7 +733,7 @@ namespace CanvasTogether
                     m_Write.WriteLine(myCircle.GetPen().Color.ToArgb());
                     //m_Write.WriteLine(obj);
                     m_Write.Flush();
-                    shapes.Add(myCircle);
+                    //shapes.Add(myCircle);
                     break;
             }
         }
@@ -796,7 +809,7 @@ namespace CanvasTogether
 
         private void ClientForm_Load(object sender, EventArgs e)
         {
-            myFreePen = new MyFreePen();
+            //myFreePen = new MyFreePen();
             myLine = new MyLines();
             myRect = new MyRect();
             myCircle = new MyCircle();

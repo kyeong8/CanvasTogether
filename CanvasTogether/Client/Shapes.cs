@@ -14,60 +14,10 @@ namespace Shapes
         {
             ;
         }
-    }
 
-    public class MyFreePen : Shape
-    {
-        // Member variables declaration
-        private Pen pen;
-        private SolidBrush brush;
-        private Rectangle rectF;
-        private int thick;
-
-        // Constructor
-        public MyFreePen()
+        public virtual string GetName()
         {
-            rectF = new Rectangle();
-            thick = 1;
-        }
-
-        // Member functions declaration
-        public void setRectF(Point start, Pen pen, SolidBrush brush, int thick)
-        {
-            rectF.X = start.X;
-            rectF.Y = start.Y;
-            rectF.Width = thick;
-            rectF.Height = thick;
-
-            this.pen = pen;
-            this.brush = brush;
-            this.thick = thick;
-        }
-
-        public Rectangle getRectF()
-        {
-            return rectF;
-        }
-
-        public int getThick()
-        {
-            return thick;
-        }
-
-        public Pen GetPen()
-        {
-            return pen;
-        }
-
-        public SolidBrush GetBrush()
-        {
-            return brush;
-        }
-
-        public override void DrawShape(PaintEventArgs e)
-        {
-            e.Graphics.FillEllipse(this.brush, this.getRectF());
-            e.Graphics.DrawEllipse(this.pen, this.getRectF());
+            return "";
         }
     }
 
@@ -77,6 +27,7 @@ namespace Shapes
         private Pen pen;
         private Rectangle rectC;
         private int thick;
+        private const string name = "Circle";
 
         // Constructor
         public MyCircle()
@@ -112,6 +63,11 @@ namespace Shapes
             return pen;
         }
 
+        public override string GetName()
+        {
+            return name;
+        }
+
         public override void DrawShape(PaintEventArgs e)
         {
             e.Graphics.DrawEllipse(this.pen, this.getRectC());
@@ -124,6 +80,7 @@ namespace Shapes
         private Pen pen;
         private Point[] point = new Point[2];
         private int thick;
+        private const string name = "Line";
 
         // Constructor
         public MyLines()
@@ -163,6 +120,11 @@ namespace Shapes
             return pen;
         }
 
+        public override string GetName()
+        {
+            return name;
+        }
+
         public override void DrawShape(PaintEventArgs e)
         {
             e.Graphics.DrawLine(this.pen, this.getPoint1(), this.getPoint2());
@@ -175,6 +137,7 @@ namespace Shapes
         private Pen pen;
         private Rectangle rect;
         private int thick;
+        private const string name = "Rectangle";
 
         // Constructor
         public MyRect()
@@ -208,6 +171,11 @@ namespace Shapes
         public Pen GetPen()
         {
             return pen;
+        }
+
+        public override string GetName()
+        {
+            return name;
         }
 
         public override void DrawShape(PaintEventArgs e)

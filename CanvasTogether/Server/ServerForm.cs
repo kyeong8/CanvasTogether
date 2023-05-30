@@ -42,14 +42,14 @@ namespace CanvasTogether
         {
             InitializeComponent();
             // 패널 4개를 관리할 shapes 2차원 list 초기화
-            shapes.Add(new List<Shape>());
-            shapes.Add(new List<Shape>());
-            shapes.Add(new List<Shape>());
-            shapes.Add(new List<Shape>());
+            shapes.Add(new List<Shape> { });
+            shapes.Add(new List<Shape> { });
+            shapes.Add(new List<Shape> { });
+            shapes.Add(new List<Shape> { });
             lblCurrentPage.Text = 1.ToString();
-            panel2.BackColor = Color.Red;
-            panel3.BackColor = Color.Green;
-            panel4.BackColor = Color.Blue;
+            //panel2.BackColor = Color.Red;
+            //panel3.BackColor = Color.Green;
+            //panel4.BackColor = Color.Blue;
             panel2.Visible = false;
             panel3.Visible = false;
             panel4.Visible = false;
@@ -62,8 +62,6 @@ namespace CanvasTogether
 
             this.m_thServer = new Thread(new ThreadStart(ServerStart));
             this.m_thServer.Start();
-
-
         }
 
         public void ServerStart()
@@ -180,23 +178,27 @@ namespace CanvasTogether
                 panel3.Visible = true;
                 panel4.Visible = true;
                 lblCurrentPage.Text = 4.ToString();
+                panel4.Focus();
             }
             else if (curPage == 2)
             {
                 panel2.Visible = false;
                 lblCurrentPage.Text = 1.ToString();
+                panel1.Focus();
             }
             else if (curPage == 3)
             {
                 panel3.Visible = false;
                 panel2.Visible = true;
                 lblCurrentPage.Text = 2.ToString();
+                panel2.Focus();
             }
             else if (curPage == 4) 
             {
                 panel4.Visible = false;
                 panel3.Visible = true;
                 lblCurrentPage.Text = 3.ToString();
+                panel3.Focus();
             }
         }
 
@@ -207,16 +209,19 @@ namespace CanvasTogether
             {
                 panel2.Visible = true;
                 lblCurrentPage.Text = 2.ToString();
+                panel2.Focus();
             }
             else if (curPage == 2)
             {
                 panel3.Visible = true;
                 lblCurrentPage.Text = 3.ToString();
+                panel3.Focus();
             }
             else if (curPage == 3)
             {
                 panel4.Visible = true;
                 lblCurrentPage.Text = 4.ToString();
+                panel4.Focus();
             }
             else if (curPage == 4)
             {
@@ -224,6 +229,7 @@ namespace CanvasTogether
                 panel3.Visible = false;
                 panel2.Visible = false;
                 lblCurrentPage.Text = 1.ToString();
+                panel1.Focus();
             }
         }
 
@@ -233,6 +239,12 @@ namespace CanvasTogether
             {
                 panel1.Invalidate(false);
                 panel1.Update();
+                panel2.Invalidate(false);
+                panel2.Update();
+                panel3.Invalidate(false);
+                panel3.Update();
+                panel4.Invalidate(false);
+                panel4.Update();
             }));
         }
 
@@ -269,6 +281,48 @@ namespace CanvasTogether
             try
             {
                 foreach (var item in shapes[0])
+                    item.DrawShape(e);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            try
+            {
+                foreach (var item in shapes[1])
+                    item.DrawShape(e);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            try
+            {
+                foreach (var item in shapes[2])
+                    item.DrawShape(e);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
+
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            try
+            {
+                foreach (var item in shapes[3])
                     item.DrawShape(e);
             }
             catch (Exception)
@@ -313,6 +367,52 @@ namespace CanvasTogether
                     int ret = serverForm.UserCount;
                     serverForm.ResponseUpdate(ret);
                     serverForm.ResponseRoomUpdate();
+
+                    // TODO, shapes 배열이 처음에 null이라서 오류 뜸.
+
+                    //if (serverForm.shapes[int.Parse(this.roomNumber) - 1].Count > 0)
+                    //{
+                    //    foreach (var item in serverForm.shapes[int.Parse(this.roomNumber) - 1])
+                    //    {
+                    //        if (item.GetName() == "Line")
+                    //        {
+                    //            MyLines temLine = (MyLines)item;
+                    //            m_Write.WriteLine("Line");
+                    //            m_Write.WriteLine(temLine.getPoint1().X);
+                    //            m_Write.WriteLine(temLine.getPoint1().Y);
+                    //            m_Write.WriteLine(temLine.getPoint2().X);
+                    //            m_Write.WriteLine(temLine.getPoint2().Y);
+                    //            m_Write.WriteLine(temLine.getThick());
+                    //            m_Write.WriteLine(temLine.GetPen().Color.ToArgb());
+                    //            m_Write.Flush();
+                    //        }
+                    //        else if (item.GetName() == "Circle")
+                    //        {
+                    //            MyCircle temCircle = (MyCircle)item;
+                    //            m_Write.WriteLine("Circle");
+                    //            m_Write.WriteLine(temCircle.getRectC().X);
+                    //            m_Write.WriteLine(temCircle.getRectC().Y);
+                    //            m_Write.WriteLine(temCircle.getRectC().Width);
+                    //            m_Write.WriteLine(temCircle.getRectC().Height);
+                    //            m_Write.WriteLine(temCircle.getThick());
+                    //            m_Write.WriteLine(temCircle.GetPen().Color.ToArgb());
+                    //            m_Write.Flush();
+                    //        }
+                    //        else if (item.GetName() == "Rectangle")
+                    //        {
+                    //            MyRect temRect = (MyRect)item;
+                    //            m_Write.WriteLine("Rectangle");
+                    //            m_Write.WriteLine(temRect.getRect().X);
+                    //            m_Write.WriteLine(temRect.getRect().Y);
+                    //            m_Write.WriteLine(temRect.getRect().Width);
+                    //            m_Write.WriteLine(temRect.getRect().Height);
+                    //            m_Write.WriteLine(temRect.getThick());
+                    //            m_Write.WriteLine(temRect.GetPen().Color.ToArgb());
+                    //            m_Write.Flush();
+                    //        }
+                    //    }
+                    //}
+                    
                 }
                 else if (Request.Equals("Message"))
                 {
@@ -368,20 +468,20 @@ namespace CanvasTogether
 
                     return;
                 }
-                else if(Request.Equals("Freepen"))
-                {
-                    int x = int.Parse(m_Read.ReadLine());
-                    int y = int.Parse(m_Read.ReadLine());
-                    int thick = int.Parse(m_Read.ReadLine());
-                    int Argb = int.Parse(m_Read.ReadLine());
-                    MyFreePen myFreePen = new MyFreePen();
-                    myFreePen.setRectF(new Point(x, y), new Pen(Color.FromArgb(Argb), thick), new SolidBrush(Color.FromArgb(Argb)), thick);
-                    Shape shape = myFreePen;
-                    serverForm.shapes[int.Parse(roomNumber)-1].Add(shape);
-                    serverForm.Draw();
+                //else if(Request.Equals("Freepen"))
+                //{
+                //    int x = int.Parse(m_Read.ReadLine());
+                //    int y = int.Parse(m_Read.ReadLine());
+                //    int thick = int.Parse(m_Read.ReadLine());
+                //    int Argb = int.Parse(m_Read.ReadLine());
+                //    MyFreePen myFreePen = new MyFreePen();
+                //    myFreePen.setRectF(new Point(x, y), new Pen(Color.FromArgb(Argb), thick), new SolidBrush(Color.FromArgb(Argb)), thick);
+                //    Shape shape = myFreePen;
+                //    serverForm.shapes[int.Parse(roomNumber)-1].Add(shape);
+                //    serverForm.Draw();
 
-                    //serverForm.all_Send_Freepen(x, y, thick, Argb);
-                }
+                //    //serverForm.all_Send_Freepen(x, y, thick, Argb);
+                //}
                 else if(Request.Equals("Line"))
                 {
                     int x1 = int.Parse(m_Read.ReadLine());

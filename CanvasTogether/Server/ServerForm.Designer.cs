@@ -109,6 +109,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(550, 414);
             this.panel2.TabIndex = 46;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // panel3
             // 
@@ -119,6 +120,7 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(550, 414);
             this.panel3.TabIndex = 46;
+            this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
             // panel4
             // 
@@ -128,6 +130,7 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(550, 414);
             this.panel4.TabIndex = 46;
+            this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
             // 
             // ServerForm
             // 
@@ -157,10 +160,10 @@
         private System.Windows.Forms.Button nextPageBtn;
         private System.Windows.Forms.Button prevPageBtn;
         private System.Windows.Forms.Label lblPage;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
+        private DoubleBufferPanel panel1;
+        private DoubleBufferPanel panel2;
+        private DoubleBufferPanel panel3;
+        private DoubleBufferPanel panel4;
     }
 }
 

@@ -283,7 +283,7 @@
             // 
             this.item_line.Image = global::CanvasTogether.Properties.Resources.line;
             this.item_line.Name = "item_line";
-            this.item_line.Size = new System.Drawing.Size(194, 36);
+            this.item_line.Size = new System.Drawing.Size(126, 22);
             this.item_line.Text = "Line";
             this.item_line.Click += new System.EventHandler(this.item_line_Click);
             // 
@@ -291,7 +291,7 @@
             // 
             this.item_rect.Image = global::CanvasTogether.Properties.Resources.rect;
             this.item_rect.Name = "item_rect";
-            this.item_rect.Size = new System.Drawing.Size(194, 36);
+            this.item_rect.Size = new System.Drawing.Size(126, 22);
             this.item_rect.Text = "Rectangle";
             this.item_rect.Click += new System.EventHandler(this.item_rect_Click);
             // 
@@ -299,7 +299,7 @@
             // 
             this.item_circle.Image = global::CanvasTogether.Properties.Resources.circle;
             this.item_circle.Name = "item_circle";
-            this.item_circle.Size = new System.Drawing.Size(194, 36);
+            this.item_circle.Size = new System.Drawing.Size(126, 22);
             this.item_circle.Text = "Circle";
             this.item_circle.Click += new System.EventHandler(this.item_circle_Click);
             // 
@@ -323,35 +323,35 @@
             // 
             this.item_Thick1.Image = global::CanvasTogether.Properties.Resources.thick1;
             this.item_Thick1.Name = "item_Thick1";
-            this.item_Thick1.Size = new System.Drawing.Size(194, 36);
+            this.item_Thick1.Size = new System.Drawing.Size(109, 22);
             this.item_Thick1.Text = "Thick1";
             // 
             // item_Thick2
             // 
             this.item_Thick2.Image = global::CanvasTogether.Properties.Resources.thick2;
             this.item_Thick2.Name = "item_Thick2";
-            this.item_Thick2.Size = new System.Drawing.Size(194, 36);
+            this.item_Thick2.Size = new System.Drawing.Size(109, 22);
             this.item_Thick2.Text = "Thick2";
             // 
             // item_Thick3
             // 
             this.item_Thick3.Image = global::CanvasTogether.Properties.Resources.thick3;
             this.item_Thick3.Name = "item_Thick3";
-            this.item_Thick3.Size = new System.Drawing.Size(194, 36);
+            this.item_Thick3.Size = new System.Drawing.Size(109, 22);
             this.item_Thick3.Text = "Thick3";
             // 
             // item_Thick4
             // 
             this.item_Thick4.Image = global::CanvasTogether.Properties.Resources.thick4;
             this.item_Thick4.Name = "item_Thick4";
-            this.item_Thick4.Size = new System.Drawing.Size(194, 36);
+            this.item_Thick4.Size = new System.Drawing.Size(109, 22);
             this.item_Thick4.Text = "Thick4";
             // 
             // item_Thick5
             // 
             this.item_Thick5.Image = global::CanvasTogether.Properties.Resources.thick5;
             this.item_Thick5.Name = "item_Thick5";
-            this.item_Thick5.Size = new System.Drawing.Size(194, 36);
+            this.item_Thick5.Size = new System.Drawing.Size(109, 22);
             this.item_Thick5.Text = "Thick5";
             // 
             // btn_text
