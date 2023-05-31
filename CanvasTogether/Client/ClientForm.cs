@@ -16,6 +16,7 @@ using System.Collections;
 using System.Drawing.Drawing2D;
 using System.Data.Entity.Migrations.Builders;
 using Shapes;
+using System.Linq.Expressions;
 
 namespace CanvasTogether
 {
@@ -77,6 +78,10 @@ namespace CanvasTogether
         Bitmap bitmap;
         private List<Shape> shapes = new List<Shape>();
 
+        private Bitmap OriginalBmp;
+        private Bitmap DrawBmp;
+        private List<Bitmap> BmpList = new List<Bitmap>();
+        private List<Bitmap> tmpList = new List<Bitmap>();
 
         private void SetupShapeVar()
         {
@@ -93,7 +98,10 @@ namespace CanvasTogether
             InitializeComponent();
             SetupShapeVar();
             pen.SetLineCap(System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.DashCap.Round);
-
+            panel1.BackgroundImage = new Bitmap(Application.StartupPath + @"\DefaultBackground.png");
+            OriginalBmp = (Bitmap)panel1.BackgroundImage;
+            BmpList.Add(OriginalBmp);
+            tmpList.Add(OriginalBmp);
             //lblCurrentPage.Text = 1.ToString();
             //panel2.BackColor = Color.MintCream;
             //panel3.BackColor = Color.Red;
@@ -503,7 +511,8 @@ namespace CanvasTogether
                     ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     shape = ml;
                     shapes.Add(shape);
-                    Draw();
+                    //Draw();
+                    DrawBitmap();
                 }
                 else if (receive.Equals("Rectangle"))
                 {
@@ -517,7 +526,8 @@ namespace CanvasTogether
                     mr.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     shape = mr;
                     shapes.Add(shape);
-                    Draw();
+                    //Draw();
+                    DrawBitmap();
                 }
                 else if (receive.Equals("Circle"))
                 {
@@ -531,9 +541,11 @@ namespace CanvasTogether
                     mc.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     shape = mc;
                     shapes.Add(shape);
-                    Draw();
+                    //Draw();
+                    DrawBitmap();
                 }
             }
+            DrawBitmap();
         }
 
         private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -576,7 +588,7 @@ namespace CanvasTogether
             }
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        /*private void panel1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             try
@@ -589,7 +601,7 @@ namespace CanvasTogether
                 return;
             }
             shape.DrawShape(e);
-        }
+        }*/
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -626,7 +638,8 @@ namespace CanvasTogether
             if (!isHolding) return;
             finish.X = e.X;
             finish.Y = e.Y;
-            switch(curMode)
+            Graphics g = panel1.CreateGraphics();
+            switch (curMode)
             {
                 case 0: // 펜
 
@@ -656,17 +669,21 @@ namespace CanvasTogether
                     m_Write.WriteLine(pen.Width);
                     m_Write.WriteLine(pen.Color.ToArgb());
                     m_Write.Flush();
-
+                    //myLine.setPoint(start, finish, pen, _thick);
+                    //g.DrawLine(myLine.GetPen(), myLine.getPoint1(), myLine.getPoint2());
                     start = finish;
                     break;
                 case 1: // 직선
                     myLine.setPoint(start, finish, pen, _thick);
+                    g.DrawLine(myLine.GetPen(), myLine.getPoint1(), myLine.getPoint2());
                     break;
                 case 2: // 사각형
                     myRect.setRect(start, finish, pen, _thick);
+                    g.DrawRectangle(myRect.GetPen(), myRect.getRect());
                     break;
                 case 3: // 원
                     myCircle.setRectC(start, finish, pen, _thick);
+                    g.DrawEllipse(myCircle.GetPen(), myCircle.getRectC());
                     break;
             }
             panel1.Invalidate(true);
@@ -736,8 +753,44 @@ namespace CanvasTogether
                     //shapes.Add(myCircle);
                     break;
             }
+            //DrawBitmap();
         }
-
+        private void DrawBitmap()
+        {
+            if (OriginalBmp != null)
+            {
+                DrawBmp = (Bitmap)BmpList.Last().Clone();
+                //프리펜이 입력되는 순간에 BmpList.Last()에 저장된 내용이 불분명해서?
+                if (shapes.Last().ReturnType() == 0)    //freepen
+                {
+                    //
+                }
+                else if (shapes.Last().ReturnType() == 1)   //line
+                {
+                    Graphics g1 = Graphics.FromImage(DrawBmp);
+                    Point s = new Point(start.X, start.Y);
+                    Point f = new Point(finish.X, finish.Y);
+                    g1.DrawLine(pen, s, f);
+                    //myLine.setPoint(start, finish, pen, _thick);
+                }
+                else if (shapes.Last().ReturnType() == 2)   //rectangle
+                {
+                    Graphics g2 = Graphics.FromImage(DrawBmp);
+                    Rectangle r = new Rectangle(Math.Min(start.X, finish.X), Math.Min(start.Y, finish.Y), Math.Abs(finish.X - start.X), Math.Abs(finish.Y - start.Y));
+                    g2.DrawRectangle(pen, r);
+                    //myRect.setRect(start, finish, pen, _thick);
+                }
+                else if (shapes.Last().ReturnType() == 3)   //circle
+                {
+                    Graphics g3 = Graphics.FromImage(DrawBmp);
+                    Rectangle r = new Rectangle(Math.Min(start.X, finish.X), Math.Min(start.Y, finish.Y), Math.Abs(finish.X - start.X), Math.Abs(finish.Y - start.Y));
+                    g3.DrawEllipse(pen, r);
+                    //myCircle.setRectC(start, finish, pen, _thick);
+                }
+                BmpList.Add(DrawBmp);
+                panel1.BackgroundImage = BmpList.Last();
+            }
+        }
         private void btn_image_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -833,6 +886,33 @@ namespace CanvasTogether
         private void item_rect_Click(object sender, EventArgs e)
         {
             curMode = (int)CANVAS_MODE.RECTMODE;
+        }
+        private void btn_undo_Click(object sender, EventArgs e)
+        {
+            if (BmpList.Count() > 0)
+            {
+                tmpList.Add(BmpList.Last());
+                BmpList.RemoveAt(BmpList.Count - 1);
+                panel1.BackgroundImage = BmpList.Last();
+            }
+            else
+            {
+                panel1.BackgroundImage = OriginalBmp;
+            }
+        }
+
+        private void btn_redo_Click(object sender, EventArgs e)
+        {
+            if (tmpList.Count() > 0)
+            {
+                BmpList.Add(tmpList.Last());
+                tmpList.RemoveAt(tmpList.Count() - 1);
+                panel1.BackgroundImage = BmpList.Last();
+            }
+            else
+            {
+                panel1.BackgroundImage = BmpList.Last();
+            }
         }
 
         private void item_circle_Click(object sender, EventArgs e)

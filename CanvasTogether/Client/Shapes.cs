@@ -19,6 +19,10 @@ namespace Shapes
         {
             return "";
         }
+        public virtual int ReturnType()
+        {
+            return 0;
+        }
     }
 
     public class MyCircle : Shape
@@ -71,6 +75,10 @@ namespace Shapes
         public override void DrawShape(PaintEventArgs e)
         {
             e.Graphics.DrawEllipse(this.pen, this.getRectC());
+        }
+        public override int ReturnType()
+        {
+            return 3;
         }
     }
 
@@ -129,6 +137,10 @@ namespace Shapes
         {
             e.Graphics.DrawLine(this.pen, this.getPoint1(), this.getPoint2());
         }
+        public override int ReturnType()
+        {
+            return 1;
+        }
     }
 
     public class MyRect : Shape
@@ -181,6 +193,10 @@ namespace Shapes
         public override void DrawShape(PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(this.pen, this.getRect());
+        }
+        public override int ReturnType()
+        {
+            return 2;
         }
     }
 }

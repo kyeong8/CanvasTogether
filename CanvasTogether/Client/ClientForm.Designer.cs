@@ -37,7 +37,6 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.txtInput = new System.Windows.Forms.TextBox();
             this.lblCurrentPage = new System.Windows.Forms.Label();
-            this.panel1 = new CanvasTogether.DoubleBufferPanel();
             this.delPageBtn = new System.Windows.Forms.Button();
             this.createPageBtn = new System.Windows.Forms.Button();
             this.nextPageBtn = new System.Windows.Forms.Button();
@@ -65,6 +64,7 @@
             this.color1 = new System.Windows.Forms.ToolStripButton();
             this.color2 = new System.Windows.Forms.ToolStripButton();
             this.color3 = new System.Windows.Forms.ToolStripButton();
+            this.panel1 = new CanvasTogether.DoubleBufferPanel();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -130,19 +130,6 @@
             this.lblCurrentPage.Name = "lblCurrentPage";
             this.lblCurrentPage.Size = new System.Drawing.Size(0, 12);
             this.lblCurrentPage.TabIndex = 40;
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.SystemColors.Window;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(12, 46);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(550, 414);
-            this.panel1.TabIndex = 39;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
-            this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
             // 
             // delPageBtn
             // 
@@ -234,6 +221,7 @@
             this.btn_undo.Size = new System.Drawing.Size(34, 34);
             this.btn_undo.Text = "toolStripButton1";
             this.btn_undo.ToolTipText = "실행 취소";
+            this.btn_undo.Click += new System.EventHandler(this.btn_undo_Click);
             // 
             // btn_redo
             // 
@@ -244,6 +232,7 @@
             this.btn_redo.Size = new System.Drawing.Size(34, 34);
             this.btn_redo.Text = "toolStripButton2";
             this.btn_redo.ToolTipText = "다시 실행";
+            this.btn_redo.Click += new System.EventHandler(this.btn_redo_Click);
             // 
             // btn_pen
             // 
@@ -416,6 +405,18 @@
             this.color3.Size = new System.Drawing.Size(28, 28);
             this.color3.ToolTipText = "좌클릭 시 색상 적용, 우클릭 시 색상 선택";
             this.color3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.Window;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Location = new System.Drawing.Point(12, 46);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(550, 414);
+            this.panel1.TabIndex = 39;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+            this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
             // 
             // ClientForm
             // 
