@@ -58,6 +58,7 @@ namespace CanvasTogether
         int _thick = 1;
         int tempX;
         int tempY;
+        int cnt = 0;
 
         Color currentColor = Color.Black;   //현재 적용된 컬러(1/2/3)
 
@@ -90,7 +91,7 @@ namespace CanvasTogether
         private List<Bitmap> fpList = new List<Bitmap>();
         int Count = 0;
         bool firstClick = true;
-
+        Point zero = new Point(0, 0);
         private void SetupShapeVar()
         {
             start = new Point(0, 0);
@@ -426,7 +427,7 @@ namespace CanvasTogether
             m_thReader = new Thread(new ThreadStart(Receive));
             m_thReader.Start();
         }
-
+        
         public void requestUpdate()
         {
             m_Write.WriteLine("Update");
@@ -459,6 +460,7 @@ namespace CanvasTogether
             string receive;
             while (m_bConnect)
             {
+
                 //this.Invoke(new Action(delegate ()
                 //{
                 //    txt_Chat.AppendText("dddddddd\r\n");
@@ -532,8 +534,9 @@ namespace CanvasTogether
                     int Argb = int.Parse(m_Read.ReadLine());
                     MyLines ml = new MyLines(1);
                     ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
-                    shape = ml;
-                    shapes.Add(shape);
+                    //shape = ml;
+                    //shapes.Add(shape);
+                    shapes.Add(ml);
                     //Draw();
                     DrawBitmap();
                 }
@@ -547,8 +550,9 @@ namespace CanvasTogether
                     int Argb = int.Parse(m_Read.ReadLine());
                     MyRect mr = new MyRect();
                     mr.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
-                    shape = mr;
-                    shapes.Add(shape);
+                    //shape = mr;
+                    //shapes.Add(shape);
+                    shapes.Add(mr);
                     //Draw();
                     DrawBitmap();
                 }
@@ -562,8 +566,9 @@ namespace CanvasTogether
                     int Argb = int.Parse(m_Read.ReadLine());
                     MyCircle mc = new MyCircle();
                     mc.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
-                    shape = mc;
-                    shapes.Add(shape);
+                    //shape = mc;
+                    //shapes.Add(shape);
+                    shapes.Add(mc);
                     //Draw();
                     DrawBitmap();
                 }
@@ -611,10 +616,10 @@ namespace CanvasTogether
             }
         }
 
-        /*private void panel1_Paint(object sender, PaintEventArgs e)
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            try
+            /*try
             {
                 foreach (var sh in shapes)
                     sh.DrawShape(e);
@@ -622,9 +627,9 @@ namespace CanvasTogether
             catch
             {
                 return;
-            }
+            }*/
             shape.DrawShape(e);
-        }*/
+        }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -634,38 +639,48 @@ namespace CanvasTogether
             if (holdingFreepen == true)
             {
                 SaveFreepen = true;
-                DrawBitmap();
+                //DrawBitmap();
                 SaveFreepen = false;
             }
             holdingFreepen = false;
-            switch (curMode)
+
+            if (!(sender is ToolStripButton))
             {
-                case 0: // 펜
-                    //myFreePen = new MyFreePen();
-                    //shape = myFreePen;
-                    break;
-                case 1: // 선
-                    myLine = new MyLines(1);
-                    shape = myLine;
-                    break;
-                case 2: // 사각형
-                    myRect = new MyRect();
-                    shape = myRect;
-                    break;
-                case 3: // 원
-                    myCircle = new MyCircle();
-                    shape = myCircle;
-                    break;
-                case 5: // 지우개
-                    break;
+                
+                switch (curMode)
+                {
+                    case 0: // 펜
+                            //myFreePen = new MyFreePen();
+                            //shape = myFreePen;
+                        break;
+                    case 1: // 선
+                        myLine = new MyLines(1);
+                        shape = myLine;
+                        break;
+                    case 2: // 사각형
+                        myRect = new MyRect();
+                        shape = myRect;
+                        break;
+                    case 3: // 원
+                        myCircle = new MyCircle();
+                        shape = myCircle;
+                        break;
+                    case 5: // 지우개
+                        break;
+                }
+                start.X = e.X;
+                start.Y = e.Y;
+                cnt += 1;
+                label1.Text = cnt.ToString();
             }
-            start.X = e.X;
-            start.Y = e.Y;
+            
         }
 
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
             if (!isHolding) return;
+
+
             finish.X = e.X;
             finish.Y = e.Y;
             Graphics g = panel1.CreateGraphics();
@@ -704,16 +719,17 @@ namespace CanvasTogether
                     start = finish;
                     break;
                 case 1: // 직선
+
                     myLine.setPoint(start, finish, pen, _thick);
-                    g.DrawLine(myLine.GetPen(), myLine.getPoint1(), myLine.getPoint2());
+                   //g.DrawLine(myLine.GetPen(), myLine.getPoint1(), myLine.getPoint2());
                     break;
                 case 2: // 사각형
                     myRect.setRect(start, finish, pen, _thick);
-                    g.DrawRectangle(myRect.GetPen(), myRect.getRect());
+                    //g.DrawRectangle(myRect.GetPen(), myRect.getRect());
                     break;
                 case 3: // 원
                     myCircle.setRectC(start, finish, pen, _thick);
-                    g.DrawEllipse(myCircle.GetPen(), myCircle.getRectC());
+                    //g.DrawEllipse(myCircle.GetPen(), myCircle.getRectC());
                     break;
             }
             panel1.Invalidate(true);
@@ -783,6 +799,7 @@ namespace CanvasTogether
                     //shapes.Add(myCircle);
                     break;
             }
+
             //DrawBitmap();
         }
         private void DrawFreepen()
@@ -806,7 +823,7 @@ namespace CanvasTogether
                     }*/
                     //DrawBmp = (Bitmap)OriginalBmp.Clone();
                     //if (BmpList.Last() != null) DrawBmp = (Bitmap)BmpList.Last().Clone();
-                    
+
                     if (shapes.Last().GetName() == "Freepen")    //freepen
                     {
                         //fpList.Add(BmpList.Last());
@@ -886,6 +903,20 @@ namespace CanvasTogether
                 }
             }));
 
+            Point zero = new Point(0, 0);
+            switch (curMode)
+            {
+                case 1: // 직선
+                    myLine.setPoint(new Point(0, 0), new Point(0, 0), pen, _thick);
+                    break;
+                case 2: // 사각형
+                    myRect.setRect(new Point(0, 0), new Point(0, 0), pen, _thick);
+                    break;
+                case 3: // 원
+                    myCircle.setRectC(new Point(0, 0), new Point(0, 0), pen, _thick);
+                    break;
+            }
+            Draw();
         }
         private void btn_image_Click(object sender, EventArgs e)
         {
