@@ -248,15 +248,6 @@ namespace CanvasTogether
             }));
         }
 
-        public void all_Send_Freepen(int x1, int y1, int x2, int y2, int thick, int Argb, string roomNumber)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
-                    serverThreads[i].Send_Freepen(x1, y1, x2, y2, thick, Argb);
-            }
-        }
-
         public void all_Send_Line(int x1, int y1, int x2, int y2, int thick, int Argb, string roomNumber)
         {
             for (int i = 0; i < 10; i++)
@@ -491,22 +482,6 @@ namespace CanvasTogether
 
                 //    //serverForm.all_Send_Freepen(x, y, thick, Argb);
                 //}
-                else if (Request.Equals("Freepen"))
-                {
-                    int x1 = int.Parse(m_Read.ReadLine());
-                    int y1 = int.Parse(m_Read.ReadLine());
-                    int x2 = int.Parse(m_Read.ReadLine());
-                    int y2 = int.Parse(m_Read.ReadLine());
-                    int thick = int.Parse(m_Read.ReadLine());
-                    int Argb = int.Parse(m_Read.ReadLine());
-                    MyLines myLine = new MyLines(2);
-                    myLine.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
-                    Shape shape = myLine;
-                    serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
-                    serverForm.Draw();
-
-                    serverForm.all_Send_Freepen(x1, y1, x2, y2, thick, Argb, roomNumber);
-                }
                 else if(Request.Equals("Line"))
                 {
                     int x1 = int.Parse(m_Read.ReadLine());
@@ -515,7 +490,7 @@ namespace CanvasTogether
                     int y2 = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
-                    MyLines myLine = new MyLines(1);
+                    MyLines myLine = new MyLines();
                     myLine.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myLine;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
@@ -583,18 +558,6 @@ namespace CanvasTogether
             foreach (string name in names)
                 m_Write.WriteLine(name);
             //serverForm.printChat("현재 활성화 된 방 : " + message.ToString());
-            m_Write.Flush();
-        }
-
-        public void Send_Freepen(int x1, int y1, int x2, int y2, int thick, int Argb)
-        {
-            m_Write.WriteLine("Freepen");
-            m_Write.WriteLine(x1);
-            m_Write.WriteLine(y1);
-            m_Write.WriteLine(x2);
-            m_Write.WriteLine(y2);
-            m_Write.WriteLine(thick);
-            m_Write.WriteLine(Argb);
             m_Write.Flush();
         }
 
