@@ -26,8 +26,9 @@ namespace CanvasTogether
         //public List<ServerThread> serverThreads = new List<ServerThread>();
         public ServerThread[] serverThreads = new ServerThread[10];
         public List<List<string>> UserState = new List<List<string>>();
-        public List<string> Users = new List<string>();
+        //public List<string> Users = new List<string>();
         public int UserCount = 0;
+        public int RoomCount = 0;
         public List<string> roomNames = new List<string>();
 
         public List<List<Shape>> shapes = new List<List<Shape>>();
@@ -54,7 +55,7 @@ namespace CanvasTogether
             panel3.Visible = false;
             panel4.Visible = false;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
                 UserState.Add(new List<string>());
 
             for (int i = 0; i < 10; i++)
@@ -113,14 +114,14 @@ namespace CanvasTogether
             }
         }
 
-        public void ResponseUpdate(int ret)
+        public void ResponseUpdate(int ret1, int ret2)
         {
             printChat("[접속인원 재갱신]");
             for (int i = 0; i < 10; i++)
             {
                 if (serverThreads[i].m_bConnect)
                 {
-                    serverThreads[i].SendUpdate(ret);
+                    serverThreads[i].SendUpdate(ret1, ret2);
                 }
             }
         }
@@ -134,6 +135,16 @@ namespace CanvasTogether
                 {
                     serverThreads[i].SendRoomUpdate(roomNames);
                 }
+            }
+        }
+
+        public void ResponseUserUpdate(string roomNumber)
+        {
+            printChat("[" + roomNumber + "번방 접속인원 재갱신]");
+            for (int i = 0; i < 10; i++)
+            {
+                if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
+                    serverThreads[i].SendUserUpdate(UserState[Convert.ToInt32(roomNumber)]);
             }
         }
 
@@ -353,8 +364,8 @@ namespace CanvasTogether
         private string enteredUser = null;
         public string roomNumber = null;
         private string roomName = null;
-        private bool isExist = false;
         private string existUser = null;
+        private string visibility = null;
 
         public ServerThread(ServerForm serverForm)
         {
@@ -373,8 +384,9 @@ namespace CanvasTogether
                     serverForm.UserCount += 1;
                     serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
 
-                    int ret = serverForm.UserCount;
-                    serverForm.ResponseUpdate(ret);
+                    int ret1 = serverForm.UserCount;
+                    int ret2 = serverForm.RoomCount;
+                    serverForm.ResponseUpdate(ret1, ret2);
                     serverForm.ResponseRoomUpdate();
 
                     // TODO, shapes 배열이 처음에 null이라서 오류 뜸.
@@ -436,44 +448,76 @@ namespace CanvasTogether
                 }
                 else if (Request.Equals("Enter"))
                 {
-                    serverForm.UserCount += 100;
+                    
                     enteredUser = m_Read.ReadLine();
                     roomNumber = m_Read.ReadLine();
-                    serverForm.UserState[Convert.ToInt32(roomNumber)].Add(enteredUser);
+                    if(!serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(enteredUser))
+                    {
+                        serverForm.RoomCount += 1;
+                        serverForm.UserState[Convert.ToInt32(roomNumber)].Add(enteredUser);
+                    }
                     serverForm.ResponseMessage(enteredUser + "이(가) " + roomNumber + "번 방에 입장하였습니다.", roomNumber);
-                    serverForm.ResponseUpdate(serverForm.UserCount);
+                    serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
                 }
                 else if (Request.Equals("Update"))
                 {
-                    int ret = serverForm.UserCount;
-                    SendUpdate(ret);
+                    serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
+                }
+                else if (Request.Equals("Room"))
+                {
+                    serverForm.ResponseRoomUpdate();
+                }
+                else if (Request.Equals("User"))
+                {
+                    roomNumber = m_Read.ReadLine();
+                    existUser = m_Read.ReadLine();
+                    serverForm.ResponseUserUpdate(roomNumber);
+                }
+                else if (Request.Equals("Out"))
+                {
+                    roomNumber = m_Read.ReadLine();
+                    existUser = m_Read.ReadLine();
+
+                    if (Convert.ToInt32(roomNumber) != 0)
+                    {
+                        if (serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(existUser))
+                        {
+                            if (serverForm.RoomCount > 0)
+                            {
+                                serverForm.RoomCount -= 1;
+                                serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
+                            }
+                        }
+                        else
+                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                    }
+
+                    serverForm.ResponseUserUpdate(roomNumber);
                 }
                 else if (Request.Equals("Disconnect"))
                 {
-                    m_bConnect = false;
-
+                    roomNumber = m_Read.ReadLine();
                     existUser = m_Read.ReadLine();
-                    foreach (List<string> row in serverForm.UserState)
-                    {
-                        if (row.Contains(existUser))
-                        {
-                            isExist = true;
-                            break;
-                        }
-                    }
 
-                    if (isExist)
+                    if (Convert.ToInt32(roomNumber) != 0)
                     {
-                        if (serverForm.UserCount - 100 > -1) serverForm.UserCount -= 100;
-                        if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                        if (serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(existUser))
+                        {
+                            if (serverForm.RoomCount > 0) serverForm.RoomCount -= 1;
+                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                            serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
+                        }
+                        else
+                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
                     }
-                    else
-                        if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
 
                     serverForm.printChat(connectedClient + "이(가) 퇴장했습니다.");
+                    
+                    serverForm.ResponseUserUpdate(roomNumber);
 
-                    int ret = serverForm.UserCount;
-                    serverForm.ResponseUpdate(ret);
+                    m_bConnect = false;
+
+                    serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
 
                     return;
                 }
@@ -566,13 +610,24 @@ namespace CanvasTogether
             m_Write.Flush();
         }
 
-        public void SendUpdate(int message)
+        public void SendUpdate(int totalCount, int roomCount)
         {
             m_Write.WriteLine("Update");
-            m_Write.WriteLine((message / 100).ToString());
-            m_Write.WriteLine((message % 100).ToString());
+            //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
+            m_Write.WriteLine(roomCount.ToString());
+            m_Write.WriteLine(totalCount.ToString());
             //MessageBox.Show(message.ToString());
             //serverForm.printChat("현재 접속인원 : " + message.ToString());
+            m_Write.Flush();
+        }
+
+        public void SendUserUpdate(List<string> userState)
+        {
+            m_Write.WriteLine("User");
+            m_Write.WriteLine(userState.Count.ToString());
+            foreach (string name in userState)
+                m_Write.WriteLine(name);
+            //serverForm.printChat("현재 활성화 된 방 : " + message.ToString());
             m_Write.Flush();
         }
 

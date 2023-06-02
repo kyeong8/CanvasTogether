@@ -46,11 +46,14 @@ namespace CanvasTogether
         public static bool exitFlag = true;
         public static int enterRoomNumber = 0;
         public Lobby lobby = new Lobby();
+        public static List<string> userNames = new List<string>();
         public static List<string> roomNames = new List<string>();
         public static bool closeFlag = false;
         bool isHolding = false;
         bool holdingFreepen = false;
         bool SaveFreepen = false;
+
+        delegate void fnSetTextBoxCallback(string contents);
 
         int pages = 1;
         int curMode;
@@ -58,7 +61,6 @@ namespace CanvasTogether
         int _thick = 1;
         int tempX;
         int tempY;
-        int cnt = 0;
 
         Color currentColor = Color.Black;   //현재 적용된 컬러(1/2/3)
 
@@ -118,6 +120,7 @@ namespace CanvasTogether
             //panel2.Visible = false;
             //panel3.Visible = false;
 
+
             Login login = new Login();
             login.ShowDialog();
 
@@ -138,8 +141,8 @@ namespace CanvasTogether
 
             exitFlag = true;
 
-            // lobby = new Lobby();
-            lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestRoomUpdate);
+            lobby = new Lobby();
+            lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
             lobby.ShowDialog();
 
@@ -151,6 +154,9 @@ namespace CanvasTogether
                 FormClosingEventArgs e = null;
                 this.ClientForm_FormClosing(sender, e);
             }
+
+            exitFlag = true;
+     
         }
 
         private void Btn_shape_Click(object sender, ToolStripItemClickedEventArgs e)
@@ -364,9 +370,32 @@ namespace CanvasTogether
         }
 
 
-        private void btnDisconnect_Click(object sender, EventArgs e)
+        private void btnExit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Visible = false;
+            txtChat.ResetText();
+
+            //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
+
+            requestOut();
+            requestUpdate();
+
+            closeFlag = false;
+            lobby = new Lobby();
+            lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
+            lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
+
+            lobby.ShowDialog();
+            requestRoomUpdate();
+            requestUpdate();
+
+            if (exitFlag)
+            {
+                FormClosingEventArgs er = null;
+                this.ClientForm_FormClosing(sender, er);
+            }
+
+            exitFlag = true;
         }
 
         private void ClientForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -375,6 +404,7 @@ namespace CanvasTogether
                 return;
 
             m_Write.WriteLine("Disconnect");
+            m_Write.WriteLine(enterRoomNumber.ToString());
             m_Write.WriteLine(name);
             m_Write.Flush();
 
@@ -403,7 +433,10 @@ namespace CanvasTogether
                 btnSend_Click(sender, e);
             }
         }
-
+        private void SetTextboxInput(string contents)
+        {
+            this.userCnt.Text = contents;
+        }
 
         public void Connect()
         {
@@ -434,18 +467,40 @@ namespace CanvasTogether
             m_Write.Flush();
         }
 
+        public void requestOut()
+        {
+            m_Write.WriteLine("Out");
+            m_Write.WriteLine(enterRoomNumber.ToString());
+            m_Write.WriteLine(name);
+            m_Write.Flush();
+        }
+
         public void requestEnterUpdate(bool flag)
         {
             if (!flag)
             {
+                this.Visible = true;
                 m_Write.WriteLine("Enter");
                 m_Write.WriteLine(name);
                 m_Write.WriteLine(enterRoomNumber.ToString());
                 m_Write.Flush();
+
+                requestUserUpdate(enterRoomNumber.ToString());
             }
         }
+        public void requestUserUpdate(string text)
+        {
+            m_Write.WriteLine("User");
+            m_Write.WriteLine(text);
+            m_Write.Flush();
+        }
+        public void requestRoomUpdate()
+        {
+            m_Write.WriteLine("Room");
+            m_Write.Flush();
+        }
 
-        public void requestRoomUpdate(string text)
+        public void requestGenerate(string text)
         {
             m_Write.WriteLine("Generate");
             m_Write.WriteLine(text);
@@ -485,9 +540,39 @@ namespace CanvasTogether
                         roomCount = message;
                         message = m_Read.ReadLine();
                         totalCount = message;
+                        
                         //MessageBox.Show("call by update");
-
+                        //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
                         lobby.uiUpdate();
+                    }
+                }
+                else if (receive.Equals("User"))
+                {
+                    //if (lobby.IsDisposed)
+                    //    continue;
+                    userNameList.ResetText();
+                    userNames = new List<string>();
+                    string count = m_Read.ReadLine();
+
+                    for (int i = 0; i < Convert.ToInt32(count); i++)
+                    {
+                        string message = m_Read.ReadLine();
+                        userNames.Add(message);
+                        this.Invoke(new Action(delegate ()
+                        {
+                            userNameList.AppendText(message + "\r\n");
+                        }));
+                    }
+                    if (this.userCnt.InvokeRequired)
+                    {
+                        this.Invoke(new fnSetTextBoxCallback(SetTextboxInput), new object[]
+                        {
+                        enterRoomNumber.ToString() + "번 방, 접속인원: " + count
+                    });
+                    }
+                    else
+                    {
+                        this.userCnt.Text = enterRoomNumber.ToString() + "번 방, 접속인원: " + count;
                     }
                 }
                 else if (receive.Equals("Room"))
@@ -670,8 +755,6 @@ namespace CanvasTogether
                 }
                 start.X = e.X;
                 start.Y = e.Y;
-                cnt += 1;
-                label1.Text = cnt.ToString();
             }
             
         }

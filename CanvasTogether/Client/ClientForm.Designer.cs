@@ -37,12 +37,7 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.txtInput = new System.Windows.Forms.TextBox();
             this.lblCurrentPage = new System.Windows.Forms.Label();
-            this.delPageBtn = new System.Windows.Forms.Button();
-            this.createPageBtn = new System.Windows.Forms.Button();
-            this.nextPageBtn = new System.Windows.Forms.Button();
-            this.prevPageBtn = new System.Windows.Forms.Button();
-            this.lblPage = new System.Windows.Forms.Label();
-            this.btnDisconnect = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_undo = new System.Windows.Forms.ToolStripButton();
             this.btn_redo = new System.Windows.Forms.ToolStripButton();
@@ -64,8 +59,9 @@
             this.color1 = new System.Windows.Forms.ToolStripButton();
             this.color2 = new System.Windows.Forms.ToolStripButton();
             this.color3 = new System.Windows.Forms.ToolStripButton();
+            this.userNameList = new System.Windows.Forms.TextBox();
+            this.userCnt = new System.Windows.Forms.Label();
             this.panel1 = new CanvasTogether.DoubleBufferPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,28 +95,28 @@
             // 
             // txtChat
             // 
-            this.txtChat.Location = new System.Drawing.Point(568, 11);
+            this.txtChat.Location = new System.Drawing.Point(565, 115);
             this.txtChat.Multiline = true;
             this.txtChat.Name = "txtChat";
             this.txtChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtChat.Size = new System.Drawing.Size(300, 450);
+            this.txtChat.Size = new System.Drawing.Size(303, 361);
             this.txtChat.TabIndex = 29;
             // 
             // btnSend
             // 
             this.btnSend.Location = new System.Drawing.Point(804, 481);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(68, 26);
+            this.btnSend.Size = new System.Drawing.Size(64, 26);
             this.btnSend.TabIndex = 31;
             this.btnSend.Text = "보내기";
             this.btnSend.UseVisualStyleBackColor = true;
             // 
             // txtInput
             // 
-            this.txtInput.Location = new System.Drawing.Point(572, 481);
+            this.txtInput.Location = new System.Drawing.Point(565, 481);
             this.txtInput.Multiline = true;
             this.txtInput.Name = "txtInput";
-            this.txtInput.Size = new System.Drawing.Size(226, 26);
+            this.txtInput.Size = new System.Drawing.Size(233, 26);
             this.txtInput.TabIndex = 30;
             this.txtInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtInput_KeyDown);
             // 
@@ -132,60 +128,15 @@
             this.lblCurrentPage.Size = new System.Drawing.Size(0, 12);
             this.lblCurrentPage.TabIndex = 40;
             // 
-            // delPageBtn
+            // btnExit
             // 
-            this.delPageBtn.Location = new System.Drawing.Point(283, 511);
-            this.delPageBtn.Name = "delPageBtn";
-            this.delPageBtn.Size = new System.Drawing.Size(88, 23);
-            this.delPageBtn.TabIndex = 38;
-            this.delPageBtn.Text = "페이지 삭제";
-            this.delPageBtn.UseVisualStyleBackColor = true;
-            // 
-            // createPageBtn
-            // 
-            this.createPageBtn.Location = new System.Drawing.Point(189, 511);
-            this.createPageBtn.Name = "createPageBtn";
-            this.createPageBtn.Size = new System.Drawing.Size(88, 23);
-            this.createPageBtn.TabIndex = 37;
-            this.createPageBtn.Text = "페이지 생성";
-            this.createPageBtn.UseVisualStyleBackColor = true;
-            // 
-            // nextPageBtn
-            // 
-            this.nextPageBtn.Location = new System.Drawing.Point(510, 470);
-            this.nextPageBtn.Name = "nextPageBtn";
-            this.nextPageBtn.Size = new System.Drawing.Size(52, 38);
-            this.nextPageBtn.TabIndex = 36;
-            this.nextPageBtn.Text = ">>";
-            this.nextPageBtn.UseVisualStyleBackColor = true;
-            // 
-            // prevPageBtn
-            // 
-            this.prevPageBtn.Location = new System.Drawing.Point(12, 470);
-            this.prevPageBtn.Name = "prevPageBtn";
-            this.prevPageBtn.Size = new System.Drawing.Size(52, 38);
-            this.prevPageBtn.TabIndex = 35;
-            this.prevPageBtn.Text = "<<";
-            this.prevPageBtn.UseVisualStyleBackColor = true;
-            // 
-            // lblPage
-            // 
-            this.lblPage.AutoSize = true;
-            this.lblPage.Location = new System.Drawing.Point(228, 480);
-            this.lblPage.Name = "lblPage";
-            this.lblPage.Size = new System.Drawing.Size(49, 12);
-            this.lblPage.TabIndex = 34;
-            this.lblPage.Text = "페이지: ";
-            // 
-            // btnDisconnect
-            // 
-            this.btnDisconnect.Location = new System.Drawing.Point(427, 525);
-            this.btnDisconnect.Name = "btnDisconnect";
-            this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
-            this.btnDisconnect.TabIndex = 32;
-            this.btnDisconnect.Text = "연결 종료";
-            this.btnDisconnect.UseVisualStyleBackColor = true;
-            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
+            this.btnExit.Location = new System.Drawing.Point(420, 526);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(97, 23);
+            this.btnExit.TabIndex = 32;
+            this.btnExit.Text = "방에서 나가기";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // toolStrip1
             // 
@@ -407,43 +358,47 @@
             this.color3.ToolTipText = "좌클릭 시 색상 적용, 우클릭 시 색상 선택";
             this.color3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Btn_SelectColor_Click);
             // 
+            // userNameList
+            // 
+            this.userNameList.Location = new System.Drawing.Point(565, 27);
+            this.userNameList.Multiline = true;
+            this.userNameList.Name = "userNameList";
+            this.userNameList.Size = new System.Drawing.Size(303, 82);
+            this.userNameList.TabIndex = 42;
+            // 
+            // userCnt
+            // 
+            this.userCnt.AutoSize = true;
+            this.userCnt.Location = new System.Drawing.Point(570, 9);
+            this.userCnt.Name = "userCnt";
+            this.userCnt.Size = new System.Drawing.Size(93, 12);
+            this.userCnt.TabIndex = 43;
+            this.userCnt.Text = "번 방, 접속인원:";
+            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Window;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Location = new System.Drawing.Point(12, 46);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(550, 414);
+            this.panel1.Size = new System.Drawing.Size(550, 459);
             this.panel1.TabIndex = 39;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
             this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(689, 104);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
-            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 561);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.userCnt);
+            this.Controls.Add(this.userNameList);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.lblCurrentPage);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.delPageBtn);
-            this.Controls.Add(this.createPageBtn);
-            this.Controls.Add(this.nextPageBtn);
-            this.Controls.Add(this.prevPageBtn);
-            this.Controls.Add(this.lblPage);
-            this.Controls.Add(this.btnDisconnect);
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.txtChat);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtInput);
@@ -470,12 +425,7 @@
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox txtInput;
         private System.Windows.Forms.Label lblCurrentPage;
-        private System.Windows.Forms.Button delPageBtn;
-        private System.Windows.Forms.Button createPageBtn;
-        private System.Windows.Forms.Button nextPageBtn;
-        private System.Windows.Forms.Button prevPageBtn;
-        private System.Windows.Forms.Label lblPage;
-        private System.Windows.Forms.Button btnDisconnect;
+        private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btn_undo;
         private System.Windows.Forms.ToolStripButton btn_redo;
@@ -498,7 +448,8 @@
         private System.Windows.Forms.ToolStripButton color2;
         private System.Windows.Forms.ToolStripButton color3;
         private DoubleBufferPanel panel1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox userNameList;
+        private System.Windows.Forms.Label userCnt;
     }
 }
 
