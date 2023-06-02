@@ -88,14 +88,22 @@ namespace Shapes
         private Pen pen;
         private Point[] point = new Point[2];
         private int thick;
-        private const string name = "Line";
+        private string name;
 
         // Constructor
-        public MyLines()
+        public MyLines(int kind)
         {
             point[0] = new Point();
             point[1] = new Point();
             thick = 1;
+            if (kind == 1)
+            {
+                name = "Line";
+            }
+            else if (kind == 2)
+            {
+                name = "Freepen";
+            }
         }
 
         // Member functions declaration
