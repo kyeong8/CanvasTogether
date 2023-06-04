@@ -49,7 +49,7 @@
             this.txtChat.Name = "txtChat";
             this.txtChat.ReadOnly = true;
             this.txtChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtChat.Size = new System.Drawing.Size(300, 450);
+            this.txtChat.Size = new System.Drawing.Size(300, 467);
             this.txtChat.TabIndex = 19;
             // 
             // lblCurrentPage
@@ -62,7 +62,7 @@
             // 
             // nextPageBtn
             // 
-            this.nextPageBtn.Location = new System.Drawing.Point(512, 434);
+            this.nextPageBtn.Location = new System.Drawing.Point(512, 486);
             this.nextPageBtn.Name = "nextPageBtn";
             this.nextPageBtn.Size = new System.Drawing.Size(50, 30);
             this.nextPageBtn.TabIndex = 43;
@@ -72,7 +72,7 @@
             // 
             // prevPageBtn
             // 
-            this.prevPageBtn.Location = new System.Drawing.Point(12, 434);
+            this.prevPageBtn.Location = new System.Drawing.Point(12, 486);
             this.prevPageBtn.Name = "prevPageBtn";
             this.prevPageBtn.Size = new System.Drawing.Size(50, 30);
             this.prevPageBtn.TabIndex = 42;
@@ -83,7 +83,7 @@
             // lblPage
             // 
             this.lblPage.AutoSize = true;
-            this.lblPage.Location = new System.Drawing.Point(250, 443);
+            this.lblPage.Location = new System.Drawing.Point(247, 500);
             this.lblPage.Name = "lblPage";
             this.lblPage.Size = new System.Drawing.Size(46, 12);
             this.lblPage.TabIndex = 41;
@@ -96,7 +96,7 @@
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Location = new System.Drawing.Point(12, 10);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(550, 414);
+            this.panel1.Size = new System.Drawing.Size(550, 466);
             this.panel1.TabIndex = 45;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -107,7 +107,7 @@
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Location = new System.Drawing.Point(-1, -1);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(550, 414);
+            this.panel2.Size = new System.Drawing.Size(550, 466);
             this.panel2.TabIndex = 46;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
@@ -118,7 +118,7 @@
             this.panel3.Controls.Add(this.panel4);
             this.panel3.Location = new System.Drawing.Point(-1, -1);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(550, 414);
+            this.panel3.Size = new System.Drawing.Size(550, 466);
             this.panel3.TabIndex = 46;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
@@ -128,7 +128,7 @@
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Location = new System.Drawing.Point(-1, -1);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(550, 414);
+            this.panel4.Size = new System.Drawing.Size(550, 466);
             this.panel4.TabIndex = 46;
             this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
             // 
@@ -136,7 +136,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 471);
+            this.ClientSize = new System.Drawing.Size(884, 531);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblCurrentPage);
             this.Controls.Add(this.nextPageBtn);

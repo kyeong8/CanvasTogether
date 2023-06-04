@@ -724,7 +724,7 @@ namespace CanvasTogether
             if (holdingFreepen == true)
             {
                 SaveFreepen = true;
-                //DrawBitmap();
+                DrawBitmap();
                 SaveFreepen = false;
             }
             holdingFreepen = false;

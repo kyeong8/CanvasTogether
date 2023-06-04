@@ -104,7 +104,7 @@
             // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(804, 481);
+            this.btnSend.Location = new System.Drawing.Point(804, 480);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(64, 26);
             this.btnSend.TabIndex = 31;
@@ -113,7 +113,7 @@
             // 
             // txtInput
             // 
-            this.txtInput.Location = new System.Drawing.Point(565, 481);
+            this.txtInput.Location = new System.Drawing.Point(565, 479);
             this.txtInput.Multiline = true;
             this.txtInput.Name = "txtInput";
             this.txtInput.Size = new System.Drawing.Size(233, 26);
@@ -140,7 +140,6 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.toolStrip1.AutoSize = false;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
@@ -379,9 +378,9 @@
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Window;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(12, 46);
+            this.panel1.Location = new System.Drawing.Point(12, 39);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(550, 459);
+            this.panel1.Size = new System.Drawing.Size(550, 466);
             this.panel1.TabIndex = 39;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
