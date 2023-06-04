@@ -52,6 +52,7 @@ namespace CanvasTogether
         bool isHolding = false;
         bool holdingFreepen = false;
         bool SaveFreepen = false;
+        bool undoing = false;
 
         delegate void fnSetTextBoxCallback(string contents);
 
@@ -906,6 +907,13 @@ namespace CanvasTogether
                     }*/
                     //DrawBmp = (Bitmap)OriginalBmp.Clone();
                     //if (BmpList.Last() != null) DrawBmp = (Bitmap)BmpList.Last().Clone();
+                    if (undoing == true)
+                    {
+                        tmpList.Clear();
+                        //tmpList.Add(OriginalBmp);
+                        undoing = false;
+                    }
+                        
 
                     if (shapes.Last().GetName() == "Freepen")    //freepen
                     {
@@ -1100,7 +1108,8 @@ namespace CanvasTogether
         private void btn_undo_Click(object sender, EventArgs e)
         {
             if (BmpList.Count() > 0)
-            {
+            {   
+                undoing = true;
                 tmpList.Add(BmpList.Last());
                 BmpList.RemoveAt(BmpList.Count() - 1);
                 if (BmpList.Count() == 0)
