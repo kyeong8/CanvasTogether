@@ -387,20 +387,14 @@ namespace CanvasTogether
 
         private void ClientForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            requestOut();
+
             if (!m_bConnect)
                 return;
 
             m_Write.WriteLine("Disconnect");
-            m_Write.WriteLine(enterRoomNumber.ToString());
-            m_Write.WriteLine(name);
             m_Write.Flush();
 
-            m_bConnect = false;
-
-            m_Read.Close();
-            m_Write.Close();
-            m_Stream.Close();
-            m_thReader.Abort();
             this.Close();
         }
 
@@ -1059,6 +1053,16 @@ namespace CanvasTogether
             {
                 panel1.BackgroundImage = BmpList.Last();
             }
+        }
+
+        private void ClientForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            m_bConnect = false;
+
+            m_Read.Close();
+            m_Write.Close();
+            m_Stream.Close();
+            m_thReader.Abort();
         }
 
         private void item_circle_Click(object sender, EventArgs e)

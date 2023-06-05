@@ -491,33 +491,19 @@ namespace CanvasTogether
                         else
                             if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
                     }
+                    else
+                    {
+                        if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                    }
 
                     serverForm.ResponseUserUpdate(roomNumber);
+                    serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
                 }
                 else if (Request.Equals("Disconnect"))
                 {
-                    roomNumber = m_Read.ReadLine();
-                    existUser = m_Read.ReadLine();
-
-                    if (Convert.ToInt32(roomNumber) != 0)
-                    {
-                        if (serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(existUser))
-                        {
-                            if (serverForm.RoomCount > 0) serverForm.RoomCount -= 1;
-                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
-                            serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
-                        }
-                        else
-                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
-                    }
-
-                    serverForm.printChat(connectedClient + "이(가) 퇴장했습니다.");
-                    
-                    serverForm.ResponseUserUpdate(roomNumber);
-
                     m_bConnect = false;
 
-                    serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
+                    serverForm.printChat(connectedClient + "이(가) 퇴장했습니다.");
 
                     return;
                 }
