@@ -43,7 +43,7 @@ namespace CanvasTogether
         {
             string route = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
             string stm = $"select * from member where id = \'" + ID_txtbox.Text.Trim() + "\'";
-            string id = "", pw = "";
+            string id = "";
             string nickname = "";
 
             try
@@ -60,7 +60,8 @@ namespace CanvasTogether
                     {
                         LoginStatus = 1;
                        
-                        nickname = (string)reader["id"];
+                        id = (string)reader["id"];
+                        nickname = (string)reader["name"];
                     }
                 }
                 conn.Close();
@@ -69,6 +70,7 @@ namespace CanvasTogether
                 {
                     MessageBox.Show("로그인 완료");
                     ClientForm.exitFlag = false;
+                    ClientForm.id = id;
                     ClientForm.name = nickname;
                     this.Close();
                 }
