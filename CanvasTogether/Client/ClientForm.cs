@@ -40,7 +40,7 @@ namespace CanvasTogether
         StreamWriter m_Write;
         private Thread m_thReader;
         bool m_bConnect;
-        public static string id, pw; //클라에 아이디 비번 저장
+        public static string id; 
         public static string name;
         public static string totalCount = "0";
         public static string roomCount = "0";
@@ -50,6 +50,7 @@ namespace CanvasTogether
         public static List<string> userNames = new List<string>();
         public static List<string> roomNames = new List<string>();
         public static bool closeFlag = false;
+        public static bool shutdownTrigger = false;
         bool isHolding = false;
         bool holdingFreepen = false;
         bool SaveFreepen = false;
@@ -159,7 +160,7 @@ namespace CanvasTogether
             }
 
             exitFlag = true;
-     
+
         }
 
         private void Btn_shape_Click(object sender, ToolStripItemClickedEventArgs e)
@@ -391,15 +392,25 @@ namespace CanvasTogether
 
         private void ClientForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            requestOut();
+            if (shutdownTrigger)
+            {
+                MessageBox.Show("중복 로그인이 감지 되었습니다.");
+                //this.Close();
+            }
+            else
+            {
+                requestOut();
 
-            if (!m_bConnect)
-                return;
+                if (!m_bConnect)
+                    return;
 
-            m_Write.WriteLine("Disconnect");
-            m_Write.Flush();
+                m_Write.WriteLine("Disconnect");
+                m_Write.WriteLine(id);
+                m_Write.Flush();
 
-            this.Close();
+                this.Close();
+            }
+            
         }
 
         private void btnSend_Click(object sender, EventArgs e)
@@ -496,6 +507,7 @@ namespace CanvasTogether
         {
             m_Write.WriteLine("New Client");
             m_Write.WriteLine(name);
+            m_Write.WriteLine(id);
             m_Write.Flush();
             string receive;
             while (m_bConnect)
@@ -578,6 +590,12 @@ namespace CanvasTogether
 
                         lobby.uiUpdate();
                     }  
+                }
+                else if (receive.Equals("ShutDown"))
+                {
+                    shutdownTrigger = true;
+                    lobby.Close();
+                    this.Close();
                 }
                 else if (receive.Equals("Freepen"))
                 {

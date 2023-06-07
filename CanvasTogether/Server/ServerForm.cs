@@ -30,11 +30,10 @@ namespace CanvasTogether
         public int UserCount = 0;
         public int RoomCount = 0;
         public List<string> roomNames = new List<string>();
-
+        public List<string> connectedClientID = new List<string>();
         public List<List<Shape>> shapes = new List<List<Shape>>();
         
-        //public List<string> Id = new List<string>();
-        //public List<string> Pw = new List<string>();
+       
 
         /* Page members */
         int pages = 1;
@@ -147,7 +146,7 @@ namespace CanvasTogether
                     serverThreads[i].SendUserUpdate(UserState[Convert.ToInt32(roomNumber)]);
             }
         }
-
+        
         public void ServerThreadExit(ServerThread st)
         {
             if (!st.m_bConnect)
@@ -361,10 +360,12 @@ namespace CanvasTogether
         private ServerForm serverForm;
         public Thread m_thReader = null;
         private string connectedClient = null;
+        private string currentID = null;
         private string enteredUser = null;
         public string roomNumber = null;
         private string roomName = null;
         private string existUser = null;
+        private string existUserID = null;
         private string visibility = null;
 
         public ServerThread(ServerForm serverForm)
@@ -381,6 +382,21 @@ namespace CanvasTogether
                 if (Request.Equals("New Client"))
                 {
                     connectedClient = m_Read.ReadLine();
+                    currentID = m_Read.ReadLine();
+
+                    foreach (string ID in serverForm.connectedClientID)
+                    {
+                        if (ID.Contains(currentID))
+                        {
+                            serverForm.printChat("[중복 로그인 발생 (User ID = " + currentID + ")]");
+                            SendShutDown();
+                            m_bConnect = false;
+                            return;
+                        }
+                    }
+
+                    serverForm.connectedClientID.Add(currentID);
+
                     serverForm.UserCount += 1;
                     serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
 
@@ -433,7 +449,7 @@ namespace CanvasTogether
                     //        }
                     //    }
                     //}
-                    
+
                 }
                 else if (Request.Equals("Message"))
                 {
@@ -501,6 +517,17 @@ namespace CanvasTogether
                 }
                 else if (Request.Equals("Disconnect"))
                 {
+                    existUserID = m_Read.ReadLine();
+
+                    foreach (string ID in serverForm.connectedClientID)
+                    {
+                        if (ID.Contains(existUserID))
+                        {
+                            serverForm.connectedClientID.Remove(existUserID);
+                            return;
+                        }
+                    }
+
                     m_bConnect = false;
 
                     serverForm.printChat(connectedClient + "이(가) 퇴장했습니다.");
@@ -604,6 +631,12 @@ namespace CanvasTogether
             m_Write.WriteLine(totalCount.ToString());
             //MessageBox.Show(message.ToString());
             //serverForm.printChat("현재 접속인원 : " + message.ToString());
+            m_Write.Flush();
+        }
+
+        public void SendShutDown()
+        {
+            m_Write.WriteLine("ShutDown");
             m_Write.Flush();
         }
 

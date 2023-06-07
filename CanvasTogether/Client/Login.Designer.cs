@@ -61,7 +61,6 @@
             this.ID_txtbox.Name = "ID_txtbox";
             this.ID_txtbox.Size = new System.Drawing.Size(162, 25);
             this.ID_txtbox.TabIndex = 2;
-            this.ID_txtbox.TabStop = false;
             // 
             // PW_txtbox
             // 
@@ -70,7 +69,6 @@
             this.PW_txtbox.Name = "PW_txtbox";
             this.PW_txtbox.Size = new System.Drawing.Size(162, 25);
             this.PW_txtbox.TabIndex = 3;
-            this.PW_txtbox.TabStop = false;
             this.PW_txtbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PW_txtbox_KeyDown);
             // 
             // btnLogin
