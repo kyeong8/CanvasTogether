@@ -58,6 +58,7 @@ namespace CanvasTogether
         bool freepenEnd = false;
 
         delegate void fnSetTextBoxCallback(string contents);
+        delegate void fnSetResetTextCallback();
 
         int pages = 1;
         int curMode;
@@ -432,6 +433,10 @@ namespace CanvasTogether
         {
             this.userCnt.Text = contents;
         }
+        private void SetResetText()
+        {
+            this.userNameList.ResetText();
+        }
 
         public void Connect()
         {
@@ -546,7 +551,17 @@ namespace CanvasTogether
                 {
                     //if (lobby.IsDisposed)
                     //    continue;
-                    userNameList.ResetText();
+                    if (this.userNameList.InvokeRequired)
+                    {
+                        this.Invoke(new fnSetResetTextCallback(SetResetText), new object[]
+                        {                     
+                    });
+                    }
+                    else
+                    {
+                        userNameList.ResetText();
+                    }
+
                     userNames = new List<string>();
                     string count = m_Read.ReadLine();
 
