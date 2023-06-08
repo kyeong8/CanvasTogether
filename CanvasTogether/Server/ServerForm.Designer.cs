@@ -55,9 +55,10 @@
             // lblCurrentPage
             // 
             this.lblCurrentPage.AutoSize = true;
-            this.lblCurrentPage.Location = new System.Drawing.Point(302, 443);
+            this.lblCurrentPage.Font = new System.Drawing.Font("굴림", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblCurrentPage.Location = new System.Drawing.Point(299, 500);
             this.lblCurrentPage.Name = "lblCurrentPage";
-            this.lblCurrentPage.Size = new System.Drawing.Size(0, 12);
+            this.lblCurrentPage.Size = new System.Drawing.Size(0, 13);
             this.lblCurrentPage.TabIndex = 44;
             // 
             // nextPageBtn
@@ -83,9 +84,10 @@
             // lblPage
             // 
             this.lblPage.AutoSize = true;
+            this.lblPage.Font = new System.Drawing.Font("굴림", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.lblPage.Location = new System.Drawing.Point(247, 500);
             this.lblPage.Name = "lblPage";
-            this.lblPage.Size = new System.Drawing.Size(46, 12);
+            this.lblPage.Size = new System.Drawing.Size(57, 13);
             this.lblPage.TabIndex = 41;
             this.lblPage.Text = "Room: ";
             // 

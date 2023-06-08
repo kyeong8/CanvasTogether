@@ -75,6 +75,8 @@ namespace CanvasTogether
         public List<Point> freepenStore = new List<Point>(); // 점 2개 모일 때마다 서버로 전송
         private Point startF; // freepen의 끝점
         private Point finishF; // freepen의 끝점
+        private Point startE; // eraser의 시작점
+        private Point finishE; // eraser의 끝점
         private Point start; // 도형의 시작점
         private Point finish; // 도형의 끝점
 
@@ -216,6 +218,36 @@ namespace CanvasTogether
                 _thick = 5;
             }
             pen = new Pen(currentColor, _thick);
+        }
+
+        private void doFloodFill(Bitmap temBmp, Point startPoint, Color preColor)
+        {
+            try
+            {
+                Stack<Point> pixels = new Stack<Point>();
+                preColor = temBmp.GetPixel(startPoint.X, startPoint.Y);
+                pixels.Push(startPoint);
+
+                while (pixels.Count > 0)
+                {
+                    Point i = pixels.Pop();
+                    if (i.X < temBmp.Width && i.X > 0 && i.Y < temBmp.Height && i.Y > 0)
+                    {
+                        if (temBmp.GetPixel(i.X, i.Y) == preColor)
+                        {
+                            temBmp.SetPixel(i.X, i.Y, currentColor);
+                            pixels.Push(new Point(i.X - 1, i.Y));
+                            pixels.Push(new Point(i.X + 1, i.Y));
+                            pixels.Push(new Point(i.X, i.Y - 1));
+                            pixels.Push(new Point(i.X, i.Y + 1));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         //private void createPageBtn_Click(object sender, EventArgs e)
@@ -383,7 +415,7 @@ namespace CanvasTogether
             lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
 
-            lobby.ShowDialog();
+            this.lobby.ShowDialog();
             requestRoomUpdate();
             requestUpdate();
 
@@ -686,6 +718,7 @@ namespace CanvasTogether
                 this.btn_eraser.BackColor = Color.White;
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
+                this.btn_fill.BackColor = Color.White;
             }
             if(e.ClickedItem == btn_eraser)
             {
@@ -695,6 +728,7 @@ namespace CanvasTogether
                 this.btn_pen.BackColor = Color.White;
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
+                this.btn_fill.BackColor = Color.White;
             }
             if(e.ClickedItem == btn_text)
             {
@@ -704,6 +738,17 @@ namespace CanvasTogether
                 this.btn_pen.BackColor = Color.White;
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.Orange;
+                this.btn_fill.BackColor = Color.White;
+            }
+            if (e.ClickedItem == btn_fill)
+            {
+                curMode = (int)CANVAS_MODE.PAINTMODE;
+
+                this.btn_eraser.BackColor = Color.White;
+                this.btn_pen.BackColor = Color.White;
+                this.btn_shape.BackColor = Color.White;
+                this.btn_text.BackColor = Color.White;
+                this.btn_fill.BackColor = Color.Orange;
             }
         }
 
@@ -760,7 +805,19 @@ namespace CanvasTogether
                     start.X = e.X;
                     start.Y = e.Y;
                     break;
+                case 4:
+                    Point startPoint = new Point(e.X, e.Y);
+                    Bitmap fillTemBmp = (Bitmap)BmpList.Last().Clone();
+                    Color preColor =fillTemBmp.GetPixel(startPoint.X, startPoint.Y);
+                    doFloodFill(fillTemBmp, startPoint, preColor);
+                    BmpList.Add(fillTemBmp);
+                    panel1.BackgroundImage = BmpList.Last();
+
+                    break;
                 case 5: // 지우개
+                    pen = new Pen(Color.White, _thick * 10);
+                    Point Etemp = new Point(e.X, e.Y);
+                    freepenStore.Add(Etemp);
                     break;
             }
         }
@@ -818,6 +875,29 @@ namespace CanvasTogether
                     finish.X = e.X;
                     finish.Y = e.Y;
                     myCircle.setRectC(start, finish, pen, _thick);
+                    break;
+                case 5: // 지우개
+                    Point Etemp = new Point(e.X, e.Y);
+                    freepenStore.Add(Etemp);
+                    startF.X = freepenStore[0].X;
+                    startF.Y = freepenStore[0].Y;
+                    finishF.X = freepenStore[1].X;
+                    finishF.Y = freepenStore[1].Y;
+
+                    if (freepenStore.Count == 2)
+                    {
+                        m_Write.WriteLine("Freepen");
+                        m_Write.WriteLine(freepenStore[0].X.ToString());
+                        m_Write.WriteLine(freepenStore[0].Y.ToString());
+                        m_Write.WriteLine(freepenStore[1].X.ToString());
+                        m_Write.WriteLine(freepenStore[1].Y.ToString());
+                        m_Write.WriteLine(pen.Width);
+                        m_Write.WriteLine(pen.Color.ToArgb());
+                        m_Write.Flush();
+
+                        freepenStore.Clear();
+                        freepenStore.Add(Etemp);
+                    }
                     break;
             }
             panel1.Invalidate(true);
@@ -892,6 +972,34 @@ namespace CanvasTogether
                     m_Write.WriteLine(myCircle.GetPen().Color.ToArgb());
                     m_Write.Flush();
                     //shapes.Add(myCircle);
+                    break;
+                case 5: // 지우개
+                    Point Etemp = new Point(e.X, e.Y);
+                    freepenStore.Add(Etemp);
+                    startF.X = freepenStore[0].X;
+                    startF.Y = freepenStore[0].Y;
+                    finishF.X = freepenStore[1].X;
+                    finishF.Y = freepenStore[1].Y;
+
+                    if (freepenStore.Count == 2)
+                    {
+                        holdingFreepen = true;
+                        m_Write.WriteLine("Freepen");
+                        m_Write.WriteLine(freepenStore[0].X.ToString());
+                        m_Write.WriteLine(freepenStore[0].Y.ToString());
+                        m_Write.WriteLine(freepenStore[1].X.ToString());
+                        m_Write.WriteLine(freepenStore[1].Y.ToString());
+                        m_Write.WriteLine(pen.Width);
+                        m_Write.WriteLine(pen.Color.ToArgb());
+                        m_Write.Flush();
+
+                        freepenStore.Clear();
+                    }
+                    freepenEnd = true;
+                    SaveFreepen = true;
+                    DrawBitmap();
+                    SaveFreepen = false;
+                    freepenEnd = false;
                     break;
             }
             //DrawBitmap();
@@ -976,7 +1084,7 @@ namespace CanvasTogether
                             panel1.BackgroundImage = BmpList.Last();
                             fpList.Clear();
                         }
-                        else if (holdingFreepen) 
+                        else if (holdingFreepen)
                         {
                             fpList.Add(fpBmp);
                             panel1.BackgroundImage = fpList.Last();
@@ -1015,7 +1123,6 @@ namespace CanvasTogether
                     }
                     //BmpList.Add(DrawBmp);
                     //panel1.BackgroundImage = BmpList.Last();
-                    Point zero = new Point(0, 0);
                     switch (curMode)
                     {
                         case 1: // 직선
