@@ -32,6 +32,7 @@ namespace CanvasTogether
         public List<string> roomNames = new List<string>();
         public List<string> connectedClientID = new List<string>();
         public List<List<Shape>> shapes = new List<List<Shape>>();
+        public bool shutdownFlag = false;
         
        
 
@@ -389,21 +390,28 @@ namespace CanvasTogether
                         if (ID.Contains(currentID))
                         {
                             serverForm.printChat("[중복 로그인 발생 (User ID = " + currentID + ")]");
+                            //serverForm.shutdownFlag = true;
                             SendShutDown();
                             m_bConnect = false;
                             return;
                         }
                     }
 
-                    serverForm.connectedClientID.Add(currentID);
+                    //if (!serverForm.shutdownFlag)
+                   // {
+                        serverForm.connectedClientID.Add(currentID);
 
-                    serverForm.UserCount += 1;
-                    serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
+                        serverForm.UserCount += 1;
+                        serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
 
-                    int ret1 = serverForm.UserCount;
-                    int ret2 = serverForm.RoomCount;
-                    serverForm.ResponseUpdate(ret1, ret2);
-                    serverForm.ResponseRoomUpdate();
+                        int ret1 = serverForm.UserCount;
+                        int ret2 = serverForm.RoomCount;
+                        serverForm.ResponseUpdate(ret1, ret2);
+                        serverForm.ResponseRoomUpdate();
+
+                       // serverForm.shutdownFlag = false;
+                    //}
+                   
 
                     // TODO, shapes 배열이 처음에 null이라서 오류 뜸.
 
@@ -518,15 +526,15 @@ namespace CanvasTogether
                 else if (Request.Equals("Disconnect"))
                 {
                     existUserID = m_Read.ReadLine();
+                    serverForm.connectedClientID.Remove(existUserID);
+                    //foreach (string ID in serverForm.connectedClientID)
+                    //{
+                    //    if (ID.Contains(existUserID))
+                    //    {
 
-                    foreach (string ID in serverForm.connectedClientID)
-                    {
-                        if (ID.Contains(existUserID))
-                        {
-                            serverForm.connectedClientID.Remove(existUserID);
-                            return;
-                        }
-                    }
+                    //        return;
+                    //    }
+                    //}
 
                     m_bConnect = false;
 

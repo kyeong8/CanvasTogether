@@ -391,7 +391,6 @@ namespace CanvasTogether
             if (shutdownTrigger)
             {
                 MessageBox.Show("중복 로그인이 감지 되었습니다.");
-                //this.Close();
             }
             else
             {
@@ -406,7 +405,7 @@ namespace CanvasTogether
 
                 this.Close();
             }
-            
+
         }
 
         private void btnSend_Click(object sender, EventArgs e)
@@ -590,8 +589,9 @@ namespace CanvasTogether
                 else if (receive.Equals("ShutDown"))
                 {
                     shutdownTrigger = true;
-                    lobby.Close();
+                    this.lobby.Close();
                     this.Close();
+                    return;
                 }
                 else if (receive.Equals("Freepen"))
                 {
