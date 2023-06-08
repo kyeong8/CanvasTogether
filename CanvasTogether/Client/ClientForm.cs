@@ -56,6 +56,7 @@ namespace CanvasTogether
         bool SaveFreepen = false;
         bool undoing = false;
         bool freepenEnd = false;
+        public static bool dead = false;
 
         delegate void fnSetTextBoxCallback(string contents);
         delegate void fnSetResetTextCallback();
@@ -161,7 +162,11 @@ namespace CanvasTogether
             }
 
             exitFlag = true;
+        }
 
+        public bool getFlag()
+        {
+            return dead;
         }
 
         private void Btn_shape_Click(object sender, ToolStripItemClickedEventArgs e)
@@ -399,16 +404,19 @@ namespace CanvasTogether
             }
             else
             {
-                requestOut();
+                dead = true;
 
                 if (!m_bConnect)
                     return;
+
+                requestOut();
 
                 m_Write.WriteLine("Disconnect");
                 m_Write.WriteLine(id);
                 m_Write.Flush();
 
-                this.Close();
+                FormClosedEventArgs ee = null;
+                ClientForm_FormClosed(sender, ee);
             }
 
         }

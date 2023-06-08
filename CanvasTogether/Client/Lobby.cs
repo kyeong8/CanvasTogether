@@ -153,8 +153,8 @@ namespace CanvasTogether
 
         private void Lobby_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Dispose();
             this.form2SendUpdate(flag);
+            Dispose();
         }
 
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)

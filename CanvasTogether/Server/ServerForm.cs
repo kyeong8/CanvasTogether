@@ -513,6 +513,8 @@ namespace CanvasTogether
                         if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
                     }
 
+                    m_bConnect = false;
+
                     serverForm.ResponseUserUpdate(roomNumber);
                     serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
                 }
@@ -528,7 +530,7 @@ namespace CanvasTogether
                     //        return;
                     //    }
                     //}
-
+                    
                     m_bConnect = false;
 
                     serverForm.printChat(connectedClient + "이(가) 퇴장했습니다.");

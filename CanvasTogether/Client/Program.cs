@@ -16,7 +16,9 @@ namespace CanvasTogether
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ClientForm());
+            ClientForm Client = new ClientForm();
+            if (!Client.getFlag())
+                Application.Run(Client);
         }
     }
 }
