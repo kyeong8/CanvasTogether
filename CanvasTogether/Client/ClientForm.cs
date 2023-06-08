@@ -17,6 +17,7 @@ using System.Drawing.Drawing2D;
 using System.Data.Entity.Migrations.Builders;
 using Shapes;
 using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CanvasTogether
 {
@@ -54,6 +55,7 @@ namespace CanvasTogether
         bool holdingFreepen = false;
         bool SaveFreepen = false;
         bool undoing = false;
+        bool freepenEnd = false;
 
         delegate void fnSetTextBoxCallback(string contents);
 
@@ -68,7 +70,9 @@ namespace CanvasTogether
 
         // ==========================================
 
-
+        public List<Point> freepenStore = new List<Point>(); // 점 2개 모일 때마다 서버로 전송
+        private Point startF; // freepen의 끝점
+        private Point finishF; // freepen의 끝점
         private Point start; // 도형의 시작점
         private Point finish; // 도형의 끝점
 
@@ -91,7 +95,7 @@ namespace CanvasTogether
         private List<Bitmap> BmpList = new List<Bitmap>();
         private List<Bitmap> tmpList = new List<Bitmap>();//undo
         private List<Bitmap> fpList = new List<Bitmap>();
-        int Count = 0;
+        private int Count = 0;
         bool firstClick = true;
         Point zero = new Point(0, 0);
         private void SetupShapeVar()
@@ -669,15 +673,6 @@ namespace CanvasTogether
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
             }
-            if(e.ClickedItem == btn_shape)
-            {
-                curMode = (int)CANVAS_MODE.LINEMODE;
-
-                this.btn_pen.BackColor = Color.White;
-                this.btn_eraser.BackColor = Color.White;
-                this.btn_shape.BackColor = Color.Orange;
-                this.btn_text.BackColor = Color.White;
-            }
             if(e.ClickedItem == btn_text)
             {
                 curMode = (int)CANVAS_MODE.TEXTMODE;
@@ -706,74 +701,99 @@ namespace CanvasTogether
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
+            freepenEnd = false;
             pen = new Pen(currentColor, _thick);
             brush = new SolidBrush(currentColor);
             isHolding = true;
-            if (holdingFreepen == true)
+            freepenStore.Clear();
+            //if (holdingFreepen == true)
+            //{
+            //    SaveFreepen = true;
+            //    DrawBitmap();
+            //    SaveFreepen = false;
+            //}
+            //holdingFreepen = false;
+            switch (curMode)
             {
-                SaveFreepen = true;
-                DrawBitmap();
-                SaveFreepen = false;
+                case 0: // 펜
+                    Point temp = new Point(e.X, e.Y);
+                    freepenStore.Add(temp);
+                    break;
+                case 1: // 선
+                    myLine = new MyLines(1);
+                    shape = myLine;
+                    start.X = e.X;
+                    start.Y = e.Y;
+                    break;
+                case 2: // 사각형
+                    myRect = new MyRect();
+                    shape = myRect;
+                    start.X = e.X;
+                    start.Y = e.Y;
+                    break;
+                case 3: // 원
+                    myCircle = new MyCircle();
+                    shape = myCircle;
+                    start.X = e.X;
+                    start.Y = e.Y;
+                    break;
+                case 5: // 지우개
+                    break;
             }
-            holdingFreepen = false;
-
-            if (!(sender is ToolStripButton))
-            {
-                
-                switch (curMode)
-                {
-                    case 0: // 펜
-                        break;
-                    case 1: // 선
-                        myLine = new MyLines(1);
-                        shape = myLine;
-                        break;
-                    case 2: // 사각형
-                        myRect = new MyRect();
-                        shape = myRect;
-                        break;
-                    case 3: // 원
-                        myCircle = new MyCircle();
-                        shape = myCircle;
-                        break;
-                    case 5: // 지우개
-                        break;
-                }
-                start.X = e.X;
-                start.Y = e.Y;
-            }
-            
         }
 
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
             if (!isHolding) return;
-
-
-            finish.X = e.X;
-            finish.Y = e.Y;
-            Graphics g = panel1.CreateGraphics();
+            
             switch (curMode)
             {
                 case 0: // 펜
-                    m_Write.WriteLine("Freepen");
-                    m_Write.WriteLine(start.X);
-                    m_Write.WriteLine(start.Y);
-                    m_Write.WriteLine(finish.X);
-                    m_Write.WriteLine(finish.Y);
-                    m_Write.WriteLine(pen.Width);
-                    m_Write.WriteLine(pen.Color.ToArgb());
-                    m_Write.Flush();
-                    //myLine.setPoint(start, finish, pen, _thick);
-                    start = finish;
+                    Point temp = new Point(e.X, e.Y);
+                    freepenStore.Add(temp);
+                    startF.X = freepenStore[0].X;
+                    startF.Y = freepenStore[0].Y;
+                    finishF.X = freepenStore[1].X;
+                    finishF.Y = freepenStore[1].Y;
+                    
+                    if (freepenStore.Count == 2)
+                    {
+                        m_Write.WriteLine("Freepen");
+                        m_Write.WriteLine(freepenStore[0].X.ToString());
+                        m_Write.WriteLine(freepenStore[0].Y.ToString());
+                        m_Write.WriteLine(freepenStore[1].X.ToString());
+                        m_Write.WriteLine(freepenStore[1].Y.ToString());
+                        m_Write.WriteLine(pen.Width);
+                        m_Write.WriteLine(pen.Color.ToArgb());
+                        m_Write.Flush();
+
+                        freepenStore.Clear();
+                        freepenStore.Add(temp);
+                    }
+                    //m_Write.WriteLine("Freepen");
+                    //m_Write.WriteLine(start.X);
+                    //m_Write.WriteLine(start.Y);
+                    //m_Write.WriteLine(finish.X);
+                    //m_Write.WriteLine(finish.Y);
+                    //m_Write.WriteLine(pen.Width);
+                    //m_Write.WriteLine(pen.Color.ToArgb());
+                    //m_Write.Flush();
+                    ////myLine.setPoint(start, finish, pen, _thick);
+                    //start = finish;
                     break;
                 case 1: // 직선
+                    finish.X = e.X;
+                    finish.Y = e.Y;
                     myLine.setPoint(start, finish, pen, _thick);
                     break;
                 case 2: // 사각형
+                    finish.X = e.X;
+                    finish.Y = e.Y;
                     myRect.setRect(start, finish, pen, _thick);
                     break;
                 case 3: // 원
+                    finish.X = e.X;
+                    finish.Y = e.Y;
                     myCircle.setRectC(start, finish, pen, _thick);
                     break;
             }
@@ -788,6 +808,35 @@ namespace CanvasTogether
 
             switch (curMode)
             {
+                case 0: // 펜
+
+                    Point temp = new Point(e.X, e.Y);
+                    freepenStore.Add(temp);
+                    startF.X = freepenStore[0].X;
+                    startF.Y = freepenStore[0].Y;
+                    finishF.X = freepenStore[1].X;
+                    finishF.Y = freepenStore[1].Y;
+                    
+                    if (freepenStore.Count == 2)
+                    {
+                        holdingFreepen = true;
+                        m_Write.WriteLine("Freepen");
+                        m_Write.WriteLine(freepenStore[0].X.ToString());
+                        m_Write.WriteLine(freepenStore[0].Y.ToString());
+                        m_Write.WriteLine(freepenStore[1].X.ToString());
+                        m_Write.WriteLine(freepenStore[1].Y.ToString());
+                        m_Write.WriteLine(pen.Width);
+                        m_Write.WriteLine(pen.Color.ToArgb());
+                        m_Write.Flush();
+
+                        freepenStore.Clear();
+                    }
+                    freepenEnd = true;
+                    SaveFreepen = true;
+                    DrawBitmap();
+                    SaveFreepen = false;
+                    freepenEnd = false;
+                    break;
                 case 1: // 선                    
                     m_Write.WriteLine("Line");
                     m_Write.WriteLine(myLine.getPoint1().X);
@@ -822,7 +871,6 @@ namespace CanvasTogether
                     //shapes.Add(myCircle);
                     break;
             }
-
             //DrawBitmap();
         }
         private void DrawFreepen()
@@ -860,43 +908,57 @@ namespace CanvasTogether
                         //if (fpList.Last() == null && BmpList.Last() != null) fpBmp = (Bitmap)BmpList.Last().Clone();
                         //else if (fpList.Last() != null) fpBmp = (Bitmap)(fpList.Last().Clone());
 
-                        if (!holdingFreepen)
+                        if (!SaveFreepen)
                         {
-                            if (BmpList.Last() != null)
+                            if (!holdingFreepen)
                             {
-                                fpList.Add(BmpList.Last());
-                                fpBmp = (Bitmap)(fpList.Last().Clone());
+                                if (BmpList.Last() != null)
+                                {
+                                    fpList.Add(BmpList.Last());
+                                    fpBmp = (Bitmap)fpList.Last().Clone();
+                                }
+                                //Graphics g1 = Graphics.FromImage(DrawBmp);
+                                Graphics g1 = Graphics.FromImage(fpBmp);
+                                Point s = new Point(startF.X, startF.Y);
+                                Point f = new Point(finishF.X, finishF.Y);
+                                g1.DrawLine(pen, s, f);
+                                holdingFreepen = true;
+                                Count++;
                             }
-                            //Graphics g1 = Graphics.FromImage(DrawBmp);
-                            Graphics g1 = Graphics.FromImage(fpBmp);
-                            Point s = new Point(start.X, start.Y);
-                            Point f = new Point(finish.X, finish.Y);
-                            g1.DrawLine(pen, s, f);
-                            holdingFreepen = true;
-                            tempX = finish.X;
-                            tempY = finish.Y;
-                            Count++;
+                            else
+                            {
+                                if (fpList.Count > 0) 
+                                {
+                                    fpBmp = (Bitmap)fpList.Last().Clone();
+                                }
+                                else
+                                {
+                                    fpBmp = (Bitmap)BmpList.Last().Clone();
+                                }
+                                //Graphics g2 = Graphics.FromImage(DrawBmp);
+                                Graphics g2 = Graphics.FromImage(fpBmp);
+                                Point s = new Point(startF.X, startF.Y);
+                                Point f = new Point(finishF.X, finishF.Y);
+                                g2.DrawLine(pen, s, f);
+                                Count++;
+                            }
                         }
-                        else
+
+                        if (SaveFreepen && holdingFreepen && freepenEnd)
                         {
-                            fpBmp = (Bitmap)(fpList.Last().Clone());
-                            //Graphics g2 = Graphics.FromImage(DrawBmp);
-                            Graphics g2 = Graphics.FromImage(fpBmp);
-                            Point s = new Point(tempX, tempY);
-                            Point f = new Point(finish.X, finish.Y);
-                            g2.DrawLine(pen, s, f);
-                            tempX = finish.X;
-                            tempY = finish.Y;
-                            Count++;
-                        }
-                        if (SaveFreepen == true && holdingFreepen == true)
-                        {
-                            BmpList.Add(fpList.Last());
+                            if (BmpList.Last() != fpBmp)
+                            {
+                                BmpList.Add(fpList.Last());
+                            }
                             panel1.BackgroundImage = BmpList.Last();
                             fpList.Clear();
                         }
-                        fpList.Add(fpBmp);
-                        panel1.BackgroundImage = fpList.Last();
+                        else if (holdingFreepen) 
+                        {
+                            fpList.Add(fpBmp);
+                            panel1.BackgroundImage = fpList.Last();
+                        }
+                        
                         //BmpList.Add(DrawBmp);
                         //panel1.BackgroundImage = BmpList.Last();
                     }
@@ -911,14 +973,14 @@ namespace CanvasTogether
                             g1.DrawLine(pen, s, f);
                             //myLine.setPoint(start, finish, pen, _thick);
                         }
-                        else if (shapes.Last().ReturnType() == 2)   //rectangle
+                        else if (shapes.Last().GetName() == "Rectangle")   //rectangle
                         {
                             Graphics g2 = Graphics.FromImage(DrawBmp);
                             Rectangle r = new Rectangle(Math.Min(start.X, finish.X), Math.Min(start.Y, finish.Y), Math.Abs(finish.X - start.X), Math.Abs(finish.Y - start.Y));
                             g2.DrawRectangle(pen, r);
                             //myRect.setRect(start, finish, pen, _thick);
                         }
-                        else if (shapes.Last().ReturnType() == 3)   //circle
+                        else if (shapes.Last().GetName() == "Circle")  //circle
                         {
                             Graphics g3 = Graphics.FromImage(DrawBmp);
                             Rectangle r = new Rectangle(Math.Min(start.X, finish.X), Math.Min(start.Y, finish.Y), Math.Abs(finish.X - start.X), Math.Abs(finish.Y - start.Y));
@@ -930,23 +992,24 @@ namespace CanvasTogether
                     }
                     //BmpList.Add(DrawBmp);
                     //panel1.BackgroundImage = BmpList.Last();
+                    Point zero = new Point(0, 0);
+                    switch (curMode)
+                    {
+                        case 1: // 직선
+                            myLine.setPoint(new Point(0, 0), new Point(0, 0), pen, _thick);
+                            break;
+                        case 2: // 사각형
+                            myRect.setRect(new Point(0, 0), new Point(0, 0), pen, _thick);
+                            break;
+                        case 3: // 원
+                            myCircle.setRectC(new Point(0, 0), new Point(0, 0), pen, _thick);
+                            break;
+                    }
+                    Draw();
                 }
             }));
 
-            Point zero = new Point(0, 0);
-            switch (curMode)
-            {
-                case 1: // 직선
-                    myLine.setPoint(new Point(0, 0), new Point(0, 0), pen, _thick);
-                    break;
-                case 2: // 사각형
-                    myRect.setRect(new Point(0, 0), new Point(0, 0), pen, _thick);
-                    break;
-                case 3: // 원
-                    myCircle.setRectC(new Point(0, 0), new Point(0, 0), pen, _thick);
-                    break;
-            }
-            Draw();
+            
         }
         private void btn_image_Click(object sender, EventArgs e)
         {
@@ -1037,12 +1100,33 @@ namespace CanvasTogether
         private void item_line_Click(object sender, EventArgs e)
         {
             curMode = (int)CANVAS_MODE.LINEMODE;
+
+            this.btn_eraser.BackColor = Color.White;
+            this.btn_pen.BackColor = Color.White;
+            this.btn_shape.BackColor = Color.Orange;
+            this.btn_text.BackColor = Color.White;
         }
 
         private void item_rect_Click(object sender, EventArgs e)
         {
             curMode = (int)CANVAS_MODE.RECTMODE;
+
+            this.btn_eraser.BackColor = Color.White;
+            this.btn_pen.BackColor = Color.White;
+            this.btn_shape.BackColor = Color.Orange;
+            this.btn_text.BackColor = Color.White;
         }
+
+        private void item_circle_Click(object sender, EventArgs e)
+        {
+            curMode = (int)CANVAS_MODE.CIRCLEMODE;
+
+            this.btn_eraser.BackColor = Color.White;
+            this.btn_pen.BackColor = Color.White;
+            this.btn_shape.BackColor = Color.Orange;
+            this.btn_text.BackColor = Color.White;
+        }
+
         private void btn_undo_Click(object sender, EventArgs e)
         {
             if (BmpList.Count() > 0)
@@ -1081,11 +1165,6 @@ namespace CanvasTogether
             m_Write.Close();
             m_Stream.Close();
             m_thReader.Abort();
-        }
-
-        private void item_circle_Click(object sender, EventArgs e)
-        {
-            curMode = (int)CANVAS_MODE.CIRCLEMODE;
         }
     }
 
