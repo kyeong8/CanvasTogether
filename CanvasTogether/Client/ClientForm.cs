@@ -415,7 +415,7 @@ namespace CanvasTogether
             lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
 
-            this.lobby.ShowDialog();
+            lobby.ShowDialog();
             requestRoomUpdate();
             requestUpdate();
 
@@ -447,6 +447,7 @@ namespace CanvasTogether
                 m_Write.WriteLine(id);
                 m_Write.Flush();
 
+                this.Dispose();
                 FormClosedEventArgs ee = null;
                 ClientForm_FormClosed(sender, ee);
             }
@@ -512,6 +513,7 @@ namespace CanvasTogether
             m_Write.WriteLine("Out");
             m_Write.WriteLine(enterRoomNumber.ToString());
             m_Write.WriteLine(name);
+            //m_Write.WriteLine(id);
             m_Write.Flush();
         }
 
@@ -649,7 +651,7 @@ namespace CanvasTogether
                 {
                     shutdownTrigger = true;
                     this.lobby.Close();
-                    this.Close();
+                    this.Dispose();
                     return;
                 }
                 else if (receive.Equals("Freepen"))

@@ -494,6 +494,9 @@ namespace CanvasTogether
                 {
                     roomNumber = m_Read.ReadLine();
                     existUser = m_Read.ReadLine();
+                    //existUserID = m_Read.ReadLine();
+
+                    //serverForm.connectedClientID.Remove(existUserID);
 
                     if (Convert.ToInt32(roomNumber) != 0)
                     {
@@ -513,7 +516,7 @@ namespace CanvasTogether
                         if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
                     }
 
-                    m_bConnect = false;
+                    //m_bConnect = false;
 
                     serverForm.ResponseUserUpdate(roomNumber);
                     serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
@@ -522,14 +525,6 @@ namespace CanvasTogether
                 {
                     existUserID = m_Read.ReadLine();
                     serverForm.connectedClientID.Remove(existUserID);
-                    //foreach (string ID in serverForm.connectedClientID)
-                    //{
-                    //    if (ID.Contains(existUserID))
-                    //    {
-
-                    //        return;
-                    //    }
-                    //}
                     
                     m_bConnect = false;
 
