@@ -523,6 +523,7 @@ namespace CanvasTogether
                 else if (Request.Equals("Disconnect"))
                 {
                     existUser = m_Read.ReadLine();
+                    roomNumber = m_Read.ReadLine();
                     //existUserID = m_Read.ReadLine();
                     serverForm.connectedClientID.Remove(existUser);
                     //foreach (string ID in serverForm.connectedClientID)
@@ -541,6 +542,7 @@ namespace CanvasTogether
                             if (serverForm.RoomCount > 0)
                             {
                                 serverForm.RoomCount -= 1;
+                                serverForm.UserCount -= 1;
                                 serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
                             }
                         }

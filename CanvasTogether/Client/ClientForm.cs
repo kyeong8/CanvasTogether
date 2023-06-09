@@ -446,9 +446,10 @@ namespace CanvasTogether
                 if (!m_bConnect)
                     return;
 
-
+                //MessageBox.Show(enterRoomNumber.ToString());
                 m_Write.WriteLine("Disconnect");
                 m_Write.WriteLine(id);
+                m_Write.WriteLine(enterRoomNumber.ToString());
                 m_Write.Flush();
                 requestOut(true);
 
