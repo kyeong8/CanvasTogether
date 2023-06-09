@@ -54,6 +54,7 @@
             this.item_Thick4 = new System.Windows.Forms.ToolStripMenuItem();
             this.item_Thick5 = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_text = new System.Windows.Forms.ToolStripButton();
+            this.btn_fill = new System.Windows.Forms.ToolStripButton();
             this.btn_image = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.color1 = new System.Windows.Forms.ToolStripButton();
@@ -151,6 +152,7 @@
             this.btn_shape,
             this.btn_thick,
             this.btn_text,
+            this.btn_fill,
             this.btn_image,
             this.toolStripSeparator1,
             this.color1,
@@ -304,6 +306,15 @@
             this.btn_text.Text = "toolStripButton1";
             this.btn_text.ToolTipText = "텍스트 추가";
             // 
+            // btn_fill
+            // 
+            this.btn_fill.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btn_fill.Image = global::CanvasTogether.Properties.Resources.fill;
+            this.btn_fill.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_fill.Name = "btn_fill";
+            this.btn_fill.Size = new System.Drawing.Size(34, 34);
+            this.btn_fill.Text = "toolStripButton1";
+            // 
             // btn_image
             // 
             this.btn_image.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -450,6 +461,7 @@
         private DoubleBufferPanel panel1;
         private System.Windows.Forms.TextBox userNameList;
         private System.Windows.Forms.Label userCnt;
+        private System.Windows.Forms.ToolStripButton btn_fill;
     }
 }
 

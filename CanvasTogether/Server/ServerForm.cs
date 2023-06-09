@@ -33,7 +33,7 @@ namespace CanvasTogether
         public int UserCount = 0;
         public int RoomCount = 0;
         public List<string> roomNames = new List<string>();
-
+        public List<string> connectedClientID = new List<string>();
         public List<List<Shape>> shapes = new List<List<Shape>>();
         public Bitmap OriginalBmp;
         public Bitmap DrawBmp;
@@ -174,7 +174,7 @@ namespace CanvasTogether
                     serverThreads[i].SendUserUpdate(UserState[Convert.ToInt32(roomNumber)]);
             }
         }
-
+        
         public void ServerThreadExit(ServerThread st)
         {
             if (!st.m_bConnect)
@@ -520,10 +520,13 @@ namespace CanvasTogether
         public MemoryStream memoryStream;
         public BinaryFormatter formatter;
         private string connectedClient = null;
+        private string currentID = null;
         private string enteredUser = null;
         public string roomNumber = null;
         private string roomName = null;
         private string existUser = null;
+        private string existFlag = null;
+        private string existUserID = null;
         private string visibility = null;
 
         public ServerThread(ServerForm serverForm)
@@ -540,6 +543,21 @@ namespace CanvasTogether
                 if (Request.Equals("New Client"))
                 {
                     connectedClient = m_Read.ReadLine();
+                    currentID = m_Read.ReadLine();
+
+                    foreach (string ID in serverForm.connectedClientID)
+                    {
+                        if (ID.Contains(currentID))
+                        {
+                            serverForm.printChat("[중복 로그인 발생 (User ID = " + currentID + ")]");
+                            SendShutDown();
+                            m_bConnect = false;
+                            return;
+                        }
+                    }
+
+                    serverForm.connectedClientID.Add(currentID);
+
                     serverForm.UserCount += 1;
                     serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
 
@@ -547,6 +565,7 @@ namespace CanvasTogether
                     int ret2 = serverForm.RoomCount;
                     serverForm.ResponseUpdate(ret1, ret2);
                     serverForm.ResponseRoomUpdate();
+
 
                     // TODO, shapes 배열이 처음에 null이라서 오류 뜸.
 
@@ -592,7 +611,7 @@ namespace CanvasTogether
                     //        }
                     //    }
                     //}
-                    
+
                 }
                 else if (Request.Equals("Message"))
                 {
@@ -607,7 +626,6 @@ namespace CanvasTogether
                 }
                 else if (Request.Equals("Enter"))
                 {
-                    
                     enteredUser = m_Read.ReadLine();
                     roomNumber = m_Read.ReadLine();
                     if(!serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(enteredUser))
@@ -629,13 +647,13 @@ namespace CanvasTogether
                 else if (Request.Equals("User"))
                 {
                     roomNumber = m_Read.ReadLine();
-                    existUser = m_Read.ReadLine();
                     serverForm.ResponseUserUpdate(roomNumber);
                 }
                 else if (Request.Equals("Out"))
                 {
                     roomNumber = m_Read.ReadLine();
                     existUser = m_Read.ReadLine();
+                    existFlag = m_Read.ReadLine();
 
                     if (Convert.ToInt32(roomNumber) != 0)
                     {
@@ -655,12 +673,49 @@ namespace CanvasTogether
                         if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
                     }
 
-                    serverForm.ResponseUserUpdate(roomNumber);
+                    if (existFlag == "true")
+                        m_bConnect = false;
+
+                    if (roomNumber != "0")
+                        serverForm.ResponseUserUpdate(roomNumber);
                     serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
                 }
                 else if (Request.Equals("Disconnect"))
                 {
+                    existUser = m_Read.ReadLine();
+                    roomNumber = m_Read.ReadLine();
+                    //existUserID = m_Read.ReadLine();
+                    serverForm.connectedClientID.Remove(existUser);
+                    //foreach (string ID in serverForm.connectedClientID)
+                    //{
+                    //    if (ID.Contains(existUserID))
+                    //    {
+
+                    //        return;
+                    //    }
+                    //}
+
+                    if (Convert.ToInt32(roomNumber) != 0)
+                    {
+                        if (serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(existUser))
+                        {
+                            if (serverForm.RoomCount > 0)
+                            {
+                                serverForm.RoomCount -= 1;
+                                serverForm.UserCount -= 1;
+                                serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
+                            }
+                        }
+                        else
+                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                    }
+                    else
+                    {
+                        if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                    }
+
                     m_bConnect = false;
+                    serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
 
                     serverForm.printChat(connectedClient + "이(가) 퇴장했습니다.");
 
@@ -785,6 +840,12 @@ namespace CanvasTogether
             m_Write.WriteLine(totalCount.ToString());
             //MessageBox.Show(message.ToString());
             //serverForm.printChat("현재 접속인원 : " + message.ToString());
+            m_Write.Flush();
+        }
+
+        public void SendShutDown()
+        {
+            m_Write.WriteLine("ShutDown");
             m_Write.Flush();
         }
 
