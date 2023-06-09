@@ -37,6 +37,8 @@ namespace CanvasTogether
         TcpClient m_Client;
         StreamReader m_Read;
         StreamWriter m_Write;
+        BinaryWriter m_bWrite;
+        BinaryReader m_bRead;
         private Thread m_thReader;
         bool m_bConnect;
         public static string id, pw; //클라에 아이디 비번 저장
@@ -87,12 +89,16 @@ namespace CanvasTogether
         private Bitmap OriginalBmp;
         private Bitmap DrawBmp;
         private Bitmap fpBmp;
+        private Bitmap currentBmp;
         private List<Bitmap> BmpList = new List<Bitmap>();
         private List<Bitmap> tmpList = new List<Bitmap>();//undo
         private List<Bitmap> fpList = new List<Bitmap>();
-        int Count = 0;
+        MemoryStream ms;
         bool firstClick = true;
         Point zero = new Point(0, 0);
+        NetworkStream networkStream;
+        MemoryStream memoryStream;
+        public byte[] buffer = new byte[1024 * 100];
         private void SetupShapeVar()
         {
             start = new Point(0, 0);
@@ -435,9 +441,12 @@ namespace CanvasTogether
 
             m_Stream = m_Client.GetStream();
 
+            networkStream = m_Stream;
+
             m_Read = new StreamReader(m_Stream);
             m_Write = new StreamWriter(m_Stream);
-
+            m_bRead = new BinaryReader(m_Stream);
+            m_bWrite = new BinaryWriter(m_Stream);
             m_thReader = new Thread(new ThreadStart(Receive));
             m_thReader.Start();
         }
@@ -586,7 +595,7 @@ namespace CanvasTogether
                     MyLines ml = new MyLines(2);
                     ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     shapes.Add(ml);
-                    DrawBitmap();
+                    //DrawBitmap();
                 }
                 else if (receive.Equals("Line"))
                 {
@@ -599,7 +608,7 @@ namespace CanvasTogether
                     MyLines ml = new MyLines(1);
                     ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     shapes.Add(ml);
-                    DrawBitmap();
+                    //DrawBitmap();
                 }
                 else if (receive.Equals("Rectangle"))
                 {
@@ -612,7 +621,7 @@ namespace CanvasTogether
                     MyRect mr = new MyRect();
                     mr.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     shapes.Add(mr);
-                    DrawBitmap();
+                    //DrawBitmap();
                 }
                 else if (receive.Equals("Circle"))
                 {
@@ -625,10 +634,70 @@ namespace CanvasTogether
                     MyCircle mc = new MyCircle();
                     mc.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     shapes.Add(mc);
-                    DrawBitmap();
+                    //DrawBitmap();
+                }
+                else if(receive.Equals("Bitmap"))
+                {
+                    memoryStream = new MemoryStream(m_Client.ReceiveBufferSize);
+                    //MessageBox.Show("Bitmap입력받음");
+                    //buffer = new byte[m_Client.ReceiveBufferSize];
+                    int bytesRead = 0;
+                    bytesRead = networkStream.Read(buffer, 0, buffer.Length);
+
+                    foreach (byte b in buffer)
+                    {
+                        memoryStream.WriteByte(b);
+                    }
+                    memoryStream.Position = 0;
+
+                    // 수신된 데이터 역직렬화하여 비트맵 이미지로 변환
+                    //memoryStream.Seek(0, SeekOrigin.Begin);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    currentBmp = (Bitmap)formatter.Deserialize(memoryStream);
+
+                    // 클라이언트에 표시
+                    panel1.BackgroundImage = currentBmp;
+                    Array.Clear(buffer, (byte)0, buffer.Length);
+                    this.Invoke(new Action(delegate ()
+                    {
+                        
+                    }));
+                    //NetworkStream networkStream = m_Stream;
+                    //MemoryStream memoryStream = new MemoryStream();
+                    
+
+                    //int length = int.Parse(m_Read.ReadLine());
+                    //byte[] buf = m_bRead.ReadBytes(length);
+                    //ms = new MemoryStream(buf);
+                    //bitmap = new Bitmap(ms);
+                    
+                    // 서버로부터 데이터 수신
+                    /*NetworkStream networkStream = m_Stream;
+                    MemoryStream memoryStream = new MemoryStream();
+
+                    byte[] buffer = new byte[m_Client.ReceiveBufferSize];
+                    int bytesRead;
+                    while ((bytesRead = networkStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        memoryStream.Write(buffer, 0, bytesRead);
+                    }
+
+                    // 수신된 데이터 역직렬화하여 비트맵 이미지로 변환
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    currentBmp = (Bitmap)formatter.Deserialize(memoryStream);
+
+                    // 클라이언트에 표시
+                    panel1.BackgroundImage = currentBmp;
+                    //int length = int.Parse(m_Read.ReadLine());
+                    //byte[] buf = m_bRead.ReadBytes(length);
+                    //ms = new MemoryStream(buf);
+                    //bitmap = new Bitmap(ms);
+                    ////bitmap.Save("C:/Users/junhwa/source/repos/Application_Software_3rdPractice/Client/bin/Debug/abc.bmp");
+                    */
                 }
             }
-            DrawBitmap();
+            //DrawBitmap();
         }
 
         private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -694,7 +763,7 @@ namespace CanvasTogether
             if (holdingFreepen == true)
             {
                 SaveFreepen = true;
-                DrawBitmap();
+                //DrawBitmap();
                 SaveFreepen = false;
             }
             holdingFreepen = false;
@@ -766,10 +835,14 @@ namespace CanvasTogether
         private void panel1_MouseUp(object sender, MouseEventArgs e)
         {
             isHolding = false;
-            if (start.X.Equals(e.X) && start.Y.Equals(e.Y)) return; // 도형을 그리지 않은 경우
+            //if (start.X.Equals(e.X) && start.Y.Equals(e.Y)) return; // 도형을 그리지 않은 경우
 
             switch (curMode)
             {
+                case 0:
+                    m_Write.WriteLine("FreepenMouseup");
+                    m_Write.Flush();
+                    break;
                 case 1: // 선                    
                     m_Write.WriteLine("Line");
                     m_Write.WriteLine(myLine.getPoint1().X);
@@ -812,20 +885,20 @@ namespace CanvasTogether
             BmpList.Add(DrawBmp);
             panel1.BackgroundImage = BmpList.Last();
         }
-        private void DrawBitmap()
+        /*private void DrawBitmap()
         {
             this.Invoke(new Action(delegate ()
             {
                 if (OriginalBmp != null)
                 {
-                    /*if (BmpList.Count() == 0)
-                    {
-                        DrawBmp = (Bitmap)OriginalBmp.Clone();
-                    }
-                    else
-                    {
-                        DrawBmp = (Bitmap)BmpList.Last().Clone();
-                    }*/
+                    //if (BmpList.Count() == 0)
+                    //{
+                    //    DrawBmp = (Bitmap)OriginalBmp.Clone();
+                    //}
+                    //else
+                    //{
+                    //    DrawBmp = (Bitmap)BmpList.Last().Clone();
+                    //}
                     //DrawBmp = (Bitmap)OriginalBmp.Clone();
                     //if (BmpList.Last() != null) DrawBmp = (Bitmap)BmpList.Last().Clone();
                     if (undoing == true)
@@ -857,7 +930,6 @@ namespace CanvasTogether
                             holdingFreepen = true;
                             tempX = finish.X;
                             tempY = finish.Y;
-                            Count++;
                         }
                         else
                         {
@@ -869,7 +941,6 @@ namespace CanvasTogether
                             g2.DrawLine(pen, s, f);
                             tempX = finish.X;
                             tempY = finish.Y;
-                            Count++;
                         }
                         if (SaveFreepen == true && holdingFreepen == true)
                         {
@@ -929,7 +1000,7 @@ namespace CanvasTogether
                     break;
             }
             Draw();
-        }
+        }*/
         private void btn_image_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -1027,7 +1098,10 @@ namespace CanvasTogether
         }
         private void btn_undo_Click(object sender, EventArgs e)
         {
-            if (BmpList.Count() > 0)
+            m_Write.WriteLine("btnUndo");
+            m_Write.Flush();
+
+            /*if (BmpList.Count() > 0)
             {   
                 undoing = true;
                 tmpList.Add(BmpList.Last());
@@ -1038,12 +1112,14 @@ namespace CanvasTogether
                 {
                     panel1.BackgroundImage = BmpList.Last();
                 }
-            }
+            }*/
         }
 
         private void btn_redo_Click(object sender, EventArgs e)
         {
-            if (tmpList.Count() > 0)
+            m_Write.WriteLine("btnRedo");
+            m_Write.Flush();
+            /*if (tmpList.Count() > 0)
             {
                 BmpList.Add(tmpList.Last());
                 tmpList.RemoveAt(tmpList.Count() - 1);
@@ -1052,7 +1128,7 @@ namespace CanvasTogether
             else
             {
                 panel1.BackgroundImage = BmpList.Last();
-            }
+            }*/
         }
 
         private void ClientForm_FormClosed(object sender, FormClosedEventArgs e)

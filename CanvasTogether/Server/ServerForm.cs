@@ -13,6 +13,9 @@ using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
 using Shapes;
+using System.Collections;
+using System.Diagnostics.Eventing.Reader;
+using System.Reflection;
 
 namespace CanvasTogether
 {
@@ -32,9 +35,27 @@ namespace CanvasTogether
         public List<string> roomNames = new List<string>();
 
         public List<List<Shape>> shapes = new List<List<Shape>>();
-        
-        //public List<string> Id = new List<string>();
-        //public List<string> Pw = new List<string>();
+        public Bitmap OriginalBmp;
+        public Bitmap DrawBmp;
+        public Bitmap fpBmp;
+        public List<Bitmap> BmpList = new List<Bitmap>();
+        public List<Bitmap> tmpList = new List<Bitmap>();//undo
+        public List<Bitmap> fpList = new List<Bitmap>();
+        public bool holdingFreepen = false;
+        public bool SaveFreepen = false;
+        public bool undoing = false;
+        public int tempX;
+        public int tempY;
+        public int s_x1;
+        public int s_y1;
+        public int s_x2;
+        public int s_y2;
+        public int s_wid;
+        public int s_hei;
+        public int s_thick;
+        public int s_Argb;
+
+        public byte[] buffer = new byte[1024 * 100];
 
         /* Page members */
         int pages = 1;
@@ -55,6 +76,11 @@ namespace CanvasTogether
             panel3.Visible = false;
             panel4.Visible = false;
 
+            panel1.BackgroundImage = new Bitmap(Application.StartupPath + @"\DefaultBackground.png");
+            OriginalBmp = (Bitmap)panel1.BackgroundImage;
+            BmpList.Add(OriginalBmp);
+            fpList.Add(OriginalBmp);
+
             for (int i = 0; i < 5; i++)
                 UserState.Add(new List<string>());
 
@@ -67,7 +93,6 @@ namespace CanvasTogether
 
         public void ServerStart()
         {
-          
             m_listener = new TcpListener(IPAddress.Any, 7777);
             m_listener.Start();
 
@@ -89,6 +114,8 @@ namespace CanvasTogether
                     serverThreads[index].m_Stream = hClient.GetStream();
                     serverThreads[index].m_Read = new StreamReader(serverThreads[index].m_Stream);
                     serverThreads[index].m_Write = new StreamWriter(serverThreads[index].m_Stream);
+                    serverThreads[index].memoryStream = new MemoryStream();
+                    serverThreads[index].formatter = new BinaryFormatter();
 
                     serverThreads[index].m_thReader = new Thread(new ThreadStart(serverThreads[index].Receive));
                     serverThreads[index].m_thReader.Start();
@@ -294,10 +321,36 @@ namespace CanvasTogether
                     serverThreads[i].Send_Circle(x1, y1, x2, y2, thick, Argb);
             }
         }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        public void all_send_bitmap(string roomNumber)    //bitmap to binary
         {
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            this.Invoke(new Action(delegate ()
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
+                    {
+                        serverThreads[i].m_Write.WriteLine("Bitmap");
+                        serverThreads[i].m_Write.Flush();
+                        serverThreads[i].formatter.Serialize(serverThreads[i].memoryStream, BmpList.Last());
+                        //buffer = serverThreads[i].memoryStream.ToArray();
+                        //Array.Copy(serverThreads[i].memoryStream.ToArray(), buffer, (int)serverThreads[i].memoryStream.Length);
+                        NetworkStream networkStream = serverThreads[i].m_Stream;
+                        networkStream.Write(serverThreads[i].memoryStream.ToArray(), 0, (int)serverThreads[i].memoryStream.Length);
+                        //networkStream.Write(buffer, 0, buffer.Length);
+                        networkStream.Flush();
+                        serverThreads[i].memoryStream.SetLength(0);
+                        //Array.Clear(buffer, (byte)0, buffer.Length);
+                    }
+                }
+            }));
+            // 비트맵 이미지 직렬화
+            // 직렬화된 데이터를 클라이언트로 전송
+
+
+        }
+        public void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            /*e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             try
             {
                 foreach (var item in shapes[0])
@@ -306,7 +359,7 @@ namespace CanvasTogether
             catch (Exception)
             {
                 return;
-            }
+            }*/
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
@@ -350,6 +403,110 @@ namespace CanvasTogether
                 return;
             }
         }
+        public void DrawBitmap()
+        {
+            if (OriginalBmp != null)
+            {
+                /*if (BmpList.Count() == 0)
+                {
+                    DrawBmp = (Bitmap)OriginalBmp.Clone();
+                }
+                else
+                {
+                    DrawBmp = (Bitmap)BmpList.Last().Clone();
+                }*/
+                //DrawBmp = (Bitmap)OriginalBmp.Clone();
+                //if (BmpList.Last() != null) DrawBmp = (Bitmap)BmpList.Last().Clone();
+                if (undoing == true)
+                {
+                    tmpList.Clear();
+                    //tmpList.Add(OriginalBmp);
+                    undoing = false;
+                }
+
+                int curPage = int.Parse(lblCurrentPage.Text);
+                if (shapes[curPage - 1].Last().GetName() == "Freepen")    //freepen
+                {
+                    //fpList.Add(BmpList.Last());
+                    //if (fpList.Last() == null && BmpList.Last() != null) fpBmp = (Bitmap)BmpList.Last().Clone();
+                    //else if (fpList.Last() != null) fpBmp = (Bitmap)(fpList.Last().Clone());
+
+                    if (!holdingFreepen)
+                    {
+                        if (BmpList.Last() != null)
+                        {
+                            fpList.Add(BmpList.Last());
+                            fpBmp = (Bitmap)(fpList.Last().Clone());
+                        }
+                        //Graphics g1 = Graphics.FromImage(DrawBmp);
+                        Graphics g1 = Graphics.FromImage(fpBmp);
+                        Point s = new Point(s_x1, s_y1);
+                        Point f = new Point(s_x2, s_y2);
+                        g1.DrawLine(new Pen(Color.FromArgb(s_Argb), s_thick), s, f);
+                        holdingFreepen = true;
+                        tempX = s_x2;
+                        tempY = s_y2;
+                    }
+                    else
+                    {
+                        fpBmp = (Bitmap)(fpList.Last().Clone());
+                        //Graphics g2 = Graphics.FromImage(DrawBmp);
+                        Graphics g2 = Graphics.FromImage(fpBmp);
+                        Point s = new Point(tempX, tempY);
+                        Point f = new Point(s_x2, s_y2);
+                        g2.DrawLine(new Pen(Color.FromArgb(s_Argb), s_thick), s, f);
+                        tempX = s_x2;
+                        tempY = s_y2;
+                    }
+                    if (SaveFreepen == true && holdingFreepen == true)
+                    {
+                        BmpList.Add(fpList.Last());
+                        panel1.BackgroundImage = BmpList.Last();
+                        fpList.Clear();
+                    }
+                    fpList.Add(fpBmp);
+                    panel1.BackgroundImage = fpList.Last();
+                    //BmpList.Add(DrawBmp);
+                    //panel1.BackgroundImage = BmpList.Last();
+                }
+                else
+                {
+                    DrawBmp = (Bitmap)BmpList.Last().Clone();
+                    if (shapes[curPage - 1].Last().GetName() == "Line")   //line
+                    {
+                        Graphics g1 = Graphics.FromImage(DrawBmp);
+                        Point s = new Point(s_x1, s_y1);
+                        Point f = new Point(s_x2, s_y2);
+                        g1.DrawLine(new Pen(Color.FromArgb(s_Argb), s_thick), s, f);
+                        //myLine.setPoint(start, finish, pen, _thick);
+                    }
+                    else if (shapes[curPage - 1].Last().GetName() == "Rectangle")   //rectangle
+                    {
+                        Graphics g2 = Graphics.FromImage(DrawBmp);
+                        s_x2 = s_x1 + s_wid; s_y2 = s_y1 + s_hei;
+                        Rectangle r = new Rectangle(Math.Min(s_x1, s_x2), Math.Min(s_y1, s_y2), Math.Abs(s_x2 - s_x1), Math.Abs(s_y2 - s_y1));
+                        g2.DrawRectangle(new Pen(Color.FromArgb(s_Argb), s_thick), r);
+                        //myRect.setRect(start, finish, pen, _thick);
+                    }
+                    else if (shapes[curPage - 1].Last().GetName() == "Circle")   //circle
+                    {
+                        Graphics g3 = Graphics.FromImage(DrawBmp);
+                        s_x2 = s_x1 + s_wid; s_y2 = s_y1 + s_hei;
+                        Rectangle r = new Rectangle(Math.Min(s_x1, s_x2), Math.Min(s_y1, s_y2), Math.Abs(s_x2 - s_x1), Math.Abs(s_y2 - s_y1));
+                        g3.DrawEllipse(new Pen(Color.FromArgb(s_Argb), s_thick), r);
+                        //myCircle.setRectC(start, finish, pen, _thick);
+                    }
+                    BmpList.Add(DrawBmp);
+                    panel1.BackgroundImage = BmpList.Last();
+                }
+                //BmpList.Add(DrawBmp);
+                //panel1.BackgroundImage = BmpList.Last();
+            }
+            //Invoke(new Action(delegate ()
+            //{
+
+            //}));
+        }
     }
 
     public class ServerThread
@@ -360,6 +517,8 @@ namespace CanvasTogether
         public bool m_bConnect = false;
         private ServerForm serverForm;
         public Thread m_thReader = null;
+        public MemoryStream memoryStream;
+        public BinaryFormatter formatter;
         private string connectedClient = null;
         private string enteredUser = null;
         public string roomNumber = null;
@@ -521,6 +680,16 @@ namespace CanvasTogether
 
                 //    //serverForm.all_Send_Freepen(x, y, thick, Argb);
                 //}
+                else if (Request.Equals("FreepenMouseup"))
+                {
+                    if (serverForm.holdingFreepen == true)
+                    {
+                        serverForm.SaveFreepen = true;
+                        serverForm.DrawBitmap();
+                        serverForm.SaveFreepen = false;
+                    }
+                    serverForm.holdingFreepen = false;
+                }
                 else if (Request.Equals("Freepen"))
                 {
                     int x1 = int.Parse(m_Read.ReadLine());
@@ -529,13 +698,16 @@ namespace CanvasTogether
                     int y2 = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_x2 = x2; serverForm.s_y2 = y2; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyLines myLine = new MyLines(2);
                     myLine.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myLine;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
-                    serverForm.Draw();
-
-                    serverForm.all_Send_Freepen(x1, y1, x2, y2, thick, Argb, roomNumber);
+                    //serverForm.Draw();
+                    serverForm.DrawBitmap();
+                    //m_Write.WriteLine("Bitmap");
+                    serverForm.all_send_bitmap(roomNumber);
+                    //serverForm.all_Send_Freepen(x1, y1, x2, y2, thick, Argb, roomNumber);
                 }
                 else if(Request.Equals("Line"))
                 {
@@ -545,13 +717,16 @@ namespace CanvasTogether
                     int y2 = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_x2 = x2; serverForm.s_y2 = y2; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyLines myLine = new MyLines(1);
                     myLine.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myLine;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
-                    serverForm.Draw();
-
-                    serverForm.all_Send_Line(x1, y1, x2, y2, thick, Argb, roomNumber);
+                    //serverForm.Draw();
+                    serverForm.DrawBitmap();
+                    //m_Write.WriteLine("Bitmap");
+                    serverForm.all_send_bitmap(roomNumber);
+                    //serverForm.all_Send_Line(x1, y1, x2, y2, thick, Argb, roomNumber);
                 }
                 else if(Request.Equals("Rectangle"))
                 {
@@ -561,13 +736,16 @@ namespace CanvasTogether
                     int hei = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_wid = wid; serverForm.s_hei = hei; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyRect myRect = new MyRect();
                     myRect.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myRect;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
-                    serverForm.Draw();
-
-                    serverForm.all_Send_Rectangle(x1, y1, wid, hei, thick, Argb, roomNumber);
+                    //serverForm.Draw();
+                    serverForm.DrawBitmap();
+                    //m_Write.WriteLine("Bitmap");
+                    serverForm.all_send_bitmap(roomNumber);
+                    //serverForm.all_Send_Rectangle(x1, y1, wid, hei, thick, Argb, roomNumber);
                 }
                 else if(Request.Equals("Circle"))
                 {
@@ -577,13 +755,16 @@ namespace CanvasTogether
                     int hei = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_wid = wid; serverForm.s_hei = hei; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyCircle myCircle = new MyCircle();
                     myCircle.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myCircle;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
-                    serverForm.Draw();
-
-                    serverForm.all_Send_Circle(x1, y1, wid, hei, thick, Argb, roomNumber);
+                    //serverForm.Draw();
+                    serverForm.DrawBitmap();
+                    //m_Write.WriteLine("Bitmap");
+                    serverForm.all_send_bitmap(roomNumber);
+                    //serverForm.all_Send_Circle(x1, y1, wid, hei, thick, Argb, roomNumber);
                 }
             }
             serverForm.ServerThreadExit(this);
