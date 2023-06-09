@@ -42,7 +42,7 @@ namespace CanvasTogether
         BinaryReader m_bRead;
         private Thread m_thReader;
         bool m_bConnect;
-        public static string id; 
+        public static string id;
         public static string name;
         public static string totalCount = "0";
         public static string roomCount = "0";
@@ -87,7 +87,7 @@ namespace CanvasTogether
         private MyCircle[] mycircle;
         Pen pen; // 펜
         SolidBrush brush = new SolidBrush(Color.Black);
-        
+
         Shape shape;
         MyLines myLine;
         MyCircle myCircle;
@@ -187,7 +187,7 @@ namespace CanvasTogether
                 btn_shape.Image = item_line.Image;
                 _polygon = 0; // line
             }
-            else if(e.ClickedItem == item_rect)
+            else if (e.ClickedItem == item_rect)
             {
                 btn_shape.Image = item_rect.Image;
                 _polygon = 1; // rect
@@ -211,7 +211,7 @@ namespace CanvasTogether
                 btn_thick.Image = item_Thick2.Image;
                 _thick = 2;
             }
-            else if( e.ClickedItem == item_Thick3)
+            else if (e.ClickedItem == item_Thick3)
             {
                 btn_thick.Image = item_Thick3.Image;
                 _thick = 3;
@@ -515,7 +515,7 @@ namespace CanvasTogether
             m_thReader = new Thread(new ThreadStart(Receive));
             m_thReader.Start();
         }
-        
+
         public void requestUpdate()
         {
             m_Write.WriteLine("Update");
@@ -593,14 +593,14 @@ namespace CanvasTogether
                 {
                     //if (lobby.IsDisposed)
                     //    continue;
-                    
+
                     if (!closeFlag)
                     {
                         string message = m_Read.ReadLine();
                         roomCount = message;
                         message = m_Read.ReadLine();
                         totalCount = message;
-                        
+
                         //MessageBox.Show("call by update");
                         //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
                         lobby.uiUpdate();
@@ -613,7 +613,7 @@ namespace CanvasTogether
                     if (this.userNameList.InvokeRequired)
                     {
                         this.Invoke(new fnSetResetTextCallback(SetResetText), new object[]
-                        {                     
+                        {
                     });
                     }
                     else
@@ -649,7 +649,7 @@ namespace CanvasTogether
                 {
                     //if (lobby.IsDisposed)
                     //    continue;
-                    
+
                     if (!closeFlag)
                     {
                         roomNames = new List<string>();
@@ -662,7 +662,7 @@ namespace CanvasTogether
                         }
 
                         this.lobby.uiUpdate();
-                    }  
+                    }
                 }
                 else if (receive.Equals("ShutDown"))
                 {
@@ -723,7 +723,7 @@ namespace CanvasTogether
                     shapes.Add(mc);
                     //DrawBitmap();
                 }
-                else if(receive.Equals("Bitmap"))
+                else if (receive.Equals("Bitmap"))
                 {
                     memoryStream = new MemoryStream(m_Client.ReceiveBufferSize);
                     //MessageBox.Show("Bitmap입력받음");
@@ -747,17 +747,17 @@ namespace CanvasTogether
                     Array.Clear(buffer, (byte)0, buffer.Length);
                     this.Invoke(new Action(delegate ()
                     {
-                        
+
                     }));
                     //NetworkStream networkStream = m_Stream;
                     //MemoryStream memoryStream = new MemoryStream();
-                    
+
 
                     //int length = int.Parse(m_Read.ReadLine());
                     //byte[] buf = m_bRead.ReadBytes(length);
                     //ms = new MemoryStream(buf);
                     //bitmap = new Bitmap(ms);
-                    
+
                     // 서버로부터 데이터 수신
                     /*NetworkStream networkStream = m_Stream;
                     MemoryStream memoryStream = new MemoryStream();
@@ -789,7 +789,7 @@ namespace CanvasTogether
 
         private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if(e.ClickedItem == btn_pen)
+            if (e.ClickedItem == btn_pen)
             {
                 curMode = (int)CANVAS_MODE.PENMODE;
 
@@ -800,7 +800,7 @@ namespace CanvasTogether
                 this.btn_fill.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
             }
-            if(e.ClickedItem == btn_eraser)
+            if (e.ClickedItem == btn_eraser)
             {
                 curMode = (int)CANVAS_MODE.ERASERMODE;
 
@@ -811,7 +811,7 @@ namespace CanvasTogether
                 this.btn_fill.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
             }
-            if(e.ClickedItem == btn_text)
+            if (e.ClickedItem == btn_text)
             {
                 curMode = (int)CANVAS_MODE.TEXTMODE;
 
@@ -907,7 +907,7 @@ namespace CanvasTogether
                 case 4:
                     Point startPoint = new Point(e.X, e.Y);
                     Bitmap fillTemBmp = (Bitmap)BmpList.Last().Clone();
-                    Color preColor =fillTemBmp.GetPixel(startPoint.X, startPoint.Y);
+                    Color preColor = fillTemBmp.GetPixel(startPoint.X, startPoint.Y);
                     doFloodFill(fillTemBmp, startPoint, preColor);
                     BmpList.Add(fillTemBmp);
                     panel1.BackgroundImage = BmpList.Last();
@@ -918,7 +918,7 @@ namespace CanvasTogether
                     freepenStore.Add(Etemp);
                     break;
                 case 6: // 텍스트
-                    
+
                     break;
             }
         }
@@ -926,7 +926,7 @@ namespace CanvasTogether
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
             if (!isHolding) return;
-            
+
             switch (curMode)
             {
                 case 0: // 펜
@@ -936,7 +936,7 @@ namespace CanvasTogether
                     startF.Y = freepenStore[0].Y;
                     finishF.X = freepenStore[1].X;
                     finishF.Y = freepenStore[1].Y;
-                    
+
                     if (freepenStore.Count == 2)
                     {
                         m_Write.WriteLine("Freepen");
@@ -1020,7 +1020,7 @@ namespace CanvasTogether
                     startF.Y = freepenStore[0].Y;
                     finishF.X = freepenStore[1].X;
                     finishF.Y = freepenStore[1].Y;
-                    
+
                     if (freepenStore.Count == 2)
                     {
                         holdingFreepen = true;
@@ -1037,7 +1037,7 @@ namespace CanvasTogether
                     }
                     freepenEnd = true;
                     SaveFreepen = true;
-                    DrawBitmap();
+                    //DrawBitmap();
                     SaveFreepen = false;
                     freepenEnd = false;
                     break;
@@ -1098,7 +1098,7 @@ namespace CanvasTogether
                     }
                     freepenEnd = true;
                     SaveFreepen = true;
-                    DrawBitmap();
+                    //DrawBitmap();
                     SaveFreepen = false;
                     freepenEnd = false;
                     break;
@@ -1110,7 +1110,7 @@ namespace CanvasTogether
             BmpList.Add(DrawBmp);
             panel1.BackgroundImage = BmpList.Last();
         }
-        /*private void DrawBitmap()
+        private void DrawBitmap()
         {
             this.Invoke(new Action(delegate ()
             {
@@ -1155,7 +1155,7 @@ namespace CanvasTogether
                                 Point f = new Point(finishF.X, finishF.Y);
                                 g1.DrawLine(pen, s, f);
                                 holdingFreepen = true;
-                                Count++;
+                                //Count++;
                             }
                             else
                             {
@@ -1172,7 +1172,7 @@ namespace CanvasTogether
                                 Point s = new Point(startF.X, startF.Y);
                                 Point f = new Point(finishF.X, finishF.Y);
                                 g2.DrawLine(pen, s, f);
-                                Count++;
+                                //Count++;
                             }
                         }
 
@@ -1363,8 +1363,8 @@ namespace CanvasTogether
             m_Write.WriteLine("btnUndo");
             m_Write.Flush();
 
-            /*if (BmpList.Count() > 0)
-            {   
+            if (BmpList.Count() > 0)
+            {
                 undoing = true;
                 tmpList.Add(BmpList.Last());
                 BmpList.RemoveAt(BmpList.Count() - 1);
@@ -1374,14 +1374,14 @@ namespace CanvasTogether
                 {
                     panel1.BackgroundImage = BmpList.Last();
                 }
-            }*/
+            }
         }
 
         private void btn_redo_Click(object sender, EventArgs e)
         {
             m_Write.WriteLine("btnRedo");
             m_Write.Flush();
-            /*if (tmpList.Count() > 0)
+            if (tmpList.Count() > 0)
             {
                 BmpList.Add(tmpList.Last());
                 tmpList.RemoveAt(tmpList.Count() - 1);
@@ -1390,7 +1390,7 @@ namespace CanvasTogether
             else
             {
                 panel1.BackgroundImage = BmpList.Last();
-            }*/
+            }
         }
 
         private void ClientForm_FormClosed(object sender, FormClosedEventArgs e)
