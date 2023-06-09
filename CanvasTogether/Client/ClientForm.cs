@@ -154,13 +154,16 @@ namespace CanvasTogether
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
             lobby.ShowDialog();
 
-            requestUpdate();
 
             if (exitFlag)
             {
                 object sender = null;
                 FormClosingEventArgs e = null;
                 this.ClientForm_FormClosing(sender, e);
+            }
+            else
+            {
+                requestUpdate();
             }
 
             exitFlag = true;
@@ -407,17 +410,19 @@ namespace CanvasTogether
 
             //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
 
-            requestOut();
+            requestOut(false);
+            requestRoomUpdate();
             requestUpdate();
 
             closeFlag = false;
-            lobby = new Lobby();
-            lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
-            lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
+            this.lobby = new Lobby();
+            this.lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
+            this.lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
+
+            this.lobby.uiUpdate();
 
             this.lobby.ShowDialog();
-            requestRoomUpdate();
-            requestUpdate();
+
 
             if (exitFlag)
             {
@@ -441,11 +446,11 @@ namespace CanvasTogether
                 if (!m_bConnect)
                     return;
 
-                requestOut();
 
                 m_Write.WriteLine("Disconnect");
                 m_Write.WriteLine(id);
                 m_Write.Flush();
+                requestOut(true);
 
                 FormClosedEventArgs ee = null;
                 ClientForm_FormClosed(sender, ee);
@@ -507,11 +512,15 @@ namespace CanvasTogether
             m_Write.Flush();
         }
 
-        public void requestOut()
+        public void requestOut(bool flag)
         {
             m_Write.WriteLine("Out");
             m_Write.WriteLine(enterRoomNumber.ToString());
             m_Write.WriteLine(name);
+            if (flag)
+                m_Write.WriteLine("true");
+            else
+                m_Write.WriteLine("false");
             m_Write.Flush();
         }
 
@@ -642,7 +651,7 @@ namespace CanvasTogether
                             roomNames.Add(message);
                         }
 
-                        lobby.uiUpdate();
+                        this.lobby.uiUpdate();
                     }  
                 }
                 else if (receive.Equals("ShutDown"))
@@ -719,6 +728,7 @@ namespace CanvasTogether
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
                 this.btn_fill.BackColor = Color.White;
+                this.btn_text.BackColor = Color.White;
             }
             if(e.ClickedItem == btn_eraser)
             {
@@ -729,6 +739,7 @@ namespace CanvasTogether
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
                 this.btn_fill.BackColor = Color.White;
+                this.btn_text.BackColor = Color.White;
             }
             if(e.ClickedItem == btn_text)
             {
@@ -739,6 +750,7 @@ namespace CanvasTogether
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.Orange;
                 this.btn_fill.BackColor = Color.White;
+                this.btn_text.BackColor = Color.White;
             }
             if (e.ClickedItem == btn_fill)
             {
@@ -749,6 +761,18 @@ namespace CanvasTogether
                 this.btn_shape.BackColor = Color.White;
                 this.btn_text.BackColor = Color.White;
                 this.btn_fill.BackColor = Color.Orange;
+                this.btn_text.BackColor = Color.White;
+            }
+            if (e.ClickedItem == btn_text)
+            {
+                curMode = (int)CANVAS_MODE.TEXTMODE;
+
+                this.btn_eraser.BackColor = Color.White;
+                this.btn_pen.BackColor = Color.White;
+                this.btn_shape.BackColor = Color.White;
+                this.btn_text.BackColor = Color.White;
+                this.btn_fill.BackColor = Color.White;
+                this.btn_text.BackColor = Color.Orange;
             }
         }
 
@@ -765,6 +789,11 @@ namespace CanvasTogether
                 return;
             }*/
             shape.DrawShape(e);
+        }
+
+        private void makeLabel()
+        {
+
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
@@ -812,12 +841,14 @@ namespace CanvasTogether
                     doFloodFill(fillTemBmp, startPoint, preColor);
                     BmpList.Add(fillTemBmp);
                     panel1.BackgroundImage = BmpList.Last();
-
                     break;
                 case 5: // 지우개
                     pen = new Pen(Color.White, _thick * 10);
                     Point Etemp = new Point(e.X, e.Y);
                     freepenStore.Add(Etemp);
+                    break;
+                case 6: // 텍스트
+                    
                     break;
             }
         }

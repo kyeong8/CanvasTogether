@@ -365,6 +365,7 @@ namespace CanvasTogether
         public string roomNumber = null;
         private string roomName = null;
         private string existUser = null;
+        private string existFlag = null;
         private string existUserID = null;
         private string visibility = null;
 
@@ -465,7 +466,6 @@ namespace CanvasTogether
                 }
                 else if (Request.Equals("Enter"))
                 {
-                    
                     enteredUser = m_Read.ReadLine();
                     roomNumber = m_Read.ReadLine();
                     if(!serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(enteredUser))
@@ -487,13 +487,52 @@ namespace CanvasTogether
                 else if (Request.Equals("User"))
                 {
                     roomNumber = m_Read.ReadLine();
-                    existUser = m_Read.ReadLine();
                     serverForm.ResponseUserUpdate(roomNumber);
                 }
                 else if (Request.Equals("Out"))
                 {
                     roomNumber = m_Read.ReadLine();
                     existUser = m_Read.ReadLine();
+                    existFlag = m_Read.ReadLine();
+
+                    if (Convert.ToInt32(roomNumber) != 0)
+                    {
+                        if (serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(existUser))
+                        {
+                            if (serverForm.RoomCount > 0)
+                            {
+                                serverForm.RoomCount -= 1;
+                                serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
+                            }
+                        }
+                        else
+                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                    }
+                    else
+                    {
+                        if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                    }
+
+                    if (existFlag == "true")
+                        m_bConnect = false;
+
+                    if (roomNumber != "0")
+                        serverForm.ResponseUserUpdate(roomNumber);
+                    serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
+                }
+                else if (Request.Equals("Disconnect"))
+                {
+                    existUser = m_Read.ReadLine();
+                    //existUserID = m_Read.ReadLine();
+                    serverForm.connectedClientID.Remove(existUser);
+                    //foreach (string ID in serverForm.connectedClientID)
+                    //{
+                    //    if (ID.Contains(existUserID))
+                    //    {
+
+                    //        return;
+                    //    }
+                    //}
 
                     if (Convert.ToInt32(roomNumber) != 0)
                     {
@@ -514,24 +553,7 @@ namespace CanvasTogether
                     }
 
                     m_bConnect = false;
-
-                    serverForm.ResponseUserUpdate(roomNumber);
                     serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
-                }
-                else if (Request.Equals("Disconnect"))
-                {
-                    existUserID = m_Read.ReadLine();
-                    serverForm.connectedClientID.Remove(existUserID);
-                    //foreach (string ID in serverForm.connectedClientID)
-                    //{
-                    //    if (ID.Contains(existUserID))
-                    //    {
-
-                    //        return;
-                    //    }
-                    //}
-                    
-                    m_bConnect = false;
 
                     serverForm.printChat(connectedClient + "이(가) 퇴장했습니다.");
 
