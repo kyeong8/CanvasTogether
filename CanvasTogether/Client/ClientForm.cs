@@ -43,7 +43,6 @@ namespace CanvasTogether
         BinaryReader m_bRead;
         private Thread m_thReader;
         bool m_bConnect;
-        public static string id; 
         public static string name;
         public static string totalCount = "0";
         public static string roomCount = "0";
@@ -455,11 +454,12 @@ namespace CanvasTogether
 
                 //MessageBox.Show(enterRoomNumber.ToString());
                 m_Write.WriteLine("Disconnect");
-                m_Write.WriteLine(id);
+                m_Write.WriteLine(name);
                 m_Write.WriteLine(enterRoomNumber.ToString());
                 m_Write.Flush();
                 requestOut(true);
 
+                this.Dispose();
                 FormClosedEventArgs ee = null;
                 ClientForm_FormClosed(sender, ee);
             }
@@ -571,7 +571,6 @@ namespace CanvasTogether
         {
             m_Write.WriteLine("New Client");
             m_Write.WriteLine(name);
-            m_Write.WriteLine(id);
             m_Write.Flush();
             string receive;
             while (m_bConnect)
@@ -669,7 +668,7 @@ namespace CanvasTogether
                 {
                     shutdownTrigger = true;
                     this.lobby.Close();
-                    this.Close();
+                    this.Dispose();
                     return;
                 }
                 else if (receive.Equals("Freepen"))

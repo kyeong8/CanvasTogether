@@ -520,13 +520,11 @@ namespace CanvasTogether
         public MemoryStream memoryStream;
         public BinaryFormatter formatter;
         private string connectedClient = null;
-        private string currentID = null;
         private string enteredUser = null;
         public string roomNumber = null;
         private string roomName = null;
         private string existUser = null;
         private string existFlag = null;
-        private string existUserID = null;
         private string visibility = null;
 
         public ServerThread(ServerForm serverForm)
@@ -543,20 +541,19 @@ namespace CanvasTogether
                 if (Request.Equals("New Client"))
                 {
                     connectedClient = m_Read.ReadLine();
-                    currentID = m_Read.ReadLine();
 
                     foreach (string ID in serverForm.connectedClientID)
                     {
-                        if (ID.Contains(currentID))
+                        if (ID.Contains(connectedClient))
                         {
-                            serverForm.printChat("[중복 로그인 발생 (User ID = " + currentID + ")]");
+                            serverForm.printChat("[중복 로그인 발생 (User ID = " + connectedClient + ")]");
                             SendShutDown();
                             m_bConnect = false;
                             return;
                         }
                     }
 
-                    serverForm.connectedClientID.Add(currentID);
+                    serverForm.connectedClientID.Add(connectedClient);
 
                     serverForm.UserCount += 1;
                     serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
@@ -684,17 +681,8 @@ namespace CanvasTogether
                 {
                     existUser = m_Read.ReadLine();
                     roomNumber = m_Read.ReadLine();
-                    //existUserID = m_Read.ReadLine();
                     serverForm.connectedClientID.Remove(existUser);
-                    //foreach (string ID in serverForm.connectedClientID)
-                    //{
-                    //    if (ID.Contains(existUserID))
-                    //    {
-
-                    //        return;
-                    //    }
-                    //}
-
+                   
                     if (Convert.ToInt32(roomNumber) != 0)
                     {
                         if (serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(existUser))
