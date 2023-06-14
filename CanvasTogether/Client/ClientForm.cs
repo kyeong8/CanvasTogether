@@ -671,58 +671,58 @@ namespace CanvasTogether
                     this.Dispose();
                     return;
                 }
-                else if (receive.Equals("Freepen"))
-                {
-                    int x1 = int.Parse(m_Read.ReadLine());
-                    int y1 = int.Parse(m_Read.ReadLine());
-                    int x2 = int.Parse(m_Read.ReadLine());
-                    int y2 = int.Parse(m_Read.ReadLine());
-                    int thick = int.Parse(m_Read.ReadLine());
-                    int Argb = int.Parse(m_Read.ReadLine());
-                    MyLines ml = new MyLines(2);
-                    ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
-                    shapes.Add(ml);
-                    //DrawBitmap();
-                }
-                else if (receive.Equals("Line"))
-                {
-                    int x1 = int.Parse(m_Read.ReadLine());
-                    int y1 = int.Parse(m_Read.ReadLine());
-                    int x2 = int.Parse(m_Read.ReadLine());
-                    int y2 = int.Parse(m_Read.ReadLine());
-                    int thick = int.Parse(m_Read.ReadLine());
-                    int Argb = int.Parse(m_Read.ReadLine());
-                    MyLines ml = new MyLines(1);
-                    ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
-                    shapes.Add(ml);
-                    //DrawBitmap();
-                }
-                else if (receive.Equals("Rectangle"))
-                {
-                    int x1 = int.Parse(m_Read.ReadLine());
-                    int y1 = int.Parse(m_Read.ReadLine());
-                    int wid = int.Parse(m_Read.ReadLine());
-                    int hei = int.Parse(m_Read.ReadLine());
-                    int thick = int.Parse(m_Read.ReadLine());
-                    int Argb = int.Parse(m_Read.ReadLine());
-                    MyRect mr = new MyRect();
-                    mr.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
-                    shapes.Add(mr);
-                    //DrawBitmap();
-                }
-                else if (receive.Equals("Circle"))
-                {
-                    int x1 = int.Parse(m_Read.ReadLine());
-                    int y1 = int.Parse(m_Read.ReadLine());
-                    int wid = int.Parse(m_Read.ReadLine());
-                    int hei = int.Parse(m_Read.ReadLine());
-                    int thick = int.Parse(m_Read.ReadLine());
-                    int Argb = int.Parse(m_Read.ReadLine());
-                    MyCircle mc = new MyCircle();
-                    mc.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
-                    shapes.Add(mc);
-                    //DrawBitmap();
-                }
+                //else if (receive.Equals("Freepen"))
+                //{
+                //    int x1 = int.Parse(m_Read.ReadLine());
+                //    int y1 = int.Parse(m_Read.ReadLine());
+                //    int x2 = int.Parse(m_Read.ReadLine());
+                //    int y2 = int.Parse(m_Read.ReadLine());
+                //    int thick = int.Parse(m_Read.ReadLine());
+                //    int Argb = int.Parse(m_Read.ReadLine());
+                //    MyLines ml = new MyLines(2);
+                //    ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
+                //    shapes.Add(ml);
+                //    //DrawBitmap();
+                //}
+                //else if (receive.Equals("Line"))
+                //{
+                //    int x1 = int.Parse(m_Read.ReadLine());
+                //    int y1 = int.Parse(m_Read.ReadLine());
+                //    int x2 = int.Parse(m_Read.ReadLine());
+                //    int y2 = int.Parse(m_Read.ReadLine());
+                //    int thick = int.Parse(m_Read.ReadLine());
+                //    int Argb = int.Parse(m_Read.ReadLine());
+                //    MyLines ml = new MyLines(1);
+                //    ml.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
+                //    shapes.Add(ml);
+                //    //DrawBitmap();
+                //}
+                //else if (receive.Equals("Rectangle"))
+                //{
+                //    int x1 = int.Parse(m_Read.ReadLine());
+                //    int y1 = int.Parse(m_Read.ReadLine());
+                //    int wid = int.Parse(m_Read.ReadLine());
+                //    int hei = int.Parse(m_Read.ReadLine());
+                //    int thick = int.Parse(m_Read.ReadLine());
+                //    int Argb = int.Parse(m_Read.ReadLine());
+                //    MyRect mr = new MyRect();
+                //    mr.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
+                //    shapes.Add(mr);
+                //    //DrawBitmap();
+                //}
+                //else if (receive.Equals("Circle"))
+                //{
+                //    int x1 = int.Parse(m_Read.ReadLine());
+                //    int y1 = int.Parse(m_Read.ReadLine());
+                //    int wid = int.Parse(m_Read.ReadLine());
+                //    int hei = int.Parse(m_Read.ReadLine());
+                //    int thick = int.Parse(m_Read.ReadLine());
+                //    int Argb = int.Parse(m_Read.ReadLine());
+                //    MyCircle mc = new MyCircle();
+                //    mc.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
+                //    shapes.Add(mc);
+                //    //DrawBitmap();
+                //}
                 else if(receive.Equals("Bitmap"))
                 {
                     memoryStream = new MemoryStream(m_Client.ReceiveBufferSize);
@@ -744,7 +744,10 @@ namespace CanvasTogether
 
                     // 클라이언트에 표시
                     panel1.BackgroundImage = currentBmp;
+                    fpList.Add(currentBmp);
+                    BmpList.Add(currentBmp);
                     Array.Clear(buffer, (byte)0, buffer.Length);
+                    DrawBitmap();
                     this.Invoke(new Action(delegate ()
                     {
                         
@@ -861,11 +864,6 @@ namespace CanvasTogether
             shape.DrawShape(e);
         }
 
-        private void makeLabel()
-        {
-
-        }
-
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
             freepenEnd = false;
@@ -956,10 +954,10 @@ namespace CanvasTogether
                         //freepenStore.Clear();
                         //freepenStore.Add(temp);
 
-                        MyLines ml = new MyLines(2);
-                        ml.setPoint(new Point(freepenStore[0].X, freepenStore[0].Y), new Point(freepenStore[1].X, freepenStore[1].Y), new Pen(Color.FromArgb(pen.Color.ToArgb()), pen.Width), (int)pen.Width);
-                        shape = ml;
-                        shapes.Add(shape);
+                        //MyLines ml = new MyLines(2);
+                        //ml.setPoint(new Point(freepenStore[0].X, freepenStore[0].Y), new Point(freepenStore[1].X, freepenStore[1].Y), new Pen(Color.FromArgb(pen.Color.ToArgb()), pen.Width), (int)pen.Width);
+                        //shape = ml;
+                        //shapes.Add(shape);
                         //Draw();
                         DrawBitmap();
 
@@ -1055,7 +1053,7 @@ namespace CanvasTogether
                     }
                     freepenEnd = true;
                     SaveFreepen = true;
-                    DrawBitmap();
+                    //DrawBitmap();
                     SaveFreepen = false;
                     freepenEnd = false;
                     break;
@@ -1199,11 +1197,27 @@ namespace CanvasTogether
                     panel1.BackgroundImage = fpList.Last();
                 }
 
+                //Point zero = new Point(0, 0);
+                if (curMode == 0)
+                {
+                    myLine.setPoint(new Point(0, 0), new Point(0, 0), pen, _thick);
+                }
+                else if (curMode == 1)
+                {
+                    myLine.setPoint(new Point(0, 0), new Point(0, 0), pen, _thick);
+                }
+                else if (curMode == 2)
+                {
+                    myRect.setRect(new Point(0, 0), new Point(0, 0), pen, _thick);
+                }
+                else if (curMode == 3)
+                {
+                    myCircle.setRectC(new Point(0, 0), new Point(0, 0), pen, _thick);
+                }
+                Draw();
                 //BmpList.Add(DrawBmp);
                 //panel1.BackgroundImage = BmpList.Last();
-        }
-
-
+            }
     }
         /*
         this.Invoke(new Action(delegate ()
@@ -1383,7 +1397,7 @@ namespace CanvasTogether
             m_Write.WriteLine("btnUndo");
             m_Write.Flush();
 
-            if (BmpList.Count() > 0)
+            /*if (BmpList.Count() > 0)
             {
                 undoing = true;
                 tmpList.Add(BmpList.Last());
@@ -1394,7 +1408,7 @@ namespace CanvasTogether
                 {
                     panel1.BackgroundImage = BmpList.Last();
                 }
-            }
+            }*/
         }
     
 
@@ -1402,7 +1416,7 @@ namespace CanvasTogether
         {
             m_Write.WriteLine("btnRedo");
             m_Write.Flush();
-            if (tmpList.Count() > 0)
+            /*if (tmpList.Count() > 0)
             {
                 BmpList.Add(tmpList.Last());
                 tmpList.RemoveAt(tmpList.Count() - 1);
@@ -1411,7 +1425,7 @@ namespace CanvasTogether
             else
             {
                 panel1.BackgroundImage = BmpList.Last();
-            }
+            }*/
         }
 
         private void ClientForm_FormClosed(object sender, FormClosedEventArgs e)

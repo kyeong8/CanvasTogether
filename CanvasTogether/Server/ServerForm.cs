@@ -54,7 +54,7 @@ namespace CanvasTogether
         public int s_hei;
         public int s_thick;
         public int s_Argb;
-
+        public int curmode;
         public byte[] buffer = new byte[1024 * 100];
 
         /* Page members */
@@ -329,19 +329,23 @@ namespace CanvasTogether
                 {
                     if (serverThreads[i].m_bConnect && serverThreads[i].roomNumber == roomNumber)
                     {
-                        serverThreads[i].m_Write.WriteLine("Bitmap");
-                        serverThreads[i].m_Write.Flush();
-                        serverThreads[i].formatter.Serialize(serverThreads[i].memoryStream, BmpList.Last());
-                        //buffer = serverThreads[i].memoryStream.ToArray();
-                        //Array.Copy(serverThreads[i].memoryStream.ToArray(), buffer, (int)serverThreads[i].memoryStream.Length);
-                        NetworkStream networkStream = serverThreads[i].m_Stream;
-                        networkStream.Write(serverThreads[i].memoryStream.ToArray(), 0, (int)serverThreads[i].memoryStream.Length);
-                        //networkStream.Write(buffer, 0, buffer.Length);
-                        networkStream.Flush();
-                        serverThreads[i].memoryStream.SetLength(0);
-                        //Array.Clear(buffer, (byte)0, buffer.Length);
+                        if (BmpList.Last() != null)
+                        {
+                            serverThreads[i].m_Write.WriteLine("Bitmap");
+                            serverThreads[i].m_Write.Flush();
+                            serverThreads[i].formatter.Serialize(serverThreads[i].memoryStream, BmpList.Last());
+                            //buffer = serverThreads[i].memoryStream.ToArray();
+                            //Array.Copy(serverThreads[i].memoryStream.ToArray(), buffer, (int)serverThreads[i].memoryStream.Length);
+                            NetworkStream networkStream = serverThreads[i].m_Stream;
+                            networkStream.Write(serverThreads[i].memoryStream.ToArray(), 0, (int)serverThreads[i].memoryStream.Length);
+                            //networkStream.Write(buffer, 0, buffer.Length);
+                            networkStream.Flush();
+                            serverThreads[i].memoryStream.SetLength(0);
+                            //Array.Clear(buffer, (byte)0, buffer.Length);
+                        }
                     }
                 }
+                panel1.BackgroundImage = BmpList.Last();
             }));
             // 비트맵 이미지 직렬화
             // 직렬화된 데이터를 클라이언트로 전송
@@ -502,6 +506,20 @@ namespace CanvasTogether
                 //BmpList.Add(DrawBmp);
                 //panel1.BackgroundImage = BmpList.Last();
             }
+            //Point zero = new Point(0, 0);
+            //switch (curmode)
+            //{
+            //    case 1: // 직선
+            //        myLine.setPoint(new Point(0, 0), new Point(0, 0), pen, _thick);
+            //        break;
+            //    case 2: // 사각형
+            //        myRect.setRect(new Point(0, 0), new Point(0, 0), pen, _thick);
+            //        break;
+            //    case 3: // 원
+            //        myCircle.setRectC(new Point(0, 0), new Point(0, 0), pen, _thick);
+            //        break;
+            //}
+            //Draw();
             //Invoke(new Action(delegate ()
             //{
 
@@ -742,6 +760,7 @@ namespace CanvasTogether
                     int y2 = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.curmode = 1;
                     serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_x2 = x2; serverForm.s_y2 = y2; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyLines myLine = new MyLines(2);
                     myLine.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
@@ -749,6 +768,7 @@ namespace CanvasTogether
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
                     //serverForm.Draw();
                     serverForm.DrawBitmap();
+                    
                     //m_Write.WriteLine("Bitmap");
                     //serverForm.all_send_bitmap(roomNumber);
                     //serverForm.all_Send_Freepen(x1, y1, x2, y2, thick, Argb, roomNumber);
@@ -761,15 +781,16 @@ namespace CanvasTogether
                     int y2 = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.curmode = 1;
                     serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_x2 = x2; serverForm.s_y2 = y2; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyLines myLine = new MyLines(1);
                     myLine.setPoint(new Point(x1, y1), new Point(x2, y2), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myLine;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
                     //serverForm.Draw();
-                    serverForm.DrawBitmap();
-                    //m_Write.WriteLine("Bitmap");
+                    myLine.setPoint(new Point(0, 0), new Point(0, 0), new Pen(Color.FromArgb(Argb), thick), thick); serverForm.Draw();
                     serverForm.all_send_bitmap(roomNumber);
+                    serverForm.DrawBitmap();
                     //serverForm.all_Send_Line(x1, y1, x2, y2, thick, Argb, roomNumber);
                 }
                 else if(Request.Equals("Rectangle"))
@@ -780,15 +801,17 @@ namespace CanvasTogether
                     int hei = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.curmode = 2;
                     serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_wid = wid; serverForm.s_hei = hei; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyRect myRect = new MyRect();
                     myRect.setRect(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myRect;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
                     //serverForm.Draw();
+                    
                     serverForm.DrawBitmap();
-                    //m_Write.WriteLine("Bitmap");
                     serverForm.all_send_bitmap(roomNumber);
+                    myRect.setRect(new Point(0, 0), new Point(0, 0), new Pen(Color.FromArgb(Argb), thick), thick); serverForm.Draw();
                     //serverForm.all_Send_Rectangle(x1, y1, wid, hei, thick, Argb, roomNumber);
                 }
                 else if(Request.Equals("Circle"))
@@ -799,16 +822,41 @@ namespace CanvasTogether
                     int hei = int.Parse(m_Read.ReadLine());
                     int thick = int.Parse(m_Read.ReadLine());
                     int Argb = int.Parse(m_Read.ReadLine());
+                    serverForm.curmode = 3;
                     serverForm.s_x1 = x1; serverForm.s_y1 = y1; serverForm.s_wid = wid; serverForm.s_hei = hei; serverForm.s_thick = thick; serverForm.s_Argb = Argb;
                     MyCircle myCircle = new MyCircle();
                     myCircle.setRectC(new Point(x1, y1), new Point(x1 + wid, y1 + hei), new Pen(Color.FromArgb(Argb), thick), thick);
                     Shape shape = myCircle;
                     serverForm.shapes[int.Parse(roomNumber) - 1].Add(shape);
                     //serverForm.Draw();
-                    serverForm.DrawBitmap();
-                    //m_Write.WriteLine("Bitmap");
+                    myCircle.setRectC(new Point(0, 0), new Point(0, 0), new Pen(Color.FromArgb(Argb), thick), thick); serverForm.Draw();
+                    serverForm.DrawBitmap(); 
                     serverForm.all_send_bitmap(roomNumber);
                     //serverForm.all_Send_Circle(x1, y1, wid, hei, thick, Argb, roomNumber);
+                }
+                else if (Request.Equals("btnUndo"))
+                {
+                    if (serverForm.BmpList.Count() > 0)
+                    {
+                        serverForm.undoing = true;
+                        serverForm.tmpList.Add(serverForm.BmpList.Last());
+                        serverForm.BmpList.RemoveAt(serverForm.BmpList.Count() - 1);
+                        serverForm.all_send_bitmap(roomNumber);
+                        //panel1.BackgroundImage = OriginalBmp;
+                        //else
+                        //{
+                        //    panel1.BackgroundImage = BmpList.Last();
+                        //}
+                    }
+                }
+                else if (Request.Equals("btnRedo"))
+                {
+                    if (serverForm.tmpList.Count() > 0)
+                    {
+                        serverForm.BmpList.Add(serverForm.tmpList.Last());
+                        serverForm.tmpList.RemoveAt(serverForm.tmpList.Count() - 1);
+                        serverForm.all_send_bitmap(roomNumber);
+                    }
                 }
             }
             serverForm.ServerThreadExit(this);
