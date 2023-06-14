@@ -51,6 +51,7 @@ namespace CanvasTogether
         public Lobby lobby = new Lobby();
         public static List<string> userNames = new List<string>();
         public static List<string> roomNames = new List<string>();
+        public static List<string> lobbyNames = new List<string>();
         public static bool closeFlag = false;
         public static bool shutdownTrigger = false;
         bool isHolding = false;
@@ -141,6 +142,8 @@ namespace CanvasTogether
 
             Connect();
 
+            //requestUserUpdate("0");
+
             //Thread.Sleep(3000);
             if (exitFlag)
             {
@@ -154,13 +157,13 @@ namespace CanvasTogether
                 this.Close();
                 return;
             }
-
+            //lobbyNames.Add(name);
             exitFlag = true;
-
+            
             lobby = new Lobby();
             lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
-
+            //MessageBox.Show(lobbyNames[-1]);
             if (DuplicateFlag)
                 lobby.ShowDialog();
 
@@ -428,7 +431,6 @@ namespace CanvasTogether
             this.lobby = new Lobby();
             this.lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             this.lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
-
             this.lobby.uiUpdate();
 
             this.lobby.ShowDialog();
@@ -525,6 +527,8 @@ namespace CanvasTogether
         {
             m_Write.WriteLine("Update");
             m_Write.Flush();
+
+            //requestUserUpdate("0");
         }
 
         public void requestOut(bool flag)
@@ -597,14 +601,26 @@ namespace CanvasTogether
                 {
                     //if (lobby.IsDisposed)
                     //    continue;
-                    
+
                     if (!closeFlag)
                     {
                         string message = m_Read.ReadLine();
                         roomCount = message;
                         message = m_Read.ReadLine();
                         totalCount = message;
+                        string count = m_Read.ReadLine();
                         
+                        lobbyNames = new List<string>();
+
+                        if (count != "0")
+                        { 
+                            for (int i = 0; i < Convert.ToInt32(count); i++)
+                            {
+                                message = m_Read.ReadLine();
+                                if (!lobbyNames.Contains(message))
+                                    lobbyNames.Add(message);
+                            }
+                        }
                         //MessageBox.Show("call by update");
                         //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
                         lobby.uiUpdate();
@@ -617,7 +633,7 @@ namespace CanvasTogether
                     if (this.userNameList.InvokeRequired)
                     {
                         this.Invoke(new fnSetResetTextCallback(SetResetText), new object[]
-                        {                     
+                        {
                     });
                     }
                     else
@@ -649,6 +665,26 @@ namespace CanvasTogether
                         this.userCnt.Text = enterRoomNumber.ToString() + "번 방, 접속인원: " + count;
                     }
                 }
+                else if (receive.Equals("Room"))
+                {
+                    //if (lobby.IsDisposed)
+                    //    continue;
+
+                    if (!closeFlag)
+                    {
+                        roomNames = new List<string>();
+                        string count = m_Read.ReadLine();
+
+                        for (int i = 0; i < Convert.ToInt32(count); i++)
+                        {
+                            string message = m_Read.ReadLine();
+                            roomNames.Add(message);
+                        }
+
+                        this.lobby.uiUpdate();
+                    }
+                }
+
                 else if (receive.Equals("Room"))
                 {
                     //if (lobby.IsDisposed)
