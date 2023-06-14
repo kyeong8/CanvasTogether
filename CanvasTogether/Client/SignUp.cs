@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace CanvasTogether
 {
-    public partial class SignUp : Form
+    public partial class SignUp : MetroFramework.Forms.MetroForm
     {
         SQLiteConnection conn;
         SQLiteCommand cmd;
