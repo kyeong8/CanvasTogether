@@ -741,6 +741,8 @@ namespace CanvasTogether
                     //memoryStream.Seek(0, SeekOrigin.Begin);
                     BinaryFormatter formatter = new BinaryFormatter();
                     currentBmp = (Bitmap)formatter.Deserialize(memoryStream);
+                    BmpList.Add(currentBmp);
+                    fpList.Add(currentBmp);
 
                     // 클라이언트에 표시
                     panel1.BackgroundImage = currentBmp;
@@ -917,6 +919,7 @@ namespace CanvasTogether
                 case 5: // 지우개
                     pen = new Pen(Color.White, _thick * 10);
                     Point Etemp = new Point(e.X, e.Y);
+                    shape = myLine;
                     freepenStore.Add(Etemp);
                     break;
                 case 6: // 텍스트
@@ -1011,6 +1014,13 @@ namespace CanvasTogether
                         m_Write.WriteLine(pen.Color.ToArgb());
                         m_Write.Flush();
 
+                        MyLines ml = new MyLines(2);
+                        ml.setPoint(new Point(freepenStore[0].X, freepenStore[0].Y), new Point(freepenStore[1].X, freepenStore[1].Y), new Pen(Color.FromArgb(pen.Color.ToArgb()), pen.Width), (int)pen.Width);
+                        shape = ml;
+                        shapes.Add(shape);
+                        //Draw();
+                        DrawBitmap();
+
                         freepenStore.Clear();
                         freepenStore.Add(Etemp);
                     }
@@ -1102,7 +1112,7 @@ namespace CanvasTogether
 
                     if (freepenStore.Count == 2)
                     {
-                        holdingFreepen = true;
+                        //holdingFreepen = true;
                         m_Write.WriteLine("Freepen");
                         m_Write.WriteLine(freepenStore[0].X.ToString());
                         m_Write.WriteLine(freepenStore[0].Y.ToString());
@@ -1113,10 +1123,13 @@ namespace CanvasTogether
                         m_Write.Flush();
 
                         freepenStore.Clear();
+
+                        m_Write.WriteLine("FreepenMouseup");
+                        m_Write.Flush();
                     }
                     freepenEnd = true;
                     SaveFreepen = true;
-                    //DrawBitmap();
+                    DrawBitmap();
                     SaveFreepen = false;
                     freepenEnd = false;
                     break;
