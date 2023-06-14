@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace CanvasTogether
 {
-    public partial class Lobby : Form
+    public partial class Lobby : MetroFramework.Forms.MetroForm
     {
         public delegate void FormSendDataHandler(string text);
         public event FormSendDataHandler form2SendEvent;
@@ -34,6 +34,12 @@ namespace CanvasTogether
             lobbyCount = (Convert.ToInt32(ClientForm.totalCount) - Convert.ToInt32(ClientForm.roomCount)).ToString();
             connectCount = ClientForm.totalCount;
             lblConnect.Text = lobbyCount + "로비 / " + connectCount + "접속";
+
+            for (int i = 0; i < Convert.ToInt32(ClientForm.lobbyNames.Count); i++)
+            {
+                NicknameList.AppendText(ClientForm.lobbyNames[i] + "\r\n");
+            }
+
         }
 
         public void uiUpdate()
@@ -88,6 +94,36 @@ namespace CanvasTogether
                     }
                 }
 
+                if (this.NicknameList.InvokeRequired)
+                {
+                    this.Invoke(new fnSetTextBoxCallback(SetUserStateReset), new object[]
+                    {
+                        "nothing"
+                    });
+                }
+                else
+                {
+                    NicknameList.ResetText();
+                }
+
+                if (this.NicknameList.InvokeRequired)
+                {
+                    for (int i = 0; i < Convert.ToInt32(ClientForm.lobbyNames.Count); i++)
+                    {
+                        this.Invoke(new fnSetTextBoxCallback(SetUserState), new object[]
+                        {
+                            ClientForm.lobbyNames[i]
+                        });
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Convert.ToInt32(ClientForm.lobbyNames.Count); i++)
+                    {
+                        NicknameList.AppendText(ClientForm.lobbyNames[i] + "\r\n");
+                    }
+                }
+
                 Application.DoEvents();
             }
 
@@ -107,6 +143,16 @@ namespace CanvasTogether
         {
             btn.Enabled = true;
             btn.Text = ClientForm.roomNames[index];
+        }
+
+        private void SetUserState(string message)
+        {
+            NicknameList.AppendText(message + "\r\n");
+        }
+
+        private void SetUserStateReset(string nothing)
+        {
+            NicknameList.ResetText();
         }
 
 
@@ -155,7 +201,7 @@ namespace CanvasTogether
         {
             Dispose();
             this.form2SendUpdate(flag);
-            
+
         }
 
         private void Lobby_FormClosing(object sender, FormClosingEventArgs e)
@@ -163,7 +209,7 @@ namespace CanvasTogether
             ClientForm.closeFlag = true;
             //FormClosedEventArgs ex = null;
             //Lobby_FormClosed(sender, ex);
-            
+
         }
     }
 }

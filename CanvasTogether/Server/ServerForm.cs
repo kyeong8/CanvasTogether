@@ -19,7 +19,7 @@ using System.Reflection;
 
 namespace CanvasTogether
 {
-    public partial class ServerForm : Form
+    public partial class ServerForm : MetroFramework.Forms.MetroForm
     {
         public Thread m_thServer = null;
 
@@ -349,8 +349,6 @@ namespace CanvasTogether
             }));
             // 비트맵 이미지 직렬화
             // 직렬화된 데이터를 클라이언트로 전송
-
-
         }
         public void panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -572,6 +570,8 @@ namespace CanvasTogether
                     }
 
                     serverForm.connectedClientID.Add(connectedClient);
+                    if (!serverForm.UserState[0].Contains(connectedClient))
+                        serverForm.UserState[0].Add(connectedClient);
 
                     serverForm.UserCount += 1;
                     serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
@@ -645,9 +645,15 @@ namespace CanvasTogether
                     roomNumber = m_Read.ReadLine();
                     if(!serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(enteredUser))
                     {
+                        if (serverForm.UserState[0].Contains(enteredUser))
+                            serverForm.UserState[0].Remove(enteredUser);
                         serverForm.RoomCount += 1;
                         serverForm.UserState[Convert.ToInt32(roomNumber)].Add(enteredUser);
                     }
+
+                    if (serverForm.UserState[0].Contains(enteredUser))
+                        serverForm.UserState[0].Remove(enteredUser);
+
                     serverForm.ResponseMessage(enteredUser + "이(가) " + roomNumber + "번 방에 입장하였습니다.", roomNumber);
                     serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
                 }
@@ -662,6 +668,9 @@ namespace CanvasTogether
                 else if (Request.Equals("User"))
                 {
                     roomNumber = m_Read.ReadLine();
+                    //MessageBox.Show(roomNumber);
+                    if (serverForm.UserState[0].Contains(enteredUser))
+                        serverForm.UserState[0].Remove(enteredUser);
                     serverForm.ResponseUserUpdate(roomNumber);
                 }
                 else if (Request.Equals("Out"))
@@ -678,10 +687,19 @@ namespace CanvasTogether
                             {
                                 serverForm.RoomCount -= 1;
                                 serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
+                                if (!serverForm.UserState[0].Contains(connectedClient))
+                                    serverForm.UserState[0].Add(enteredUser);
                             }
                         }
                         else
-                            if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                        {
+                            if (serverForm.UserCount > 0)
+                            {
+                                if (!serverForm.UserState[0].Contains(connectedClient))
+                                    serverForm.UserState[0].Add(enteredUser);
+                                serverForm.UserCount -= 1;
+                            }
+                        }
                     }
                     else
                     {
@@ -716,9 +734,11 @@ namespace CanvasTogether
                             if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
                     }
                     else
-                    {
                         if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
-                    }
+
+
+                    if (serverForm.UserState[0].Contains(existUser))
+                        serverForm.UserState[0].Remove(existUser);
 
                     m_bConnect = false;
                     serverForm.ResponseUpdate(serverForm.UserCount, serverForm.RoomCount);
@@ -875,6 +895,10 @@ namespace CanvasTogether
             //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
             m_Write.WriteLine(roomCount.ToString());
             m_Write.WriteLine(totalCount.ToString());
+            m_Write.WriteLine(serverForm.UserState[0].Count.ToString());
+            foreach (string name in serverForm.UserState[0])
+                m_Write.WriteLine(name);
+
             //MessageBox.Show(message.ToString());
             //serverForm.printChat("현재 접속인원 : " + message.ToString());
             m_Write.Flush();

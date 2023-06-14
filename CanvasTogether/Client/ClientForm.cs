@@ -22,7 +22,7 @@ using static System.Windows.Forms.LinkLabel;
 
 namespace CanvasTogether
 {
-    public partial class ClientForm : Form
+    public partial class ClientForm : MetroFramework.Forms.MetroForm
     {
         enum CANVAS_MODE
         {
@@ -51,6 +51,7 @@ namespace CanvasTogether
         public Lobby lobby = new Lobby();
         public static List<string> userNames = new List<string>();
         public static List<string> roomNames = new List<string>();
+        public static List<string> lobbyNames = new List<string>();
         public static bool closeFlag = false;
         public static bool shutdownTrigger = false;
         bool isHolding = false;
@@ -59,6 +60,7 @@ namespace CanvasTogether
         bool undoing = false;
         bool freepenEnd = false;
         public static bool dead = false;
+        public static bool DuplicateFlag = true;
 
         delegate void fnSetTextBoxCallback(string contents);
         delegate void fnSetResetTextCallback();
@@ -138,13 +140,16 @@ namespace CanvasTogether
             Login login = new Login();
             login.ShowDialog();
 
+            Connect();
+
+            //requestUserUpdate("0");
+
+            //Thread.Sleep(3000);
             if (exitFlag)
             {
                 this.Close();
                 return;
             }
-
-            Connect();
 
             if (!m_bConnect)
             {
@@ -152,13 +157,15 @@ namespace CanvasTogether
                 this.Close();
                 return;
             }
-
+            //lobbyNames.Add(name);
             exitFlag = true;
-
+            
             lobby = new Lobby();
             lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
-            lobby.ShowDialog();
+            //MessageBox.Show(lobbyNames[-1]);
+            if (DuplicateFlag)
+                lobby.ShowDialog();
 
 
             if (exitFlag)
@@ -424,7 +431,6 @@ namespace CanvasTogether
             this.lobby = new Lobby();
             this.lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             this.lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
-
             this.lobby.uiUpdate();
 
             this.lobby.ShowDialog();
@@ -521,6 +527,8 @@ namespace CanvasTogether
         {
             m_Write.WriteLine("Update");
             m_Write.Flush();
+
+            //requestUserUpdate("0");
         }
 
         public void requestOut(bool flag)
@@ -593,14 +601,26 @@ namespace CanvasTogether
                 {
                     //if (lobby.IsDisposed)
                     //    continue;
-                    
+
                     if (!closeFlag)
                     {
                         string message = m_Read.ReadLine();
                         roomCount = message;
                         message = m_Read.ReadLine();
                         totalCount = message;
+                        string count = m_Read.ReadLine();
                         
+                        lobbyNames = new List<string>();
+
+                        if (count != "0")
+                        { 
+                            for (int i = 0; i < Convert.ToInt32(count); i++)
+                            {
+                                message = m_Read.ReadLine();
+                                if (!lobbyNames.Contains(message))
+                                    lobbyNames.Add(message);
+                            }
+                        }
                         //MessageBox.Show("call by update");
                         //MessageBox.Show(totalCount.ToString() + " " + roomCount.ToString());
                         lobby.uiUpdate();
@@ -613,7 +633,7 @@ namespace CanvasTogether
                     if (this.userNameList.InvokeRequired)
                     {
                         this.Invoke(new fnSetResetTextCallback(SetResetText), new object[]
-                        {                     
+                        {
                     });
                     }
                     else
@@ -649,6 +669,26 @@ namespace CanvasTogether
                 {
                     //if (lobby.IsDisposed)
                     //    continue;
+
+                    if (!closeFlag)
+                    {
+                        roomNames = new List<string>();
+                        string count = m_Read.ReadLine();
+
+                        for (int i = 0; i < Convert.ToInt32(count); i++)
+                        {
+                            string message = m_Read.ReadLine();
+                            roomNames.Add(message);
+                        }
+
+                        this.lobby.uiUpdate();
+                    }
+                }
+
+                else if (receive.Equals("Room"))
+                {
+                    //if (lobby.IsDisposed)
+                    //    continue;
                     
                     if (!closeFlag)
                     {
@@ -667,6 +707,7 @@ namespace CanvasTogether
                 else if (receive.Equals("ShutDown"))
                 {
                     shutdownTrigger = true;
+                    ClientForm.DuplicateFlag = false;
                     this.lobby.Close();
                     this.Dispose();
                     return;
@@ -741,6 +782,8 @@ namespace CanvasTogether
                     //memoryStream.Seek(0, SeekOrigin.Begin);
                     BinaryFormatter formatter = new BinaryFormatter();
                     currentBmp = (Bitmap)formatter.Deserialize(memoryStream);
+                    BmpList.Add(currentBmp);
+                    fpList.Add(currentBmp);
 
                     // 클라이언트에 표시
                     panel1.BackgroundImage = currentBmp;
@@ -915,6 +958,7 @@ namespace CanvasTogether
                 case 5: // 지우개
                     pen = new Pen(Color.White, _thick * 10);
                     Point Etemp = new Point(e.X, e.Y);
+                    shape = myLine;
                     freepenStore.Add(Etemp);
                     break;
                 case 6: // 텍스트
@@ -1009,6 +1053,13 @@ namespace CanvasTogether
                         m_Write.WriteLine(pen.Color.ToArgb());
                         m_Write.Flush();
 
+                        MyLines ml = new MyLines(2);
+                        ml.setPoint(new Point(freepenStore[0].X, freepenStore[0].Y), new Point(freepenStore[1].X, freepenStore[1].Y), new Pen(Color.FromArgb(pen.Color.ToArgb()), pen.Width), (int)pen.Width);
+                        shape = ml;
+                        shapes.Add(shape);
+                        //Draw();
+                        DrawBitmap();
+
                         freepenStore.Clear();
                         freepenStore.Add(Etemp);
                     }
@@ -1026,7 +1077,6 @@ namespace CanvasTogether
             switch (curMode)
             {
                 case 0: // 펜
-
                     Point temp = new Point(e.X, e.Y);
                     freepenStore.Add(temp);
                     startF.X = freepenStore[0].X;
@@ -1100,7 +1150,7 @@ namespace CanvasTogether
 
                     if (freepenStore.Count == 2)
                     {
-                        holdingFreepen = true;
+                        //holdingFreepen = true;
                         m_Write.WriteLine("Freepen");
                         m_Write.WriteLine(freepenStore[0].X.ToString());
                         m_Write.WriteLine(freepenStore[0].Y.ToString());
@@ -1111,10 +1161,13 @@ namespace CanvasTogether
                         m_Write.Flush();
 
                         freepenStore.Clear();
+
+                        m_Write.WriteLine("FreepenMouseup");
+                        m_Write.Flush();
                     }
                     freepenEnd = true;
                     SaveFreepen = true;
-                    //DrawBitmap();
+                    DrawBitmap();
                     SaveFreepen = false;
                     freepenEnd = false;
                     break;
