@@ -22,7 +22,7 @@ using static System.Windows.Forms.LinkLabel;
 
 namespace CanvasTogether
 {
-    public partial class ClientForm : Form
+    public partial class ClientForm : MetroFramework.Forms.MetroForm
     {
         enum CANVAS_MODE
         {
@@ -1038,7 +1038,6 @@ namespace CanvasTogether
             switch (curMode)
             {
                 case 0: // 펜
-
                     Point temp = new Point(e.X, e.Y);
                     freepenStore.Add(temp);
                     startF.X = freepenStore[0].X;

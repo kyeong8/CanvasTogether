@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace CanvasTogether
 {
-    public partial class Lobby : Form
+    public partial class Lobby : MetroFramework.Forms.MetroForm
     {
         public delegate void FormSendDataHandler(string text);
         public event FormSendDataHandler form2SendEvent;

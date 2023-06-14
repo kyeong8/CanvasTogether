@@ -19,7 +19,7 @@ using System.Reflection;
 
 namespace CanvasTogether
 {
-    public partial class ServerForm : Form
+    public partial class ServerForm : MetroFramework.Forms.MetroForm
     {
         public Thread m_thServer = null;
 
@@ -345,8 +345,6 @@ namespace CanvasTogether
             }));
             // 비트맵 이미지 직렬화
             // 직렬화된 데이터를 클라이언트로 전송
-
-
         }
         public void panel1_Paint(object sender, PaintEventArgs e)
         {

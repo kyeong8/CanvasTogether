@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ID_txtbox = new System.Windows.Forms.TextBox();
@@ -39,7 +40,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 51);
+            this.label1.Location = new System.Drawing.Point(47, 78);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 15);
             this.label1.TabIndex = 0;
@@ -48,7 +49,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 102);
+            this.label2.Location = new System.Drawing.Point(47, 129);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 15);
             this.label2.TabIndex = 1;
@@ -56,7 +57,7 @@
             // 
             // ID_txtbox
             // 
-            this.ID_txtbox.Location = new System.Drawing.Point(143, 48);
+            this.ID_txtbox.Location = new System.Drawing.Point(148, 75);
             this.ID_txtbox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ID_txtbox.Name = "ID_txtbox";
             this.ID_txtbox.Size = new System.Drawing.Size(162, 25);
@@ -64,7 +65,7 @@
             // 
             // PW_txtbox
             // 
-            this.PW_txtbox.Location = new System.Drawing.Point(143, 100);
+            this.PW_txtbox.Location = new System.Drawing.Point(148, 127);
             this.PW_txtbox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PW_txtbox.Name = "PW_txtbox";
             this.PW_txtbox.Size = new System.Drawing.Size(162, 25);
@@ -73,7 +74,7 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(74, 152);
+            this.btnLogin.Location = new System.Drawing.Point(79, 176);
             this.btnLogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(81, 38);
@@ -84,7 +85,7 @@
             // 
             // btnSignUP
             // 
-            this.btnSignUP.Location = new System.Drawing.Point(203, 152);
+            this.btnSignUP.Location = new System.Drawing.Point(208, 176);
             this.btnSignUP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSignUP.Name = "btnSignUP";
             this.btnSignUP.Size = new System.Drawing.Size(81, 38);
@@ -97,13 +98,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(347, 202);
+            this.ClientSize = new System.Drawing.Size(364, 228);
             this.Controls.Add(this.btnSignUP);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.PW_txtbox);
             this.Controls.Add(this.ID_txtbox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Login";
             this.Text = "Login";
