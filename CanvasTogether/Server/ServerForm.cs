@@ -552,6 +552,7 @@ namespace CanvasTogether
                     }
 
                     serverForm.connectedClientID.Add(connectedClient);
+                    serverForm.UserState[0].Add(connectedClient);
 
                     serverForm.UserCount += 1;
                     serverForm.printChat(connectedClient + "이(가) 접속했습니다.");
@@ -625,6 +626,8 @@ namespace CanvasTogether
                     roomNumber = m_Read.ReadLine();
                     if(!serverForm.UserState[Convert.ToInt32(roomNumber)].Contains(enteredUser))
                     {
+                        if (serverForm.UserState[0].Contains(enteredUser))
+                            serverForm.UserState[0].Remove(enteredUser);
                         serverForm.RoomCount += 1;
                         serverForm.UserState[Convert.ToInt32(roomNumber)].Add(enteredUser);
                     }
@@ -658,6 +661,7 @@ namespace CanvasTogether
                             {
                                 serverForm.RoomCount -= 1;
                                 serverForm.UserState[Convert.ToInt32(roomNumber)].Remove(enteredUser);
+                                serverForm.UserState[0].Add(enteredUser);
                             }
                         }
                         else
@@ -693,7 +697,11 @@ namespace CanvasTogether
                             }
                         }
                         else
+                        {
+                            if (serverForm.UserState[0].Contains(enteredUser))
+                                serverForm.UserState[0].Remove(enteredUser);
                             if (serverForm.UserCount > 0) serverForm.UserCount -= 1;
+                        }
                     }
                     else
                     {

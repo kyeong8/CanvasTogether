@@ -59,6 +59,7 @@ namespace CanvasTogether
         bool undoing = false;
         bool freepenEnd = false;
         public static bool dead = false;
+        public static bool DuplicateFlag = true;
 
         delegate void fnSetTextBoxCallback(string contents);
         delegate void fnSetResetTextCallback();
@@ -138,13 +139,14 @@ namespace CanvasTogether
             Login login = new Login();
             login.ShowDialog();
 
+            Connect();
+
+            //Thread.Sleep(3000);
             if (exitFlag)
             {
                 this.Close();
                 return;
             }
-
-            Connect();
 
             if (!m_bConnect)
             {
@@ -158,7 +160,9 @@ namespace CanvasTogether
             lobby = new Lobby();
             lobby.form2SendEvent += new Lobby.FormSendDataHandler(requestGenerate);
             lobby.form2SendUpdate += new Lobby.FormSendUpdateHandler(requestEnterUpdate);
-            lobby.ShowDialog();
+
+            if (DuplicateFlag)
+                lobby.ShowDialog();
 
 
             if (exitFlag)
@@ -667,6 +671,7 @@ namespace CanvasTogether
                 else if (receive.Equals("ShutDown"))
                 {
                     shutdownTrigger = true;
+                    ClientForm.DuplicateFlag = false;
                     this.lobby.Close();
                     this.Dispose();
                     return;
