@@ -125,7 +125,9 @@ namespace CanvasTogether
             InitializeComponent();
             SetupShapeVar();
             pen.SetLineCap(System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.LineCap.Round, System.Drawing.Drawing2D.DashCap.Round);
-            panel1.BackgroundImage = new Bitmap(Application.StartupPath + @"\DefaultBackground.png");
+            //panel1.BackgroundImage = new Bitmap(Application.StartupPath + @"\DefaultBackground.png");
+            panel1.BackgroundImage = new Bitmap(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory())) + @"\Resources\DefaultBackground.png");
+            
             OriginalBmp = (Bitmap)panel1.BackgroundImage;
             BmpList.Add(OriginalBmp);
             fpList.Add(OriginalBmp);

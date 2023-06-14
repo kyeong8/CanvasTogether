@@ -76,7 +76,8 @@ namespace CanvasTogether
             panel3.Visible = false;
             panel4.Visible = false;
 
-            panel1.BackgroundImage = new Bitmap(Application.StartupPath + @"\DefaultBackground.png");
+            //panel1.BackgroundImage = new Bitmap(Application.StartupPath + @"\DefaultBackground.png");
+            panel1.BackgroundImage = new Bitmap(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()))) + @"\Client\Resources\DefaultBackground.png");
             OriginalBmp = (Bitmap)panel1.BackgroundImage;
             BmpList.Add(OriginalBmp);
             fpList.Add(OriginalBmp);
