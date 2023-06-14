@@ -742,6 +742,7 @@ namespace CanvasTogether
                         serverForm.SaveFreepen = true;
                         serverForm.DrawBitmap();
                         serverForm.SaveFreepen = false;
+                        serverForm.all_send_bitmap(roomNumber);
                     }
                     serverForm.holdingFreepen = false;
                 }
@@ -761,7 +762,7 @@ namespace CanvasTogether
                     //serverForm.Draw();
                     serverForm.DrawBitmap();
                     //m_Write.WriteLine("Bitmap");
-                    serverForm.all_send_bitmap(roomNumber);
+                    //serverForm.all_send_bitmap(roomNumber);
                     //serverForm.all_Send_Freepen(x1, y1, x2, y2, thick, Argb, roomNumber);
                 }
                 else if(Request.Equals("Line"))
